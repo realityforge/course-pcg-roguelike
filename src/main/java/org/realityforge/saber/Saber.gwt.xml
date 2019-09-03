@@ -9,5 +9,5 @@
   <source path=''/>
   <public path='public'/>
 
-  <entry-point class='org.realityforge.arcade.tennis.Tennis'/>
+  <entry-point class='org.realityforge.saber.Saber'/>
 </module>
