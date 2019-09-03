@@ -1,8 +1,5 @@
 require 'buildr/git_auto_version'
 require 'buildr/gwt'
-require 'reality/naming'
-
-GWT_MODULES = %w()
 
 desc 'SaBeR: Simple boring roguelike'
 define 'saber' do
@@ -22,31 +19,46 @@ define 'saber' do
                :braincheck,
                :gwt_user
 
-  gwt_config = {}
-  GWT_MODULES.each do |m|
-    uname = Reality::Naming.underscore(m)
-    module_name = "org.realityforge.arcade.#{uname}.#{m}"
-    gwt_config[module_name] = false
-    gwt([module_name],
-        {
-          :java_args => %w(-Xms512M -Xmx1024M -Dgwt.watchFileChanges=false),
-          :dependencies => project.compile.dependencies + [project.compile.target] + [Buildr.artifact(:gwt_user)],
-          :gwtc_args => %w(-optimize 9 -checkAssertions -XmethodNameDisplayMode FULL -noincremental),
-          :output_key => uname
-        })
-    ipr.add_gwt_configuration(project,
-                              :gwt_module => module_name,
-                              :start_javascript_debugger => false,
-                              :open_in_browser => false,
-                              :vm_parameters => '-Xmx2G',
-                              :shell_parameters => "-style PRETTY -XmethodNameDisplayMode FULL -noincremental -port 8888 -codeServerPort 8889 -bindAddress 0.0.0.0 -war #{_(:generated, uname, 'gwt-export')}/",
-                              :launch_page => "http://127.0.0.1:8888/#{uname}/")
-  end
+  ipr.add_gwt_configuration(project,
+                            :gwt_module => 'org.realityforge.saber.SaberDev',
+                            :start_javascript_debugger => false,
+                            :open_in_browser => false,
+                            :vm_parameters => '-Xmx2G',
+                            :shell_parameters => "-style PRETTY -XmethodNameDisplayMode FULL -noincremental -port 8888 -codeServerPort 8889 -bindAddress 0.0.0.0 -war #{_(:generated, name, 'gwt-export')}/",
+                            :launch_page => "http://127.0.0.1:8888/saber_dev/dev.html")
 
-  project.iml.add_gwt_facet(gwt_config, :settings => {
-    :compilerMaxHeapSize => '1024',
-    :compilerParameters => '-draftCompile -localWorkers 2 -strict'
-  }, :gwt_dev_artifact => :gwt_dev)
+  ipr.add_gwt_configuration(project,
+                            :gwt_module => 'org.realityforge.saber.SaberProd',
+                            :start_javascript_debugger => false,
+                            :open_in_browser => false,
+                            :vm_parameters => '-Xmx2G',
+                            :shell_parameters => "-style PRETTY -XmethodNameDisplayMode FULL -noincremental -port 8888 -codeServerPort 8889 -bindAddress 0.0.0.0 -war #{_(:generated, name, 'gwt-export')}/",
+                            :launch_page => "http://127.0.0.1:8888/saber/index.html")
+
+  gwt(['org.realityforge.saber.SaberDev'],
+      {
+        :java_args => %w(-Xms512M -Xmx1024M -Dgwt.watchFileChanges=false),
+        :dependencies => project.compile.dependencies + [project.compile.target] + [Buildr.artifact(:gwt_user)],
+        :gwtc_args => %w(-optimize 9 -checkAssertions -XmethodNameDisplayMode FULL -noincremental),
+        :output_key => 'saber_dev'
+      })
+  gwt(['org.realityforge.saber.SaberProd'],
+      {
+        :java_args => %w(-Xms512M -Xmx1024M -Dgwt.watchFileChanges=false),
+        :dependencies => project.compile.dependencies + [project.compile.target] + [Buildr.artifact(:gwt_user)],
+        :gwtc_args => %w(-XdisableClassMetadata -XdisableCastChecking -optimize 9 -nocheckAssertions -XmethodNameDisplayMode NONE -noincremental -compileReport),
+        :output_key => 'saber'
+      })
+
+  project.iml.add_gwt_facet({
+                              'org.realityforge.saber.Saber' => false,
+                              'org.realityforge.saber.SaberDev' => false,
+                              'org.realityforge.saber.SaberProd' => false
+                            },
+                            :settings => {
+                              :compilerMaxHeapSize => '1024',
+                              :compilerParameters => '-draftCompile -localWorkers 2 -strict'
+                            }, :gwt_dev_artifact => :gwt_dev)
 
   iml.excluded_directories << project._('tmp')
 
