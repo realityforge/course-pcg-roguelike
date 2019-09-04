@@ -8,5 +8,7 @@ public class Saber
   @Override
   public void onModuleLoad()
   {
+    final Renderer renderer = new Renderer( 800, 600 );
+
   }
 }
