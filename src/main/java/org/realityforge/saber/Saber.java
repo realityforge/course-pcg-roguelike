@@ -18,7 +18,8 @@ public class Saber
     _textureManager = new TextureManager( this::startGame );
     _tileTypeManager = new TileTypeManager();
 
-    registerTile( "resources/tiles/spr_tile_floor", Tiles.FLOOR );
+    registerTile( "resources/tiles/spr_tile_floor", Tiles.FLOOR, TileType.Flags.SOLID );
+    registerTile( "resources/tiles/spr_tile_floor_alt", Tiles.FLOOR_ALT, TileType.Flags.SOLID );
 
     registerTile( "resources/tiles/spr_tile_wall_top", Tiles.WALL_TOP );
     registerTile( "resources/tiles/spr_tile_wall_top_left", Tiles.WALL_TOP_LEFT );
@@ -42,14 +43,19 @@ public class Saber
 
     registerTile( "resources/tiles/spr_tile_wall_entrance", Tiles.WALL_ENTRANCE );
     registerTile( "resources/tiles/spr_tile_door_locked", Tiles.WALL_DOOR_LOCKED );
-    registerTile( "resources/tiles/spr_tile_door_unlocked", Tiles.WALL_DOOR_UNLOCKED );
+    registerTile( "resources/tiles/spr_tile_door_unlocked", Tiles.WALL_DOOR_UNLOCKED, TileType.Flags.SOLID );
 
     _textureManager.startTextureLoad();
   }
 
   private void registerTile( @Nonnull final String textureName, final int value )
   {
-    _tileTypeManager.registerTileType( value, _textureManager.registerTexture( textureName ) );
+    registerTile( textureName, value, 0 );
+  }
+
+  private void registerTile( @Nonnull final String textureName, final int value, final int flags )
+  {
+    _tileTypeManager.registerTileType( value, _textureManager.registerTexture( textureName ), flags );
   }
 
   private void startGame()
