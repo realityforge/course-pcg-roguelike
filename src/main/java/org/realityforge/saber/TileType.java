@@ -42,9 +42,15 @@ public final class TileType
     return ( Flags.SOLID & _flags ) == Flags.SOLID;
   }
 
+  public boolean isFloor()
+  {
+    return ( Flags.FLOOR & _flags ) == Flags.FLOOR;
+  }
+
   public static final class Flags
   {
     public static final int SOLID = 1 << 1;
-    private static final int MASK = SOLID;
+    public static final int FLOOR = 1 << 2;
+    private static final int MASK = SOLID | FLOOR;
   }
 }

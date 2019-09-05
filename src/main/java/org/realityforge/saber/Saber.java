@@ -18,8 +18,8 @@ public class Saber
     _textureManager = new TextureManager( this::startGame );
     _tileTypeManager = new TileTypeManager();
 
-    registerTile( "resources/tiles/spr_tile_floor", Tiles.FLOOR, TileType.Flags.SOLID );
-    registerTile( "resources/tiles/spr_tile_floor_alt", Tiles.FLOOR_ALT, TileType.Flags.SOLID );
+    registerTile( "resources/tiles/spr_tile_floor", Tiles.FLOOR, TileType.Flags.SOLID | TileType.Flags.FLOOR );
+    registerTile( "resources/tiles/spr_tile_floor_alt", Tiles.FLOOR_ALT, TileType.Flags.SOLID | TileType.Flags.FLOOR );
 
     registerTile( "resources/tiles/spr_tile_wall_top", Tiles.WALL_TOP );
     registerTile( "resources/tiles/spr_tile_wall_top_left", Tiles.WALL_TOP_LEFT );
