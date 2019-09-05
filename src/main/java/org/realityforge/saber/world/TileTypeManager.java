@@ -1,10 +1,11 @@
-package org.realityforge.saber;
+package org.realityforge.saber.world;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import javax.annotation.Nonnull;
 import org.realityforge.braincheck.BrainCheckConfig;
+import org.realityforge.saber.Texture;
 import static org.realityforge.braincheck.Guards.*;
 
 public final class TileTypeManager

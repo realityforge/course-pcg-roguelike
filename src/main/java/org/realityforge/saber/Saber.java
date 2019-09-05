@@ -3,6 +3,9 @@ package org.realityforge.saber;
 import com.google.gwt.core.client.EntryPoint;
 import elemental2.dom.DomGlobal;
 import javax.annotation.Nonnull;
+import org.realityforge.saber.world.TileType;
+import org.realityforge.saber.world.TileTypeManager;
+import org.realityforge.saber.world.Tiles;
 
 public class Saber
   implements EntryPoint

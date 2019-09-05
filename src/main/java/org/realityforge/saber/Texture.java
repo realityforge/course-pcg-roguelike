@@ -5,7 +5,7 @@ import elemental2.dom.HTMLImageElement;
 import java.util.Objects;
 import javax.annotation.Nonnull;
 
-final class Texture
+public final class Texture
 {
   @Nonnull
   private final String _name;
