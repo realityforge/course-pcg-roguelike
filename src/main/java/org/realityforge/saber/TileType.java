@@ -37,6 +37,11 @@ public final class TileType
     return _texture;
   }
 
+  public boolean isSolid()
+  {
+    return ( Flags.SOLID & _flags ) == Flags.SOLID;
+  }
+
   public static final class Flags
   {
     public static final int SOLID = 1 << 1;
