@@ -21,9 +21,12 @@ public final class TextureManager
     _onReady = Objects.requireNonNull( onReady );
   }
 
-  void registerTexture( @Nonnull final String name )
+  @Nonnull
+  Texture registerTexture( @Nonnull final String name )
   {
-    _textures.put( Objects.requireNonNull( name ), new Texture( name ) );
+    final Texture texture = new Texture( name );
+    _textures.put( Objects.requireNonNull( name ), texture );
+    return texture;
   }
 
   void startTextureLoad()
