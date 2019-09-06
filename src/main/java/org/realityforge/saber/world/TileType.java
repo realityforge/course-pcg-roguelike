@@ -16,7 +16,7 @@ public final class TileType
   {
     if ( BrainCheckConfig.checkInvariants() )
     {
-      invariant( () -> 0 < id,
+      invariant( () -> 0 <= id,
                  () -> "Saber-0001: Invalid id (" + id + ") passed when creating tile" );
       invariant( () -> 0 == ( flags & ~Flags.MASK ),
                  () -> "Saber-0002: Invalid flags (" + flags + ") passed when creating tile " + id );

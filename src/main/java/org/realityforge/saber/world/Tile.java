@@ -12,8 +12,8 @@ public final class Tile
 
   public Tile( final int column, final int row, @Nonnull final TileType tileType )
   {
-    assert column > 0;
-    assert row > 0;
+    assert column >= 0;
+    assert row >= 0;
     _column = column;
     _row = row;
     _tileType = tileType;
