@@ -1,6 +1,7 @@
 package org.realityforge.saber;
 
 import com.google.gwt.core.client.EntryPoint;
+import org.realityforge.saber.game.LevelData;
 
 public class Saber
   implements EntryPoint
@@ -10,6 +11,6 @@ public class Saber
   {
     final Game game = new Game( new Renderer( 950, 950 ) );
     game.init();
-    game.start();
+    game.start( LevelData.LEVEL1_DATA );
   }
 }

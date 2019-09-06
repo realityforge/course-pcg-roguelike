@@ -1,5 +1,6 @@
 package org.realityforge.saber;
 
+import elemental2.dom.CanvasRenderingContext2D;
 import elemental2.dom.DomGlobal;
 import elemental2.dom.HTMLCanvasElement;
 import java.util.Objects;
@@ -62,9 +63,10 @@ public final class Game
     _cellHeight = canvas.height / ( _level.getRowCount() * 1D );
   }
 
-  public void start()
+  public void start( @Nonnull final String levelData )
   {
     _textureManager.startTextureLoad();
+    loadFromData( levelData );
     runFrame();
     DomGlobal.setInterval( v -> runFrame(), FRAME_DELAY );
   }
@@ -139,5 +141,27 @@ public final class Game
   {
     DomGlobal.console.log( "Textures loaded" );
     _texturesLoaded = true;
+  }
+
+  public void loadFromData( @Nonnull final String data )
+  {
+    int index = 0;
+    int charIndex = 0;
+    final int columnCount = _level.getColumnCount();
+    final int rowCount = _level.getRowCount();
+    final Tile[] tiles = _level.getTiles();
+    for ( int j = 0; j < columnCount; j++ )
+    {
+      for ( int i = 0; i < rowCount; i++ )
+      {
+        // Format for each cell is [\d\d]
+        final int tileId = ( data.charAt( charIndex + 1 ) - '0' ) * 10 + data.charAt( charIndex + 2 ) - '0';
+        tiles[ index++ ].setTileType( _tileTypeManager.getTileType( tileId ) );
+        charIndex += 4;
+      }
+
+      // Skip end line char.
+      charIndex += 1;
+    }
   }
 }
