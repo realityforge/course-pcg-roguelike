@@ -3,6 +3,7 @@ package org.realityforge.saber;
 import com.google.gwt.core.client.EntryPoint;
 import elemental2.dom.DomGlobal;
 import javax.annotation.Nonnull;
+import org.realityforge.saber.world.Level;
 import org.realityforge.saber.world.TileType;
 import org.realityforge.saber.world.TileTypeManager;
 import org.realityforge.saber.world.Tiles;
@@ -13,6 +14,7 @@ public class Saber
   private Renderer _renderer;
   private TextureManager _textureManager;
   private TileTypeManager _tileTypeManager;
+  private Level _level;
 
   @Override
   public void onModuleLoad()
@@ -43,6 +45,8 @@ public class Saber
     registerTile( "resources/tiles/spr_tile_wall_top_right", Tiles.WALL_TOP_RIGHT );
     registerTile( "resources/tiles/spr_tile_wall_top_t", Tiles.WALL_TOP_T );
     final TileType emptyTileType = _tileTypeManager.registerEmptyTileType( Tiles.EMPTY, 0 );
+
+    _level = new Level( 19, 19, emptyTileType );
 
     _textureManager.startTextureLoad();
   }
