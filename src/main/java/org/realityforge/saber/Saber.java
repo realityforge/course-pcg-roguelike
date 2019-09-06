@@ -42,6 +42,7 @@ public class Saber
     registerTile( "resources/tiles/spr_tile_wall_top_left", Tiles.WALL_TOP_LEFT );
     registerTile( "resources/tiles/spr_tile_wall_top_right", Tiles.WALL_TOP_RIGHT );
     registerTile( "resources/tiles/spr_tile_wall_top_t", Tiles.WALL_TOP_T );
+    final TileType emptyTileType = _tileTypeManager.registerEmptyTileType( Tiles.EMPTY, 0 );
 
     _textureManager.startTextureLoad();
   }
