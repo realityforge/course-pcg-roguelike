@@ -8,7 +8,7 @@ public class Saber
   @Override
   public void onModuleLoad()
   {
-    final Game game = new Game( new Renderer( 800, 600 ) );
+    final Game game = new Game( new Renderer( 950, 950 ) );
     game.init();
     game.start();
   }
