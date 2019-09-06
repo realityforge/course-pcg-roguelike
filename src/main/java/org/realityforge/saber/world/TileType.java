@@ -1,7 +1,6 @@
 package org.realityforge.saber.world;
 
-import java.util.Objects;
-import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.realityforge.braincheck.BrainCheckConfig;
 import org.realityforge.saber.Texture;
 import static org.realityforge.braincheck.Guards.*;
@@ -9,11 +8,11 @@ import static org.realityforge.braincheck.Guards.*;
 public final class TileType
 {
   private final int _id;
-  @Nonnull
+  @Nullable
   private final Texture _texture;
   private final int _flags;
 
-  TileType( final int id, @Nonnull final Texture texture, final int flags )
+  TileType( final int id, @Nullable final Texture texture, final int flags )
   {
     if ( BrainCheckConfig.checkInvariants() )
     {
@@ -23,7 +22,7 @@ public final class TileType
                  () -> "Saber-0002: Invalid flags (" + flags + ") passed when creating tile " + id );
     }
     _id = id;
-    _texture = Objects.requireNonNull( texture );
+    _texture = texture;
     _flags = flags;
   }
 
@@ -32,7 +31,7 @@ public final class TileType
     return _id;
   }
 
-  @Nonnull
+  @Nullable
   public Texture getTexture()
   {
     return _texture;

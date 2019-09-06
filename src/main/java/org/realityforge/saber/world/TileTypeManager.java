@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.realityforge.braincheck.BrainCheckConfig;
 import org.realityforge.saber.Texture;
 import static org.realityforge.braincheck.Guards.*;
@@ -21,6 +22,18 @@ public final class TileTypeManager
 
   @Nonnull
   public TileType registerTileType( final int id, @Nonnull final Texture texture, final int flags )
+  {
+    return doRegisterTileType( id, texture, flags );
+  }
+
+  @Nonnull
+  public TileType registerEmptyTileType( final int id, final int flags )
+  {
+    return doRegisterTileType( id, null, flags );
+  }
+
+  @Nonnull
+  private TileType doRegisterTileType( final int id, @Nullable final Texture texture, final int flags )
   {
     if ( BrainCheckConfig.checkInvariants() )
     {
