@@ -1,4 +1,4 @@
-package org.realityforge.saber.world;
+package org.realityforge.saber.game;
 
 public final class Tiles
 {
