@@ -8,6 +8,10 @@ complete as there is too much un-said.
     - Use Canvas2D to render world
     - Consider using [Ashley](https://github.com/libgdx/ashley) or another ECS to implement entities.
 
+## Reimplementation Notes
+
+* TileType should be data driven and loaded from a file.
+
 ## Notes
 
 * Consider using a deterministic world generated from an initial seed. This means all decisions must occur
