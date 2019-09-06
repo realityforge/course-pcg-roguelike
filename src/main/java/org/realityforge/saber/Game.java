@@ -1,22 +1,30 @@
 package org.realityforge.saber;
 
 import elemental2.dom.DomGlobal;
+import elemental2.dom.HTMLCanvasElement;
 import java.util.Objects;
 import javax.annotation.Nonnull;
 import org.realityforge.saber.game.Tiles;
 import org.realityforge.saber.world.Level;
+import org.realityforge.saber.world.Tile;
 import org.realityforge.saber.world.TileType;
 import org.realityforge.saber.world.TileTypeManager;
 
 public final class Game
 {
+  private static final int FRAMES_PER_SECOND = 30;
+  private static final int MILLIS_PER_SECOND = 1000;
+  private static final int FRAME_DELAY = MILLIS_PER_SECOND / FRAMES_PER_SECOND;
   @Nonnull
   private final Renderer _renderer;
   @Nonnull
   private final TileTypeManager _tileTypeManager = new TileTypeManager();
   @Nonnull
-  private final TextureManager _textureManager = new TextureManager( this::dataLoaded );
+  private final TextureManager _textureManager = new TextureManager( this::texturesLoaded );
   private Level _level;
+  private boolean _texturesLoaded;
+  private double _cellWidth;
+  private double _cellHeight;
 
   public Game( @Nonnull final Renderer renderer )
   {
@@ -49,25 +57,77 @@ public final class Game
     final TileType emptyTileType = _tileTypeManager.registerEmptyTileType( Tiles.EMPTY, 0 );
 
     _level = new Level( 19, 19, emptyTileType );
+    final HTMLCanvasElement canvas = _renderer.getCanvas();
+    _cellWidth = canvas.width / ( _level.getColumnCount() * 1D );
+    _cellHeight = canvas.height / ( _level.getRowCount() * 1D );
   }
 
   public void start()
   {
     _textureManager.startTextureLoad();
+    runFrame();
+    DomGlobal.setInterval( v -> runFrame(), FRAME_DELAY );
   }
 
-  private void registerTile( @Nonnull final String textureName, final int value )
+  private void runFrame()
   {
-    registerTile( textureName, value, 0 );
+    /*
+    if ( _simulationActive )
+    {
+      simulateWorld();
+    }
+    */
+    if ( _texturesLoaded )
+    {
+      renderWorld();
+    }
   }
 
-  private void registerTile( @Nonnull final String textureName, final int value, final int flags )
+  private void renderWorld()
   {
-    _tileTypeManager.registerTileType( value, _textureManager.registerTexture( textureName ), flags );
+    drawWorld();
   }
 
-  private void dataLoaded()
+  private void drawWorld()
+  {
+    int index = 0;
+    double rowY = 0;
+    final int rowCount = _level.getRowCount();
+    final int columnCount = _level.getColumnCount();
+    final Tile[] tiles = _level.getTiles();
+    for ( int i = 0; i < rowCount; i++ )
+    {
+      double cellX = 0;
+      for ( int j = 0; j < columnCount; j++ )
+      {
+        final Tile tile = tiles[ index++ ];
+        final TileType tileType = tile.getTileType();
+        final Texture texture = tileType.getTexture();
+        if ( null != texture )
+        {
+          _renderer.getContext().drawImage( texture.getImage(), cellX, rowY );
+        }
+        cellX += _cellWidth;
+      }
+      rowY += _cellHeight;
+    }
+  }
+
+  @Nonnull
+  private TileType registerTile( @Nonnull final String textureName, final int value )
+  {
+    return registerTile( textureName, value, 0 );
+  }
+
+  @Nonnull
+  private TileType registerTile( @Nonnull final String textureName, final int value, final int flags )
+  {
+    return _tileTypeManager.registerTileType( value, _textureManager.registerTexture( textureName ), flags );
+  }
+
+  private void texturesLoaded()
   {
     DomGlobal.console.log( "Textures loaded" );
+    _texturesLoaded = true;
   }
 }
