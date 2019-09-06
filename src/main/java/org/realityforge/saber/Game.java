@@ -85,7 +85,17 @@ public final class Game
 
   private void renderWorld()
   {
+    clearBackground();
+
     drawWorld();
+  }
+
+  private void clearBackground()
+  {
+    final HTMLCanvasElement canvas = _renderer.getCanvas();
+    final CanvasRenderingContext2D context = _renderer.getContext();
+    context.fillStyle = CanvasRenderingContext2D.FillStyleUnionType.of( "black" );
+    context.fillRect( 0, 0, canvas.width, canvas.height );
   }
 
   private void drawWorld()
