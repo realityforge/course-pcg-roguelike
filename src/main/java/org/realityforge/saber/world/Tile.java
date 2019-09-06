@@ -9,6 +9,8 @@ public final class Tile
   private final int _row;
   @Nonnull
   private TileType _tileType;
+  private double _topLeftX;
+  private double _topLeftY;
 
   public Tile( final int column, final int row, @Nonnull final TileType tileType )
   {
@@ -38,5 +40,25 @@ public final class Tile
   public void setTileType( @Nonnull final TileType tileType )
   {
     _tileType = Objects.requireNonNull( tileType );
+  }
+
+  public double getTopLeftX()
+  {
+    return _topLeftX;
+  }
+
+  public void setTopLeftX( final double topLeftX )
+  {
+    _topLeftX = topLeftX;
+  }
+
+  public double getTopLeftY()
+  {
+    return _topLeftY;
+  }
+
+  public void setTopLeftY( final double topLeftY )
+  {
+    _topLeftY = topLeftY;
   }
 }

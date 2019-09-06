@@ -57,10 +57,34 @@ public final class Game
     registerTile( "resources/tiles/spr_tile_wall_top_t", Tiles.WALL_TOP_T );
     final TileType emptyTileType = _tileTypeManager.registerEmptyTileType( Tiles.EMPTY, 0 );
 
+    initLevel( emptyTileType );
+  }
+
+  private void initLevel( @Nonnull final TileType emptyTileType )
+  {
     _level = new Level( 19, 19, emptyTileType );
+
     final HTMLCanvasElement canvas = _renderer.getCanvas();
     _cellWidth = canvas.width / ( _level.getColumnCount() * 1D );
     _cellHeight = canvas.height / ( _level.getRowCount() * 1D );
+
+    int index = 0;
+    final int columnCount = _level.getColumnCount();
+    final int rowCount = _level.getRowCount();
+    final Tile[] tiles = _level.getTiles();
+    double topLeftY = 0;
+    for ( int i = 0; i < rowCount; i++ )
+    {
+      double topLeftX = 0;
+      for ( int j = 0; j < columnCount; j++ )
+      {
+        final Tile tile = tiles[ index++ ];
+        tile.setTopLeftX( topLeftX );
+        tile.setTopLeftY( topLeftY );
+        topLeftX += _cellWidth;
+      }
+      topLeftY += _cellHeight;
+    }
   }
 
   public void start( @Nonnull final String levelData )
@@ -103,13 +127,11 @@ public final class Game
   private void drawWorld()
   {
     int index = 0;
-    double rowY = 0;
     final int rowCount = _level.getRowCount();
     final int columnCount = _level.getColumnCount();
     final Tile[] tiles = _level.getTiles();
     for ( int i = 0; i < rowCount; i++ )
     {
-      double cellX = 0;
       for ( int j = 0; j < columnCount; j++ )
       {
         final Tile tile = tiles[ index++ ];
@@ -117,11 +139,9 @@ public final class Game
         final Texture texture = tileType.getTexture();
         if ( null != texture )
         {
-          _renderer.getContext().drawImage( texture.getImage(), cellX, rowY );
+          _renderer.getContext().drawImage( texture.getImage(), tile.getTopLeftX(), tile.getTopLeftY() );
         }
-        cellX += _cellWidth;
       }
-      rowY += _cellHeight;
     }
   }
 
