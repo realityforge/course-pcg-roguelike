@@ -1,12 +1,11 @@
 package com.artemis.annotations;
 
+import com.artemis.Component;
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
-
-import com.artemis.Component;
 
 /**
  * Transforms a {@link Component} into a {@link com.artemis.PooledComponent}. Component transformation
@@ -16,18 +15,18 @@ import com.artemis.Component;
  * This feature helps mitigate garbage collection related freezes and stuttering on the Android platform.
  * It is considered stable. If pooling is not available on a platform, this feature will degrade
  * gracefully to vanilla components.
- * 
+ *
  * @see <a href="https://github.com/junkdog/artemis-odb/wiki/%40PooledWeaver">Component pooling</a>
- *	  on the wiki.
+ * on the wiki.
  */
-@Retention(RetentionPolicy.CLASS)
-@Target(ElementType.TYPE)
+@Retention( RetentionPolicy.CLASS )
+@Target( ElementType.TYPE )
 @Documented
-public @interface PooledWeaver {
-	
-	/**
-	 * If true, forces weaving even if maven property <code>enablePooledWeaving</code> is
-	 * set to <code>false</code>. 
-	 */
-	boolean forceWeaving() default false;
+public @interface PooledWeaver
+{
+  /**
+   * If true, forces weaving even if maven property <code>enablePooledWeaving</code> is
+   * set to <code>false</code>.
+   */
+  boolean forceWeaving() default false;
 }

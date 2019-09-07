@@ -2,7 +2,6 @@ package com.artemis.injection;
 
 import com.artemis.InjectionException;
 import com.artemis.World;
-
 import java.util.Map;
 
 /**
@@ -17,64 +16,62 @@ import java.util.Map;
  * @author Snorre E. Brekke
  * @see FieldHandler
  */
-public interface Injector {
+public interface Injector
+{
+  /**
+   * Programmatic retrieval of registered objects. Useful when
+   * full injection isn't necessary.
+   *
+   * @param id Name or class name.
+   * @return the requested object, or null if not found
+   * @see com.artemis.WorldConfiguration#register(String, Object)
+   */
+  <T> T getRegistered( String id );
 
-	/**
-	 * Programmatic retrieval of registered objects. Useful when
-	 * full injection isn't necessary.
-	 *
-	 * @param id Name or class name.
-	 * @return the requested object, or null if not found
-	 *
-	 * @see com.artemis.WorldConfiguration#register(String, Object)
-	 */
-	<T> T getRegistered( String id );
+  /**
+   * Programmatic retrieval of registered objects. Useful when
+   * full injection isn't necessary. This method internally
+   * calls {@link #getRegistered(String)}, with the class name
+   * as parameter.
+   *
+   * @param id Uniquely registered instance, identified by class..
+   * @return the requested object, or null if not found
+   * @see com.artemis.WorldConfiguration#register(Object)
+   */
+  <T> T getRegistered( Class<T> id );
 
-	/**
-	 * Programmatic retrieval of registered objects. Useful when
-	 * full injection isn't necessary. This method internally
-	 * calls {@link #getRegistered(String)}, with the class name
-	 * as parameter.
-	 *
-	 * @param id Uniquely registered instance, identified by class..
-	 * @return the requested object, or null if not found
-	 *
-	 * @see com.artemis.WorldConfiguration#register(Object)
-	 */
-	<T> T getRegistered( Class<T> id );
+  /**
+   * @param world       this Injector will be used for
+   * @param injectables registered via {@link com.artemis.WorldConfiguration#register}
+   * @throws InjectionException when injector lacks a means to inject injectables.
+   */
+  void initialize( World world, Map<String, Object> injectables );
 
-	/**
-	 * @param world       this Injector will be used for
-	 * @param injectables registered via {@link com.artemis.WorldConfiguration#register}
-	 * @throws InjectionException when injector lacks a means to inject injectables.
-	 */
-	void initialize( World world, Map<String, Object> injectables );
+  /**
+   * Inject dependencies on object. The injector delegates to {@link FieldHandler} to resolve
+   * feiled values.
+   *
+   * @param target object which should have dependencies injected.
+   * @see FieldHandler
+   */
+  void inject( Object target )
+    throws RuntimeException;
 
-	/**
-	 * Inject dependencies on object. The injector delegates to {@link FieldHandler} to resolve
-	 * feiled values.
-	 *
-	 * @param target object which should have dependencies injected.
-	 * @throws RuntimeException
-	 * @see FieldHandler
-	 */
-	void inject( Object target ) throws RuntimeException;
+  /**
+   * Determins if a target object can be injected by this injector.
+   *
+   * @param target eligable for injection
+   * @return true if the Injector is capable of injecting the target object.
+   */
+  boolean isInjectable( Object target );
 
-	/**
-	 * Determins if a target object can be injected by this injector.
-	 *
-	 * @param target eligable for injection
-	 * @return true if the Injector is capable of injecting the target object.
-	 */
-	boolean isInjectable( Object target );
-
-	/**
-	 * Enables the injector to be configured with a custom {@link FieldHandler} which will
-	 * be used to resolve instance values for target-fields.
-	 *
-	 * @param fieldHandler to use for resolving dependency values
-	 * @return this Injector for chaining
-	 */
-	Injector setFieldHandler( FieldHandler fieldHandler );
+  /**
+   * Enables the injector to be configured with a custom {@link FieldHandler} which will
+   * be used to resolve instance values for target-fields.
+   *
+   * @param fieldHandler to use for resolving dependency values
+   * @return this Injector for chaining
+   */
+  Injector setFieldHandler( FieldHandler fieldHandler );
 
 }

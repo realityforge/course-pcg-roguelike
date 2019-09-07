@@ -2,7 +2,6 @@ package com.artemis;
 
 import com.artemis.utils.Bag;
 
-
 /**
  * Let the user set the size.
  * <p>
@@ -10,28 +9,29 @@ import com.artemis.utils.Bag;
  * beyond the given size. Only use this if you know what you are doing!
  * </p>
  *
- * @author junkdog
- *
  * @param <T> object type this bag holds
+ * @author junkdog
  */
-class WildBag<T> extends Bag<T> {
+class WildBag<T>
+  extends Bag<T>
+{
+  public WildBag( Class<T> type )
+  {
+    super( type );
+  }
 
-
-	public WildBag(Class<T> type) {
-		super(type);
-	}
-
-	/**
-	 * Set the size.
-	 * <p>
-	 * This will not resize the bag, nor will it clean up contents beyond the
-	 * given size. Use with caution.
-	 * </p>
-	 *
-	 * @param size the size to set
-	 */
-	void setSize(int size) {
-		this.size = size;
-	}
+  /**
+   * Set the size.
+   * <p>
+   * This will not resize the bag, nor will it clean up contents beyond the
+   * given size. Use with caution.
+   * </p>
+   *
+   * @param size the size to set
+   */
+  void setSize( int size )
+  {
+    this.size = size;
+  }
 
 }

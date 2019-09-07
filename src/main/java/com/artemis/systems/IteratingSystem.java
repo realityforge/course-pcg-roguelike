@@ -1,6 +1,8 @@
 package com.artemis.systems;
 
-import com.artemis.*;
+import com.artemis.Aspect;
+import com.artemis.BaseEntitySystem;
+import com.artemis.EntitySubscription;
 import com.artemis.utils.IntBag;
 
 /**
@@ -14,36 +16,41 @@ import com.artemis.utils.IntBag;
  * @author Adrian Papari
  * @see EntityProcessingSystem Entity iteration by entity reference.
  */
-public abstract class IteratingSystem extends BaseEntitySystem {
+public abstract class IteratingSystem
+  extends BaseEntitySystem
+{
+  /**
+   * Creates a new IteratingSystem.
+   *
+   * @param aspect the aspect to match entities
+   */
+  public IteratingSystem( Aspect.Builder aspect )
+  {
+    super( aspect );
+  }
 
-	/**
-	 * Creates a new IteratingSystem.
-	 *
-	 * @param aspect
-	 *			the aspect to match entities
-	 */
-	public IteratingSystem(Aspect.Builder aspect) {
-		super(aspect);
-	}
+  public IteratingSystem()
+  {
+  }
 
-	public IteratingSystem() {
-	}
+  /**
+   * Process a entity this system is interested in.
+   *
+   * @param entityId the entity to process
+   */
+  protected abstract void process( int entityId );
 
-	/**
-	 * Process a entity this system is interested in.
-	 *
-	 * @param entityId
-	 *			the entity to process
-	 */
-	protected abstract void process(int entityId);
-
-	/** @inheritDoc */
-	@Override
-	protected final void processSystem() {
-		IntBag actives = subscription.getEntities();
-		int[] ids = actives.getData();
-		for (int i = 0, s = actives.size(); s > i; i++) {
-			process(ids[i]);
-		}
-	}
+  /**
+   * @inheritDoc
+   */
+  @Override
+  protected final void processSystem()
+  {
+    IntBag actives = subscription.getEntities();
+    int[] ids = actives.getData();
+    for ( int i = 0, s = actives.size(); s > i; i++ )
+    {
+      process( ids[ i ] );
+    }
+  }
 }

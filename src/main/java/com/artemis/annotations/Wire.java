@@ -1,9 +1,15 @@
 package com.artemis.annotations;
 
-import com.artemis.*;
-
-import java.lang.annotation.*;
-
+import com.artemis.ComponentMapper;
+import com.artemis.EntitySystem;
+import com.artemis.Manager;
+import com.artemis.World;
+import com.artemis.WorldConfiguration;
+import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
  * Customizes reflective injection of {@link ComponentMapper}, {@link EntitySystem},
@@ -30,25 +36,23 @@ import java.lang.annotation.*;
  *
  * @see AspectDescriptor
  */
-@Retention(RetentionPolicy.RUNTIME)
-@Target({ElementType.FIELD, ElementType.TYPE})
+@Retention( RetentionPolicy.RUNTIME )
+@Target( { ElementType.FIELD, ElementType.TYPE } )
 @Documented
-public @interface Wire {
+public @interface Wire
+{
+  /**
+   * If true, also inject inherited fields.
+   */
+  boolean injectInherited() default false;
 
-	/**
-	 * If true, also inject inherited fields.
-	 */
-	boolean injectInherited() default false;
+  /**
+   * Throws a {@link NullPointerException} if field can't be injected.
+   */
+  boolean failOnNull() default true;
 
-
-	/**
-	 * Throws a {@link NullPointerException} if field can't be injected.
-	 */
-	boolean failOnNull() default true;
-
-
-	/**
-	 *
-	 */
-	String name() default "";
+  /**
+   *
+   */
+  String name() default "";
 }

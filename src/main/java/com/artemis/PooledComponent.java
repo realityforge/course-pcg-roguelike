@@ -7,8 +7,11 @@ package com.artemis;
  *
  * @see com.artemis.annotations.PooledWeaver to automate pooled component creation.
  */
-public abstract class PooledComponent extends Component {
-
-	/** Called whenever the component is recycled. Implementation should reset component to pristine state. */
-	protected abstract void reset();
+public abstract class PooledComponent
+  extends Component
+{
+  /**
+   * Called whenever the component is recycled. Implementation should reset component to pristine state.
+   */
+  protected abstract void reset();
 }

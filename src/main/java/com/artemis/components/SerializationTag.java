@@ -10,11 +10,14 @@ import com.artemis.annotations.Transient;
  * @see com.artemis.io.SaveFileFormat#has(String)
  */
 @Transient
-public class SerializationTag extends PooledComponent {
-	public String tag;
+public class SerializationTag
+  extends PooledComponent
+{
+  public String tag;
 
-	@Override
-	protected void reset() {
-		tag = null;
-	}
+  @Override
+  protected void reset()
+  {
+    tag = null;
+  }
 }

@@ -4,7 +4,6 @@ import com.artemis.Entity;
 import com.artemis.link.EntityLinkManager;
 import com.artemis.utils.Bag;
 import com.artemis.utils.IntBag;
-
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -26,7 +25,8 @@ import java.lang.annotation.Target;
  *
  * @see <a href="https://github.com/junkdog/artemis-odb/wiki/Entity-References-and-Serialization">Entity References and Serialization</a>
  */
-@Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.FIELD)
-public @interface EntityId {
+@Retention( RetentionPolicy.RUNTIME )
+@Target( ElementType.FIELD )
+public @interface EntityId
+{
 }

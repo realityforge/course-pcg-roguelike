@@ -9,10 +9,9 @@ import com.artemis.Entity;
 import com.artemis.EntitySubscription;
 import com.artemis.InvalidComponentException;
 import com.artemis.World;
-import com.artemis.utils.BitVector;
-
 import com.artemis.annotations.SkipWire;
 import com.artemis.utils.Bag;
+import com.artemis.utils.BitVector;
 import com.artemis.utils.ImmutableBag;
 import com.artemis.utils.IntBag;
 import com.artemis.utils.ShortBag;
@@ -29,258 +28,304 @@ import com.artemis.utils.reflect.ReflectionException;
  * @author Arni Arent
  */
 @SkipWire
-public class ComponentManager extends BaseSystem
+public class ComponentManager
+  extends BaseSystem
 {
-	/** Adrian's secret rebellion. */
-	static final int NO_COMPONENTS = 0;
+  /**
+   * Adrian's secret rebellion.
+   */
+  static final int NO_COMPONENTS = 0;
+  /**
+   * Collects all Entites marked for deletion from this ComponentManager.
+   */
+  private Bag<ComponentMapper> mappers = new Bag( ComponentMapper.class );
+  private final ComponentIdentityResolver identityResolver = new ComponentIdentityResolver();
+  final ShortBag entityToIdentity;
+  protected final ComponentTypeFactory typeFactory;
 
-	/** Collects all Entites marked for deletion from this ComponentManager. */
-	private Bag<ComponentMapper> mappers = new Bag( ComponentMapper.class);
+  /**
+   * Creates a new instance of {@link ComponentManager}.
+   */
+  protected ComponentManager( int entityContainerSize )
+  {
+    entityToIdentity = new ShortBag( entityContainerSize );
+    typeFactory = new ComponentTypeFactory( this, entityContainerSize );
+  }
 
-	private final ComponentIdentityResolver identityResolver = new ComponentIdentityResolver();
-	final ShortBag entityToIdentity;
-	protected final ComponentTypeFactory typeFactory;
+  @Override
+  protected void processSystem()
+  {
+  }
 
-	/**
-	 * Creates a new instance of {@link ComponentManager}.
-	 */
-	protected ComponentManager(int entityContainerSize) {
-		entityToIdentity = new ShortBag(entityContainerSize);
-		typeFactory = new ComponentTypeFactory(this, entityContainerSize);
-	}
+  /**
+   * Create a component of given type by class.
+   *
+   * @param owner          entity id
+   * @param componentClass class of component to instance.
+   * @return Newly created packed, pooled or basic component.
+   */
+  protected <T extends Component> T create( int owner, Class<T> componentClass )
+  {
+    return getMapper( componentClass ).create( owner );
+  }
 
-	@Override
-	protected void processSystem() {}
+  protected <T extends Component> ComponentMapper<T> getMapper( Class<T> mapper )
+  {
+    com.artemis.ComponentType type = typeFactory.getTypeFor( mapper );
+    return mappers.get( type.getIndex() );
+  }
 
-	/**
-	 * Create a component of given type by class.
-	 * @param owner entity id
-	 * @param componentClass class of component to instance.
-	 * @return Newly created packed, pooled or basic component.
-	 */
-	protected <T extends Component> T create( int owner, Class<T> componentClass) {
-		return getMapper(componentClass).create(owner);
-	}
+  void registerComponentType( com.artemis.ComponentType ct, int capacity )
+  {
+    int index = ct.getIndex();
+    ComponentMapper mapper = new ComponentMapper( ct.getType(), world );
+    mapper.components.ensureCapacity( capacity );
+    mappers.set( index, mapper );
+  }
 
-	protected <T extends Component> ComponentMapper<T> getMapper(Class<T> mapper) {
-		com.artemis.ComponentType type = typeFactory.getTypeFor( mapper);
-		return mappers.get(type.getIndex());
-	}
+  @SuppressWarnings( "unchecked" )
+  static <T extends Component> T newInstance( Class<T> componentClass )
+  {
+    try
+    {
+      return ClassReflection.newInstance( componentClass );
+    }
+    catch ( ReflectionException e )
+    {
+      throw new InvalidComponentException( componentClass, "Unable to instantiate component.", e );
+    }
+  }
 
-	void registerComponentType( com.artemis.ComponentType ct, int capacity) {
-		int index = ct.getIndex();
-		ComponentMapper mapper = new ComponentMapper(ct.getType(), world);
-		mapper.components.ensureCapacity(capacity);
-		mappers.set(index, mapper);
-	}
+  /**
+   * Removes all components from deleted entities.
+   *
+   * @param pendingPurge the entities to remove components from
+   */
+  void clean( IntBag pendingPurge )
+  {
+    int[] ids = pendingPurge.getData();
+    for ( int i = 0, s = pendingPurge.size(); s > i; i++ )
+    {
+      removeComponents( ids[ i ] );
+    }
+  }
 
-	@SuppressWarnings("unchecked")
-	static <T extends Component> T newInstance(Class<T> componentClass) {
-		try {
-			return ClassReflection.newInstance(componentClass);
-		} catch (ReflectionException e) {
-			throw new InvalidComponentException( componentClass, "Unable to instantiate component.", e);
-		}
-	}
+  private void removeComponents( int entityId )
+  {
+    Bag<ComponentMapper> mappers = componentMappers( entityId );
+    for ( int i = 0, s = mappers.size(); s > i; i++ )
+    {
+      mappers.get( i ).internalRemove( entityId );
+    }
 
+    setIdentity( entityId, 0 );
+  }
 
-	/**
-	 * Removes all components from deleted entities.
-	 *
-	 * @param pendingPurge
-	 *			the entities to remove components from
-	 */
-	void clean(IntBag pendingPurge) {
-		int[] ids = pendingPurge.getData();
-		for (int i = 0, s = pendingPurge.size(); s > i; i++) {
-			removeComponents(ids[i]);
-		}
-	}
+  /**
+   * Get all components from all entities for a given type.
+   *
+   * @param type the type of components to get
+   * @return a bag containing all components of the given type
+   */
+  protected Bag<Component> getComponentsByType( com.artemis.ComponentType type )
+  {
+    return mappers.get( type.getIndex() ).components;
+  }
 
-	private void removeComponents(int entityId) {
-		Bag<ComponentMapper> mappers = componentMappers(entityId);
-		for (int i = 0, s = mappers.size(); s > i; i++) {
-			mappers.get(i).internalRemove(entityId);
-		}
+  /**
+   * @return Bag of all generated component types, which identify components without having to use classes.
+   */
+  public ImmutableBag<com.artemis.ComponentType> getComponentTypes()
+  {
+    return typeFactory.types;
+  }
 
-		setIdentity(entityId, 0);
-	}
+  /**
+   * Get a component of an entity.
+   *
+   * @param entityId the entity associated with the component
+   * @param type     the type of component to get
+   * @return the component of given type
+   */
+  protected Component getComponent( int entityId, ComponentType type )
+  {
+    ComponentMapper mapper = mappers.get( type.getIndex() );
+    return mapper.get( entityId );
+  }
 
-	/**
-	 * Get all components from all entities for a given type.
-	 *
-	 * @param type
-	 *			the type of components to get
-	 * @return a bag containing all components of the given type
-	 */
-	protected Bag<Component> getComponentsByType( com.artemis.ComponentType type) {
-		return mappers.get(type.getIndex()).components;
-	}
+  /**
+   * Get all component associated with an entity.
+   *
+   * @param entityId the entity to get components from
+   * @param fillBag  a bag to be filled with components
+   * @return the {@code fillBag}, filled with the entities components
+   */
+  public Bag<Component> getComponentsFor( int entityId, Bag<Component> fillBag )
+  {
+    Bag<ComponentMapper> mappers = componentMappers( entityId );
 
-   /**
-	 * @return Bag of all generated component types, which identify components without having to use classes.
-	 */
-	public ImmutableBag<com.artemis.ComponentType> getComponentTypes() {
-		return typeFactory.types;
-	}
+    for ( int i = 0, s = mappers.size(); s > i; i++ )
+    {
+      fillBag.add( mappers.get( i ).get( entityId ) );
+    }
 
-	/**
-	 * Get a component of an entity.
-	 *
-	 * @param entityId
-	 *			the entity associated with the component
-	 * @param type
-	 *			the type of component to get
-	 * @return the component of given type
-	 */
-	protected Component getComponent(int entityId, ComponentType type) {
-		ComponentMapper mapper = mappers.get(type.getIndex());
-		return mapper.get(entityId);
-	}
+    return fillBag;
+  }
 
-	/**
-	 * Get all component associated with an entity.
-	 *
-	 * @param entityId
-	 *			the entity to get components from
-	 * @param fillBag
-	 *			a bag to be filled with components
-	 * @return the {@code fillBag}, filled with the entities components
-	 */
-	public Bag<Component> getComponentsFor(int entityId, Bag<Component> fillBag) {
-		Bag<ComponentMapper> mappers = componentMappers(entityId);
+  /**
+   * Get component composition of entity.
+   */
+  BitVector componentBits( int entityId )
+  {
+    int identityIndex = entityToIdentity.get( entityId );
+    return identityResolver.compositionBits.get( identityIndex );
+  }
 
-		for (int i = 0, s = mappers.size(); s > i; i++) {
-			fillBag.add(mappers.get(i).get(entityId));
-		}
+  /**
+   * Get component composition of entity.
+   */
+  private Bag<ComponentMapper> componentMappers( int entityId )
+  {
+    int identityIndex = entityToIdentity.get( entityId );
+    return identityResolver.compositionMappers.get( identityIndex );
+  }
 
-		return fillBag;
-	}
+  /**
+   * Fetches unique identifier for composition.
+   *
+   * @param componentBits composition to fetch unique identifier for.
+   * @return Unique identifier for passed composition.
+   */
+  public int compositionIdentity( BitVector componentBits )
+  {
+    int identity = identityResolver.getIdentity( componentBits );
+    if ( identity == -1 )
+    {
+      identity = identityResolver.allocateIdentity( componentBits, this );
+      world.getAspectSubscriptionManager()
+        .processComponentIdentity( identity, componentBits );
+    }
 
-	/** Get component composition of entity. */
-	BitVector componentBits(int entityId) {
-		int identityIndex = entityToIdentity.get(entityId);
-		return identityResolver.compositionBits.get(identityIndex);
-	}
+    return identity;
+  }
 
-	/** Get component composition of entity. */
-	private Bag<ComponentMapper> componentMappers(int entityId) {
-		int identityIndex = entityToIdentity.get(entityId);
-		return identityResolver.compositionMappers.get(identityIndex);
-	}
+  /**
+   * Fetch composition id for entity.
+   *
+   * A composition id is uniquely identified by a single Aspect. For performance reasons, each entity is
+   * identified by its composition id. Adding or removing components from an entity will change its compositionId.
+   *
+   * @return composition identity.
+   */
+  public int getIdentity( int entityId )
+  {
+    return entityToIdentity.get( entityId );
+  }
 
-	/**
-	 * Fetches unique identifier for composition.
-	 *
-	 * @param componentBits composition to fetch unique identifier for.
-	 * @return Unique identifier for passed composition.
-	 */
-	public int compositionIdentity(BitVector componentBits) {
-		int identity = identityResolver.getIdentity(componentBits);
-		if (identity == -1) {
-			identity = identityResolver.allocateIdentity(componentBits, this);
-			world.getAspectSubscriptionManager()
-				.processComponentIdentity(identity, componentBits);
-		}
+  /**
+   * Synchronizes new subscriptions with {@link World} state.
+   *
+   * @param es entity subscription to update.
+   */
+  void synchronize( EntitySubscription es )
+  {
+    Bag<BitVector> compositionBits = identityResolver.compositionBits;
+    for ( int i = 1, s = compositionBits.size(); s > i; i++ )
+    {
+      BitVector componentBits = compositionBits.get( i );
+      es.processComponentIdentity( i, componentBits );
+    }
 
-		return identity;
-	}
+    for ( Entity e : world.getEntityManager().entities )
+    {
+      if ( e != null )
+      {
+        es.check( e.id, getIdentity( e.id ) );
+      }
+    }
 
-	/**
-	 * Fetch composition id for entity.
-	 *
-	 * A composition id is uniquely identified by a single Aspect. For performance reasons, each entity is
-	 * identified by its composition id. Adding or removing components from an entity will change its compositionId.
-	 *
-	 * @param entityId
-	 * @return composition identity.
-	 */
-	public int getIdentity(int entityId) {
-		return entityToIdentity.get(entityId);
-	}
+    es.informEntityChanges();
+    es.rebuildCompressedActives();
+  }
 
-	/**
-	 * Synchronizes new subscriptions with {@link World} state.
-	 *
-	 * @param es entity subscription to update.
-	 */
-	void synchronize( EntitySubscription es) {
-		Bag<BitVector> compositionBits = identityResolver.compositionBits;
-		for (int i = 1, s = compositionBits.size(); s > i; i++) {
-			BitVector componentBits = compositionBits.get(i);
-			es.processComponentIdentity(i, componentBits);
-		}
+  /**
+   * Set composition id of entity.
+   *
+   * @param entityId      entity id
+   * @param compositionId composition id
+   */
+  void setIdentity( int entityId, int compositionId )
+  {
+    entityToIdentity.unsafeSet( entityId, (short) compositionId );
+  }
 
-		for ( Entity e : world.getEntityManager().entities) {
-			if (e != null) es.check(e.id, getIdentity(e.id));
-		}
+  /**
+   * @return Factory responsible for tracking all component types.
+   */
+  public ComponentTypeFactory getTypeFactory()
+  {
+    return typeFactory;
+  }
 
-		es.informEntityChanges();
-		es.rebuildCompressedActives();
-	}
+  public void ensureCapacity( int newSize )
+  {
+    typeFactory.initialMapperCapacity = newSize;
+    entityToIdentity.ensureCapacity( newSize );
+    for ( ComponentMapper mapper : mappers )
+    {
+      mapper.components.ensureCapacity( newSize );
+    }
+  }
 
-	/**
-	 * Set composition id of entity.
-	 *
-	 * @param entityId entity id
-	 * @param compositionId composition id
-	 */
-	void setIdentity(int entityId, int compositionId) {
-		entityToIdentity.unsafeSet(entityId, (short) compositionId);
-	}
+  /**
+   * Tracks all unique component compositions.
+   */
+  static final class ComponentIdentityResolver
+  {
+    final Bag<BitVector> compositionBits;
+    final Bag<Bag<ComponentMapper>> compositionMappers;
 
-	/**
-	 * @return Factory responsible for tracking all component types.
-	 */
-	public ComponentTypeFactory getTypeFactory() {
-		return typeFactory;
-	}
+    ComponentIdentityResolver()
+    {
+      compositionBits = new Bag( BitVector.class );
+      compositionBits.add( new BitVector() );
+      compositionMappers = new Bag<Bag<ComponentMapper>>();
+      compositionMappers.add( new Bag( ComponentMapper.class ) );
+    }
 
-	public void ensureCapacity(int newSize) {
-		typeFactory.initialMapperCapacity = newSize;
-		entityToIdentity.ensureCapacity(newSize);
-		for (ComponentMapper mapper : mappers) {
-			mapper.components.ensureCapacity(newSize);
-		}
-	}
+    /**
+     * Fetch unique identity for passed composition.
+     */
+    int getIdentity( BitVector components )
+    {
+      Object[] bitsets = compositionBits.getData();
+      int size = compositionBits.size();
+      for ( int i = NO_COMPONENTS; size > i; i++ )
+      { // want to start from 1 so that 0 can mean null
+        if ( components.equals( bitsets[ i ] ) )
+        {
+          return i;
+        }
+      }
 
-	/** Tracks all unique component compositions. */
-	static final class ComponentIdentityResolver {
-		final Bag<BitVector> compositionBits;
-		final Bag<Bag<ComponentMapper>> compositionMappers;
+      return -1;
+    }
 
-		ComponentIdentityResolver() {
-			compositionBits = new Bag(BitVector.class);
-			compositionBits.add(new BitVector());
-			compositionMappers = new Bag<Bag<ComponentMapper>>();
-			compositionMappers.add(new Bag(ComponentMapper.class));
-		}
+    int allocateIdentity( BitVector componentBits, ComponentManager cm )
+    {
+      Bag<ComponentMapper> mappers =
+        new Bag<ComponentMapper>( ComponentMapper.class, componentBits.cardinality() );
 
-		/** Fetch unique identity for passed composition. */
-		int getIdentity(BitVector components) {
-			Object[] bitsets = compositionBits.getData();
-			int size = compositionBits.size();
-			for (int i = NO_COMPONENTS; size > i; i++) { // want to start from 1 so that 0 can mean null
-				if (components.equals(bitsets[i]))
-					return i;
-			}
+      ComponentTypeFactory tf = cm.getTypeFactory();
+      for ( int i = componentBits.nextSetBit( 0 ); i >= 0; i = componentBits.nextSetBit( i + 1 ) )
+      {
+        mappers.add( cm.getMapper( tf.getTypeFor( i ).getType() ) );
+      }
 
-			return -1;
-		}
+      compositionMappers.add( mappers );
+      compositionBits.add( new BitVector( componentBits ) );
 
-		int allocateIdentity(BitVector componentBits, ComponentManager cm) {
-			Bag<ComponentMapper> mappers =
-				new Bag<ComponentMapper>(ComponentMapper.class, componentBits.cardinality());
-
-			ComponentTypeFactory tf = cm.getTypeFactory();
-			for (int i = componentBits.nextSetBit(0); i >= 0; i = componentBits.nextSetBit(i + 1)) {
-				mappers.add(cm.getMapper(tf.getTypeFor(i).getType()));
-			}
-
-			compositionMappers.add(mappers);
-			compositionBits.add(new BitVector(componentBits));
-
-			return compositionBits.size() - 1;
-		}
-	}
+      return compositionBits.size() - 1;
+    }
+  }
 }

@@ -5,21 +5,22 @@ package com.artemis.injection;
  *
  * @author Snorre E. Brekke
  */
-public enum ClassType {
-	/**
-	 * Used for (sub)classes of {@link com.artemis.ComponentMapper}
-	 */
-	MAPPER,
-	/**
-	 * Used for (sub)classes of {@link com.artemis.BaseSystem}
-	 */
-	SYSTEM,
-	/**
-	 * Used for (sub)classes of {@link com.artemis.World}
-	 */
-	WORLD,
-	/**
-	 * Used for everything else.
-	 */
-	CUSTOM
+public enum ClassType
+{
+  /**
+   * Used for (sub)classes of {@link com.artemis.ComponentMapper}
+   */
+  MAPPER,
+  /**
+   * Used for (sub)classes of {@link com.artemis.BaseSystem}
+   */
+  SYSTEM,
+  /**
+   * Used for (sub)classes of {@link com.artemis.World}
+   */
+  WORLD,
+  /**
+   * Used for everything else.
+   */
+  CUSTOM
 }

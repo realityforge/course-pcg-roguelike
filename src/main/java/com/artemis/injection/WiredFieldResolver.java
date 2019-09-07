@@ -3,7 +3,6 @@ package com.artemis.injection;
 import com.artemis.MundaneWireException;
 import com.artemis.World;
 import com.artemis.utils.reflect.Field;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -13,50 +12,60 @@ import java.util.Map;
  *
  * @author Snorre E. Brekke
  */
-public class WiredFieldResolver implements UseInjectionCache, PojoFieldResolver {
-	private InjectionCache cache;
+public class WiredFieldResolver
+  implements UseInjectionCache, PojoFieldResolver
+{
+  private InjectionCache cache;
+  private Map<String, Object> pojos = new HashMap<String, Object>();
+  private World world;
 
-	private Map<String, Object> pojos = new HashMap<String, Object>();
-	private World world;
+  public WiredFieldResolver()
+  {
+  }
 
-	public WiredFieldResolver() {
-	}
+  @Override
+  public void initialize( World world )
+  {
+    this.world = world;
+  }
 
-	@Override
-	public void initialize(World world) {
-		this.world = world;
-	}
+  @Override
+  public Object resolve( Object target, Class<?> fieldType, Field field )
+  {
+    ClassType injectionType = cache.getFieldClassType( fieldType );
+    CachedField cachedField = cache.getCachedField( field );
 
-	@Override
-	public Object resolve(Object target, Class<?> fieldType, Field field) {
-		ClassType injectionType = cache.getFieldClassType(fieldType);
-		CachedField cachedField = cache.getCachedField(field);
+    if ( injectionType == ClassType.CUSTOM || injectionType == ClassType.WORLD )
+    {
+      if ( cachedField.wireType == WireType.WIRE )
+      {
+        String key = cachedField.name;
+        if ( "".equals( key ) )
+        {
+          key = field.getType().getName();
+        }
 
-		if (injectionType == ClassType.CUSTOM || injectionType == ClassType.WORLD) {
-			if (cachedField.wireType == WireType.WIRE) {
-				String key = cachedField.name;
-				if ("".equals(key)) {
-					key = field.getType().getName();
-				}
+        if ( !pojos.containsKey( key ) && cachedField.failOnNull )
+        {
+          String err = "Not registered: " + key + "=" + fieldType;
+          throw new MundaneWireException( err );
+        }
 
-				if (!pojos.containsKey(key) && cachedField.failOnNull) {
-					String err = "Not registered: " + key + "=" + fieldType;
-					throw new MundaneWireException(err);
-				}
+        return pojos.get( key );
+      }
+    }
+    return null;
+  }
 
-				return pojos.get(key);
-			}
-		}
-		return null;
-	}
+  @Override
+  public void setCache( InjectionCache cache )
+  {
+    this.cache = cache;
+  }
 
-	@Override
-	public void setCache(InjectionCache cache) {
-		this.cache = cache;
-	}
-
-	@Override
-	public void setPojos(Map<String, Object> pojos) {
-		this.pojos = pojos;
-	}
+  @Override
+  public void setPojos( Map<String, Object> pojos )
+  {
+    this.pojos = pojos;
+  }
 }

@@ -10,5 +10,6 @@ package com.artemis;
  * @see PooledComponent
  * @see com.artemis.annotations.PooledWeaver
  */
-public abstract class Component {
+public abstract class Component
+{
 }

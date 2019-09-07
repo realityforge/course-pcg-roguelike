@@ -1,7 +1,11 @@
 package com.artemis.annotations;
 
-import com.artemis.*;
-
+import com.artemis.Aspect;
+import com.artemis.Component;
+import com.artemis.EntitySubscription;
+import com.artemis.EntitySystem;
+import com.artemis.EntityTransmuter;
+import com.artemis.World;
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -14,7 +18,7 @@ import java.lang.annotation.Target;
  * {@link EntitySubscription}, {@link EntityTransmuter}.</p>
  *
  * <p>On BaseEntitySystem subclasses, this annotation configures the aspects for the system,
- *  replacing the need to use constructor parameters.</>/p>
+ * replacing the need to use constructor parameters.</>/p>
  *
  * <p>This annotation can be combined with {@link All} and {@link One},
  * but will be ignored if {@link AspectDescriptor} is present.</p>
@@ -25,23 +29,22 @@ import java.lang.annotation.Target;
  * <h4>Note on EntityTransmuters</h4>
  * <p>{@link #value()} corresponds to remove.</p>
  *
+ * @author Felix Bridault
+ * @author Ken Schosinsky
  * @see All
  * @see One
  * @see AspectDescriptor
  * @see Wire
- *
- * @author Felix Bridault
- * @author Ken Schosinsky
  */
-@Retention(RetentionPolicy.RUNTIME)
-@Target({ ElementType.FIELD, ElementType.METHOD, ElementType.TYPE })
+@Retention( RetentionPolicy.RUNTIME )
+@Target( { ElementType.FIELD, ElementType.METHOD, ElementType.TYPE } )
 @Documented
 @UnstableApi
-public @interface Exclude {
-
-	/**
-	 * @return excluding types
-	 */
-	Class<? extends Component>[] value() default {};
+public @interface Exclude
+{
+  /**
+   * @return excluding types
+   */
+  Class<? extends Component>[] value() default {};
 
 }

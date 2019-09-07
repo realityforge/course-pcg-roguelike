@@ -1,6 +1,10 @@
 package com.artemis.annotations;
 
-import java.lang.annotation.*;
+import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
  * Customize how the fluid generator processes your class.
@@ -9,29 +13,29 @@ import java.lang.annotation.*;
  *
  * @author Daan van Yperen
  */
-@Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.TYPE)
+@Retention( RetentionPolicy.RUNTIME )
+@Target( ElementType.TYPE )
 @Documented
-public @interface Fluid {
+public @interface Fluid
+{
+  /**
+   * Name to use as a prefix for all methods relating to this
+   * component.
+   *
+   * If left empty artemis will use the default: classname starting
+   * with lowercase character. MyPos.class: "myPos"
+   */
+  String name() default "";
 
-    /**
-     * Name to use as a prefix for all methods relating to this
-     * component.
-     *
-     * If left empty artemis will use the default: classname starting
-     * with lowercase character. MyPos.class: "myPos"
-     */
-    String name() default "";
+  /**
+   * If you are using getters with parameters, but you prefer the fluid
+   * interface to just swallow the return value and return {@code E} instead,
+   * set this to true.
+   */
+  boolean swallowGettersWithParameters() default false;
 
-    /**
-     * If you are using getters with parameters, but you prefer the fluid
-     * interface to just swallow the return value and return {@code E} instead,
-     * set this to true.
-     */
-    boolean swallowGettersWithParameters() default false;
-
-    /**
-     * Exclude class from fluid interface.
-     */
-    boolean exclude() default false;
+  /**
+   * Exclude class from fluid interface.
+   */
+  boolean exclude() default false;
 }

@@ -1,7 +1,10 @@
 package com.artemis.annotations;
 
-import java.lang.annotation.*;
-
+import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
  * Skip reflective dependency injection on annotated field or class.
@@ -10,8 +13,9 @@ import java.lang.annotation.*;
  *
  * @author Daan van Yperen
  */
-@Retention(RetentionPolicy.RUNTIME)
-@Target({ElementType.FIELD, ElementType.TYPE})
+@Retention( RetentionPolicy.RUNTIME )
+@Target( { ElementType.FIELD, ElementType.TYPE } )
 @Documented
-public @interface SkipWire {
+public @interface SkipWire
+{
 }

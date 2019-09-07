@@ -9,9 +9,10 @@ import com.artemis.World;
  *
  * @author Snorre E. Brekke
  */
-public interface UseInjectionCache {
-	/**
-	 * @param cache used by the {@link FieldHandler}
-	 */
-	void setCache( InjectionCache cache );
+public interface UseInjectionCache
+{
+  /**
+   * @param cache used by the {@link FieldHandler}
+   */
+  void setCache( InjectionCache cache );
 }

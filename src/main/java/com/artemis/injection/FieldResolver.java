@@ -8,17 +8,15 @@ import com.artemis.utils.reflect.Field;
  *
  * @author Snorre E. Brekke
  */
-public interface FieldResolver {
+public interface FieldResolver
+{
+  /**
+   * Called after Wo
+   */
+  void initialize( World world );
 
-	/**
-	 * Called after Wo
-	 *
-	 * @param world
-	 */
-	void initialize( World world );
-
-	/**
-	 * @param target object which should have dependencies injected.
-	 */
-	Object resolve( Object target, Class<?> fieldType, Field field );
+  /**
+   * @param target object which should have dependencies injected.
+   */
+  Object resolve( Object target, Class<?> fieldType, Field field );
 }
