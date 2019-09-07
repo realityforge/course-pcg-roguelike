@@ -229,10 +229,10 @@ public class ComponentManager
 
     for ( Entity e : world.getEntityManager().entities )
     {
-			if ( e != null )
-			{
-				es.check( e.id, getIdentity( e.id ) );
-			}
+      if ( e != null )
+      {
+        es.check( e.id, getIdentity( e.id ) );
+      }
     }
 
     es.informEntityChanges();
@@ -293,10 +293,10 @@ public class ComponentManager
       int size = compositionBits.size();
       for ( int i = NO_COMPONENTS; size > i; i++ )
       { // want to start from 1 so that 0 can mean null
-				if ( components.equals( bitsets[ i ] ) )
-				{
-					return i;
-				}
+        if ( components.equals( bitsets[ i ] ) )
+        {
+          return i;
+        }
       }
 
       return -1;

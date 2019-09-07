@@ -21,10 +21,10 @@ public class InvocationStrategy
     BaseSystem[] systemsData = systems.getData();
     for ( int i = 0, s = systems.size(); s > i; i++ )
     {
-        if ( disabled.get( i ) )
-        {
-            continue;
-        }
+      if ( disabled.get( i ) )
+      {
+        continue;
+      }
 
       updateEntityStates();
       systemsData[ i ].process();
