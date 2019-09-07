@@ -10,7 +10,7 @@ public class InvocationStrategy
 {
   /**
    * Processes all systems in order.
-   * <p>
+   *
    * Should guarantee artemis is in a sane state using calls to #updateEntityStates
    * before each call to a system, and after the last system has been called, or if no
    * systems have been called at all.
@@ -18,7 +18,7 @@ public class InvocationStrategy
   @Override
   protected void process()
   {
-    BaseSystem[] systemsData = systems.getData();
+    Object[] systemsData = systems.getData();
     for ( int i = 0, s = systems.size(); s > i; i++ )
     {
       if ( disabled.get( i ) )
@@ -27,7 +27,7 @@ public class InvocationStrategy
       }
 
       updateEntityStates();
-      systemsData[ i ].process();
+      ( (BaseSystem) systemsData[ i ] ).process();
     }
 
     updateEntityStates();

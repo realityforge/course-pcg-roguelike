@@ -15,20 +15,18 @@
  ******************************************************************************/
 package com.artemis.utils.reflect;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Modifier;
+import com.artemis.gwtref.client.Parameter;
 
 /**
  * Provides information about, and access to, a single method on a class or interface.
  *
  * @author nexsoftware
  */
-@SuppressWarnings( { "unchecked", "rawtypes" } )
 public final class Method
 {
-  private final java.lang.reflect.Method method;
+  private final com.artemis.gwtref.client.Method method;
 
-  Method( java.lang.reflect.Method method )
+  Method( com.artemis.gwtref.client.Method method )
   {
     this.method = method;
   }
@@ -54,7 +52,13 @@ public final class Method
    */
   public Class[] getParameterTypes()
   {
-    return method.getParameterTypes();
+    Parameter[] parameters = method.getParameters();
+    Class[] parameterTypes = new Class[ parameters.length ];
+    for ( int i = 0, j = parameters.length; i < j; i++ )
+    {
+      parameterTypes[ i ] = parameters[ i ].getType();
+    }
+    return parameterTypes;
   }
 
   /**
@@ -62,17 +66,17 @@ public final class Method
    */
   public Class getDeclaringClass()
   {
-    return method.getDeclaringClass();
+    return method.getEnclosingType();
   }
 
   public boolean isAccessible()
   {
-    return method.isAccessible();
+    return method.isPublic();
   }
 
   public void setAccessible( boolean accessible )
   {
-    method.setAccessible( accessible );
+    // NOOP in GWT
   }
 
   /**
@@ -80,7 +84,7 @@ public final class Method
    */
   public boolean isAbstract()
   {
-    return Modifier.isAbstract( method.getModifiers() );
+    return method.isAbstract();
   }
 
   /**
@@ -96,7 +100,7 @@ public final class Method
    */
   public boolean isFinal()
   {
-    return Modifier.isFinal( method.getModifiers() );
+    return method.isFinal();
   }
 
   /**
@@ -104,7 +108,7 @@ public final class Method
    */
   public boolean isPrivate()
   {
-    return Modifier.isPrivate( method.getModifiers() );
+    return method.isPrivate();
   }
 
   /**
@@ -112,7 +116,7 @@ public final class Method
    */
   public boolean isProtected()
   {
-    return Modifier.isProtected( method.getModifiers() );
+    return method.isProtected();
   }
 
   /**
@@ -120,7 +124,7 @@ public final class Method
    */
   public boolean isPublic()
   {
-    return Modifier.isPublic( method.getModifiers() );
+    return method.isPublic();
   }
 
   /**
@@ -128,7 +132,7 @@ public final class Method
    */
   public boolean isNative()
   {
-    return Modifier.isNative( method.getModifiers() );
+    return method.isNative();
   }
 
   /**
@@ -136,7 +140,7 @@ public final class Method
    */
   public boolean isStatic()
   {
-    return Modifier.isStatic( method.getModifiers() );
+    return method.isStatic();
   }
 
   /**
@@ -161,16 +165,11 @@ public final class Method
     {
       throw new ReflectionException( "Illegal argument(s) supplied to method: " + getName(), e );
     }
-    catch ( IllegalAccessException e )
-    {
-      throw new ReflectionException( "Illegal access to method: " + getName(), e );
-    }
-    catch ( InvocationTargetException e )
-    {
-      throw new ReflectionException( "Exception occurred in method: " + getName(), e );
-    }
   }
 
+  /**
+   * Returns this element's annotation for the specified type if such an annotation is present, else null.
+   */
   public <T extends java.lang.annotation.Annotation> T getAnnotation( Class<T> annotationClass )
   {
     final Annotation declaredAnnotation = getDeclaredAnnotation( annotationClass );
@@ -182,7 +181,15 @@ public final class Method
    */
   public boolean isAnnotationPresent( Class<? extends java.lang.annotation.Annotation> annotationType )
   {
-    return method.isAnnotationPresent( annotationType );
+    java.lang.annotation.Annotation[] annotations = method.getDeclaredAnnotations();
+    for ( java.lang.annotation.Annotation annotation : annotations )
+    {
+      if ( annotation.annotationType().equals( annotationType ) )
+      {
+        return true;
+      }
+    }
+    return false;
   }
 
   /**
@@ -208,10 +215,6 @@ public final class Method
   public Annotation getDeclaredAnnotation( Class<? extends java.lang.annotation.Annotation> annotationType )
   {
     java.lang.annotation.Annotation[] annotations = method.getDeclaredAnnotations();
-    if ( annotations == null )
-    {
-      return null;
-    }
     for ( java.lang.annotation.Annotation annotation : annotations )
     {
       if ( annotation.annotationType().equals( annotationType ) )

@@ -1,5 +1,6 @@
 package com.artemis.io;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -15,11 +16,14 @@ public class InputStreamHelper
   }
 
   /**
-   * Reset input stream
+   * Resets the buffer to the marked position.  The marked position
+   * is 0 unless another position was marked or an offset was specified
+   * in the constructor.
    */
   public static void reset( InputStream is )
     throws IOException
   {
+    ensureIsByteArrayInputStream( is );
     is.reset();
   }
 
@@ -37,6 +41,20 @@ public class InputStreamHelper
    */
   public static boolean isMarkSupported( InputStream is )
   {
+    ensureIsByteArrayInputStream( is );
     return is.markSupported();
+  }
+
+  private static void ensureIsByteArrayInputStream( InputStream is )
+  {
+		if ( !isByteArrayInputStream( is ) )
+		{
+			throw new RuntimeException( is.getClass() + "not supported. world-io only supports ByteArrayInputStream." );
+		}
+  }
+
+  private static boolean isByteArrayInputStream( InputStream is )
+  {
+    return ByteArrayInputStream.class.equals( is.getClass() );
   }
 }

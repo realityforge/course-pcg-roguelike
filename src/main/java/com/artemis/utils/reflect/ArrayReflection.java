@@ -15,12 +15,13 @@
  ******************************************************************************/
 package com.artemis.utils.reflect;
 
+import com.artemis.gwtref.client.ReflectionCache;
+
 /**
  * Utilities for Array reflection.
  *
  * @author nexsoftware
  */
-@SuppressWarnings( { "rawtypes" } )
 public final class ArrayReflection
 {
   /**
@@ -28,7 +29,7 @@ public final class ArrayReflection
    */
   static public Object newInstance( Class c, int size )
   {
-    return java.lang.reflect.Array.newInstance( c, size );
+    return ReflectionCache.instance.newArray( c, size );
   }
 
   /**
@@ -36,7 +37,7 @@ public final class ArrayReflection
    */
   static public int getLength( Object array )
   {
-    return java.lang.reflect.Array.getLength( array );
+    return ReflectionCache.instance.getArrayLength( ReflectionCache.getType( array.getClass() ), array );
   }
 
   /**
@@ -44,7 +45,7 @@ public final class ArrayReflection
    */
   static public Object get( Object array, int index )
   {
-    return java.lang.reflect.Array.get( array, index );
+    return ReflectionCache.instance.getArrayElement( ReflectionCache.getType( array.getClass() ), array, index );
   }
 
   /**
@@ -52,7 +53,6 @@ public final class ArrayReflection
    */
   static public void set( Object array, int index, Object value )
   {
-    java.lang.reflect.Array.set( array, index, value );
+    ReflectionCache.instance.setArrayElement( ReflectionCache.getType( array.getClass() ), array, index, value );
   }
-
 }

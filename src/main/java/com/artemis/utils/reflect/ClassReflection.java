@@ -15,14 +15,19 @@
  ******************************************************************************/
 package com.artemis.utils.reflect;
 
-import java.lang.reflect.Modifier;
+import com.artemis.gwtref.client.ReflectionCache;
+import com.artemis.gwtref.client.Type;
+import com.artemis.utils.reflect.Annotation;
+import com.artemis.utils.reflect.Constructor;
+import com.artemis.utils.reflect.Field;
+import com.artemis.utils.reflect.Method;
+import com.artemis.utils.reflect.ReflectionException;
 
 /**
  * Utilities for Class reflection.
  *
  * @author nexsoftware
  */
-@SuppressWarnings( { "unchecked", "rawtypes" } )
 public final class ClassReflection
 {
   /**
@@ -33,7 +38,7 @@ public final class ClassReflection
   {
     try
     {
-      return Class.forName( name );
+      return ReflectionCache.forName( name ).getClassOfType();
     }
     catch ( ClassNotFoundException e )
     {
@@ -54,7 +59,12 @@ public final class ClassReflection
    */
   static public boolean isInstance( Class c, Object obj )
   {
-    return c.isInstance( obj );
+    return isAssignableFrom( c, obj.getClass() );
+  }
+
+  static public String getCanonicalName( Class c )
+  {
+    return c.getSimpleName();
   }
 
   /**
@@ -63,7 +73,9 @@ public final class ClassReflection
    */
   static public boolean isAssignableFrom( Class c1, Class c2 )
   {
-    return c1.isAssignableFrom( c2 );
+    Type c1Type = ReflectionCache.getType( c1 );
+    Type c2Type = ReflectionCache.getType( c2 );
+    return c1Type.isAssignableFrom( c2Type );
   }
 
   /**
@@ -71,7 +83,7 @@ public final class ClassReflection
    */
   static public boolean isMemberClass( Class c )
   {
-    return c.isMemberClass();
+    return ReflectionCache.getType( c ).isMemberClass();
   }
 
   /**
@@ -79,7 +91,7 @@ public final class ClassReflection
    */
   static public boolean isStaticClass( Class c )
   {
-    return Modifier.isStatic( c.getModifiers() );
+    return ReflectionCache.getType( c ).isStatic();
   }
 
   /**
@@ -87,7 +99,7 @@ public final class ClassReflection
    */
   static public boolean isAbstractClass( Class c )
   {
-    return Modifier.isAbstract( c.getModifiers() );
+    return ReflectionCache.getType( c ).isAbstract();
   }
 
   /**
@@ -98,65 +110,38 @@ public final class ClassReflection
   {
     try
     {
-      return c.newInstance();
+      return (T) ReflectionCache.getType( c ).newInstance();
     }
-    catch ( InstantiationException e )
+    catch ( NoSuchMethodException e )
     {
-      String help = ". Make sure class has a public no-arg constructor.";
-      throw new ReflectionException( "Could not instantiate instance of class: " + c.getName() + help, e );
-    }
-    catch ( IllegalAccessException e )
-    {
-      String help = ". Make sure class has a public no-arg constructor.";
-      throw new ReflectionException( "Could not instantiate instance of class: " + c.getName() + help, e );
+      throw new ReflectionException( "Could not use default constructor of " + c.getName(), e );
     }
   }
 
   /**
-   * Returns an array of {@link Constructor} containing the public constructors of the class represented by the supplied Class.
+   * Returns an array of {@link com.artemis.utils.reflect.Constructor} containing the public constructors of the class represented by the supplied Class.
    */
-  static public Constructor[] getConstructors( Class c )
+  static public com.artemis.utils.reflect.Constructor[] getConstructors( Class c )
   {
-    java.lang.reflect.Constructor[] constructors = c.getConstructors();
-    Constructor[] result = new Constructor[ constructors.length ];
+    com.artemis.gwtref.client.Constructor[] constructors = ReflectionCache.getType( c ).getConstructors();
+    com.artemis.utils.reflect.Constructor[] result = new com.artemis.utils.reflect.Constructor[ constructors.length ];
     for ( int i = 0, j = constructors.length; i < j; i++ )
     {
-      result[ i ] = new Constructor( constructors[ i ] );
+      result[ i ] = new com.artemis.utils.reflect.Constructor( constructors[ i ] );
     }
     return result;
   }
 
   /**
-   * Returns a {@link Constructor} that represents the public constructor for the supplied class which takes the supplied parameter types.
+   * Returns a {@link com.artemis.utils.reflect.Constructor} that represents the public constructor for the supplied class which takes the supplied
+   * parameter types.
    */
-  static public Constructor getConstructor( Class c, Class... parameterTypes )
+  static public com.artemis.utils.reflect.Constructor getConstructor( Class c, Class... parameterTypes )
     throws ReflectionException
   {
     try
     {
-      return new Constructor( c.getConstructor( parameterTypes ) );
-    }
-    catch ( SecurityException e )
-    {
-      throw new ReflectionException( "Security violation occurred while getting constructor for class: '" +
-                                     c.getName() +
-                                     "'.", e );
-    }
-    catch ( NoSuchMethodException e )
-    {
-      throw new ReflectionException( "Constructor not found for class: " + c.getName(), e );
-    }
-  }
-
-  /**
-   * Returns a {@link Constructor} that represents the constructor for the supplied class which takes the supplied parameter types.
-   */
-  static public Constructor getDeclaredConstructor( Class c, Class... parameterTypes )
-    throws ReflectionException
-  {
-    try
-    {
-      return new Constructor( c.getDeclaredConstructor( parameterTypes ) );
+      return new com.artemis.utils.reflect.Constructor( ReflectionCache.getType( c ).getConstructor( parameterTypes ) );
     }
     catch ( SecurityException e )
     {
@@ -169,28 +154,50 @@ public final class ClassReflection
   }
 
   /**
-   * Returns an array of {@link Method} containing the public member methods of the class represented by the supplied Class.
+   * Returns a {@link com.artemis.utils.reflect.Constructor} that represents the constructor for the supplied class which takes the supplied parameter
+   * types.
    */
-  static public Method[] getMethods( Class c )
+  static public com.artemis.utils.reflect.Constructor getDeclaredConstructor( Class c, Class... parameterTypes )
+    throws ReflectionException
   {
-    java.lang.reflect.Method[] methods = c.getMethods();
-    Method[] result = new Method[ methods.length ];
+    try
+    {
+      return new Constructor( ReflectionCache.getType( c ).getDeclaredConstructor( parameterTypes ) );
+    }
+    catch ( SecurityException e )
+    {
+      throw new ReflectionException( "Security violation while getting constructor for class: " + c.getName(), e );
+    }
+    catch ( NoSuchMethodException e )
+    {
+      throw new ReflectionException( "Constructor not found for class: " + c.getName(), e );
+    }
+  }
+
+  /**
+   * Returns an array of {@link com.artemis.utils.reflect.Method} containing the public member methods of the class represented by the supplied Class.
+   */
+  static public com.artemis.utils.reflect.Method[] getMethods( Class c )
+  {
+    com.artemis.gwtref.client.Method[] methods = ReflectionCache.getType( c ).getMethods();
+    com.artemis.utils.reflect.Method[] result = new com.artemis.utils.reflect.Method[ methods.length ];
     for ( int i = 0, j = methods.length; i < j; i++ )
     {
-      result[ i ] = new Method( methods[ i ] );
+      result[ i ] = new com.artemis.utils.reflect.Method( methods[ i ] );
     }
     return result;
   }
 
   /**
-   * Returns a {@link Method} that represents the public member method for the supplied class which takes the supplied parameter types.
+   * Returns a {@link com.artemis.utils.reflect.Method} that represents the public member method for the supplied class which takes the supplied parameter
+   * types.
    */
-  static public Method getMethod( Class c, String name, Class... parameterTypes )
+  static public com.artemis.utils.reflect.Method getMethod( Class c, String name, Class... parameterTypes )
     throws ReflectionException
   {
     try
     {
-      return new Method( c.getMethod( name, parameterTypes ) );
+      return new com.artemis.utils.reflect.Method( ReflectionCache.getType( c ).getMethod( name, parameterTypes ) );
     }
     catch ( SecurityException e )
     {
@@ -204,28 +211,28 @@ public final class ClassReflection
   }
 
   /**
-   * Returns an array of {@link Method} containing the methods declared by the class represented by the supplied Class.
+   * Returns an array of {@link com.artemis.utils.reflect.Method} containing the methods declared by the class represented by the supplied Class.
    */
-  static public Method[] getDeclaredMethods( Class c )
+  static public com.artemis.utils.reflect.Method[] getDeclaredMethods( Class c )
   {
-    java.lang.reflect.Method[] methods = c.getDeclaredMethods();
-    Method[] result = new Method[ methods.length ];
+    com.artemis.gwtref.client.Method[] methods = ReflectionCache.getType( c ).getDeclaredMethods();
+    com.artemis.utils.reflect.Method[] result = new com.artemis.utils.reflect.Method[ methods.length ];
     for ( int i = 0, j = methods.length; i < j; i++ )
     {
-      result[ i ] = new Method( methods[ i ] );
+      result[ i ] = new com.artemis.utils.reflect.Method( methods[ i ] );
     }
     return result;
   }
 
   /**
-   * Returns a {@link Method} that represents the method declared by the supplied class which takes the supplied parameter types.
+   * Returns a {@link com.artemis.utils.reflect.Method} that represents the method declared by the supplied class which takes the supplied parameter types.
    */
-  static public Method getDeclaredMethod( Class c, String name, Class... parameterTypes )
+  static public com.artemis.utils.reflect.Method getDeclaredMethod( Class c, String name, Class... parameterTypes )
     throws ReflectionException
   {
     try
     {
-      return new Method( c.getDeclaredMethod( name, parameterTypes ) );
+      return new Method( ReflectionCache.getType( c ).getMethod( name, parameterTypes ) );
     }
     catch ( SecurityException e )
     {
@@ -239,82 +246,74 @@ public final class ClassReflection
   }
 
   /**
-   * Returns an array of {@link Field} containing the public fields of the class represented by the supplied Class.
+   * Returns an array of {@link com.artemis.utils.reflect.Field} containing the public fields of the class represented by the supplied Class.
    */
-  static public Field[] getFields( Class c )
+  static public com.artemis.utils.reflect.Field[] getFields( Class c )
   {
-    java.lang.reflect.Field[] fields = c.getFields();
-    Field[] result = new Field[ fields.length ];
+    com.artemis.gwtref.client.Field[] fields = ReflectionCache.getType( c ).getFields();
+    com.artemis.utils.reflect.Field[] result = new com.artemis.utils.reflect.Field[ fields.length ];
     for ( int i = 0, j = fields.length; i < j; i++ )
     {
-      result[ i ] = new Field( fields[ i ] );
+      result[ i ] = new com.artemis.utils.reflect.Field( fields[ i ] );
     }
     return result;
   }
 
   /**
-   * Returns a {@link Field} that represents the specified public member field for the supplied class.
+   * Returns a {@link com.artemis.utils.reflect.Field} that represents the specified public member field for the supplied class.
    */
-  static public Field getField( Class c, String name )
+  static public com.artemis.utils.reflect.Field getField( Class c, String name )
     throws ReflectionException
   {
     try
     {
-      return new Field( c.getField( name ) );
+      return new com.artemis.utils.reflect.Field( ReflectionCache.getType( c ).getField( name ) );
     }
     catch ( SecurityException e )
     {
       throw new ReflectionException( "Security violation while getting field: " + name + ", for class: " + c.getName(),
                                      e );
     }
-    catch ( NoSuchFieldException e )
-    {
-      throw new ReflectionException( "Field not found: " + name + ", for class: " + c.getName(), e );
-    }
   }
 
   /**
-   * Returns an array of {@link Field} objects reflecting all the fields declared by the supplied class.
+   * Returns an array of {@link com.artemis.utils.reflect.Field} objects reflecting all the fields declared by the supplied class.
    */
-  static public Field[] getDeclaredFields( Class c )
+  static public com.artemis.utils.reflect.Field[] getDeclaredFields( Class c )
   {
-    java.lang.reflect.Field[] fields = c.getDeclaredFields();
-    Field[] result = new Field[ fields.length ];
+    com.artemis.gwtref.client.Field[] fields = ReflectionCache.getType( c ).getDeclaredFields();
+    com.artemis.utils.reflect.Field[] result = new com.artemis.utils.reflect.Field[ fields.length ];
     for ( int i = 0, j = fields.length; i < j; i++ )
     {
-      result[ i ] = new Field( fields[ i ] );
+      result[ i ] = new com.artemis.utils.reflect.Field( fields[ i ] );
     }
     return result;
   }
 
   /**
-   * Creates a new instance of the annotation represented by the supplied annotationClass.
+   * Returns this element's annotation for the specified type if such an annotation is present, else null.
    */
   static public <T extends java.lang.annotation.Annotation> T getAnnotation( Class c, Class<T> annotationClass )
     throws ReflectionException
   {
-    final Annotation declaredAnnotation = getDeclaredAnnotation( c, annotationClass );
+    final com.artemis.utils.reflect.Annotation declaredAnnotation = getDeclaredAnnotation( c, annotationClass );
     return declaredAnnotation != null ? declaredAnnotation.getAnnotation( annotationClass ) : null;
   }
 
   /**
-   * Returns a {@link Field} that represents the specified declared field for the supplied class.
+   * Returns a {@link com.artemis.utils.reflect.Field} that represents the specified declared field for the supplied class.
    */
-  static public Field getDeclaredField( Class c, String name )
+  static public com.artemis.utils.reflect.Field getDeclaredField( Class c, String name )
     throws ReflectionException
   {
     try
     {
-      return new Field( c.getDeclaredField( name ) );
+      return new Field( ReflectionCache.getType( c ).getField( name ) );
     }
     catch ( SecurityException e )
     {
       throw new ReflectionException( "Security violation while getting field: " + name + ", for class: " + c.getName(),
                                      e );
-    }
-    catch ( NoSuchFieldException e )
-    {
-      throw new ReflectionException( "Field not found: " + name + ", for class: " + c.getName(), e );
     }
   }
 
@@ -323,33 +322,46 @@ public final class ClassReflection
    */
   static public boolean isAnnotationPresent( Class c, Class<? extends java.lang.annotation.Annotation> annotationType )
   {
-    return c.isAnnotationPresent( annotationType );
+    java.lang.annotation.Annotation[] annotations = ReflectionCache.getType( c ).getDeclaredAnnotations();
+		if ( annotations == null )
+		{
+			return false;
+		}
+
+    for ( java.lang.annotation.Annotation annotation : annotations )
+    {
+      if ( annotation.annotationType().equals( annotationType ) )
+      {
+        return true;
+      }
+    }
+    return false;
   }
 
   /**
-   * Returns an array of {@link Annotation} objects reflecting all annotations declared by the supplied class,
+   * Returns an array of {@link com.artemis.utils.reflect.Annotation} objects reflecting all annotations declared by the supplied class,
    * or an empty array if there are none. Does not include inherited annotations.
    */
-  static public Annotation[] getDeclaredAnnotations( Class c )
+  static public com.artemis.utils.reflect.Annotation[] getDeclaredAnnotations( Class c )
   {
-    java.lang.annotation.Annotation[] annotations = c.getDeclaredAnnotations();
-    Annotation[] result = new Annotation[ annotations.length ];
+    java.lang.annotation.Annotation[] annotations = ReflectionCache.getType( c ).getDeclaredAnnotations();
+    com.artemis.utils.reflect.Annotation[] result = new com.artemis.utils.reflect.Annotation[ annotations.length ];
     for ( int i = 0; i < annotations.length; i++ )
     {
-      result[ i ] = new Annotation( annotations[ i ] );
+      result[ i ] = new com.artemis.utils.reflect.Annotation( annotations[ i ] );
     }
     return result;
   }
 
   /**
-   * Returns an {@link Annotation} object reflecting the annotation provided, or null of this field doesn't
+   * Returns an {@link com.artemis.utils.reflect.Annotation} object reflecting the annotation provided, or null of this field doesn't
    * have such an annotation. This is a convenience function if the caller knows already which annotation
    * type he's looking for.
    */
-  static public Annotation getDeclaredAnnotation( Class c,
-                                                  Class<? extends java.lang.annotation.Annotation> annotationType )
+  static public com.artemis.utils.reflect.Annotation getDeclaredAnnotation( Class c,
+                                                                            Class<? extends java.lang.annotation.Annotation> annotationType )
   {
-    java.lang.annotation.Annotation[] annotations = c.getDeclaredAnnotations();
+    java.lang.annotation.Annotation[] annotations = ReflectionCache.getType( c ).getDeclaredAnnotations();
     for ( java.lang.annotation.Annotation annotation : annotations )
     {
       if ( annotation.annotationType().equals( annotationType ) )

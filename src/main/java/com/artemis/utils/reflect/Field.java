@@ -15,22 +15,18 @@
  ******************************************************************************/
 package com.artemis.utils.reflect;
 
-import java.lang.reflect.GenericArrayType;
-import java.lang.reflect.Modifier;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
+import com.artemis.gwtref.client.Type;
 
 /**
  * Provides information about, and access to, a single field of a class or interface.
  *
  * @author nexsoftware
  */
-@SuppressWarnings( { "unchecked", "rawtypes" } )
 public final class Field
 {
-  private final java.lang.reflect.Field field;
+  private final com.artemis.gwtref.client.Field field;
 
-  Field( java.lang.reflect.Field field )
+  Field( com.artemis.gwtref.client.Field field )
   {
     this.field = field;
   }
@@ -48,7 +44,7 @@ public final class Field
    */
   public Class getType()
   {
-    return field.getType();
+    return field.getType().getClassOfType();
   }
 
   /**
@@ -56,17 +52,17 @@ public final class Field
    */
   public Class getDeclaringClass()
   {
-    return field.getDeclaringClass();
+    return field.getEnclosingType().getClassOfType();
   }
 
   public boolean isAccessible()
   {
-    return field.isAccessible();
+    return field.isPublic();
   }
 
   public void setAccessible( boolean accessible )
   {
-    field.setAccessible( accessible );
+    // NOOP in GWT
   }
 
   /**
@@ -82,7 +78,7 @@ public final class Field
    */
   public boolean isFinal()
   {
-    return Modifier.isFinal( field.getModifiers() );
+    return field.isFinal();
   }
 
   /**
@@ -90,7 +86,7 @@ public final class Field
    */
   public boolean isPrivate()
   {
-    return Modifier.isPrivate( field.getModifiers() );
+    return field.isPrivate();
   }
 
   /**
@@ -98,7 +94,7 @@ public final class Field
    */
   public boolean isProtected()
   {
-    return Modifier.isProtected( field.getModifiers() );
+    return field.isProtected();
   }
 
   /**
@@ -106,7 +102,7 @@ public final class Field
    */
   public boolean isPublic()
   {
-    return Modifier.isPublic( field.getModifiers() );
+    return field.isPublic();
   }
 
   /**
@@ -114,7 +110,7 @@ public final class Field
    */
   public boolean isStatic()
   {
-    return Modifier.isStatic( field.getModifiers() );
+    return field.isStatic();
   }
 
   /**
@@ -122,7 +118,7 @@ public final class Field
    */
   public boolean isTransient()
   {
-    return Modifier.isTransient( field.getModifiers() );
+    return field.isTransient();
   }
 
   /**
@@ -130,7 +126,7 @@ public final class Field
    */
   public boolean isVolatile()
   {
-    return Modifier.isVolatile( field.getModifiers() );
+    return field.isVolatile();
   }
 
   /**
@@ -147,32 +143,8 @@ public final class Field
    */
   public Class getElementType( int index )
   {
-    Type genericType = field.getGenericType();
-    if ( genericType instanceof ParameterizedType )
-    {
-      Type[] actualTypes = ( (ParameterizedType) genericType ).getActualTypeArguments();
-      if ( actualTypes.length - 1 >= index )
-      {
-        Type actualType = actualTypes[ index ];
-				if ( actualType instanceof Class )
-				{
-					return (Class) actualType;
-				}
-				else if ( actualType instanceof ParameterizedType )
-				{
-					return (Class) ( (ParameterizedType) actualType ).getRawType();
-				}
-				else if ( actualType instanceof GenericArrayType )
-				{
-					Type componentType = ( (GenericArrayType) actualType ).getGenericComponentType();
-					if ( componentType instanceof Class )
-					{
-						return ArrayReflection.newInstance( (Class) componentType, 0 ).getClass();
-					}
-				}
-      }
-    }
-    return null;
+    Type elementType = field.getElementType( index );
+    return elementType != null ? elementType.getClassOfType() : null;
   }
 
   /**
@@ -187,11 +159,12 @@ public final class Field
     }
     catch ( IllegalArgumentException e )
     {
-      throw new ReflectionException( "Object is not an instance of " + getDeclaringClass(), e );
+      throw new ReflectionException( "Could not get " + getDeclaringClass() + "#" + getName() + ": " + e.getMessage(),
+                                     e );
     }
     catch ( IllegalAccessException e )
     {
-      throw new ReflectionException( "Illegal access to field: " + getName(), e );
+      throw new ReflectionException( "Illegal access to field " + getName() + ": " + e.getMessage(), e );
     }
   }
 
@@ -207,14 +180,18 @@ public final class Field
     }
     catch ( IllegalArgumentException e )
     {
-      throw new ReflectionException( "Argument not valid for field: " + getName(), e );
+      throw new ReflectionException( "Could not set " + getDeclaringClass() + "#" + getName() + ": " + e.getMessage(),
+                                     e );
     }
     catch ( IllegalAccessException e )
     {
-      throw new ReflectionException( "Illegal access to field: " + getName(), e );
+      throw new ReflectionException( "Illegal access to field " + getName() + ": " + e.getMessage(), e );
     }
   }
 
+  /**
+   * Returns this element's annotation for the specified type if such an annotation is present, else null.
+   */
   public <T extends java.lang.annotation.Annotation> T getAnnotation( Class<T> annotationClass )
   {
     final Annotation declaredAnnotation = getDeclaredAnnotation( annotationClass );
@@ -226,7 +203,15 @@ public final class Field
    */
   public boolean isAnnotationPresent( Class<? extends java.lang.annotation.Annotation> annotationType )
   {
-    return field.isAnnotationPresent( annotationType );
+    java.lang.annotation.Annotation[] annotations = field.getDeclaredAnnotations();
+    for ( java.lang.annotation.Annotation annotation : annotations )
+    {
+      if ( annotation.annotationType().equals( annotationType ) )
+      {
+        return true;
+      }
+    }
+    return false;
   }
 
   /**
@@ -252,10 +237,6 @@ public final class Field
   public Annotation getDeclaredAnnotation( Class<? extends java.lang.annotation.Annotation> annotationType )
   {
     java.lang.annotation.Annotation[] annotations = field.getDeclaredAnnotations();
-    if ( annotations == null )
-    {
-      return null;
-    }
     for ( java.lang.annotation.Annotation annotation : annotations )
     {
       if ( annotation.annotationType().equals( annotationType ) )
@@ -264,29 +245,5 @@ public final class Field
       }
     }
     return null;
-  }
-
-  @Override
-  public boolean equals( Object o )
-  {
-    if ( this == o )
-    {
-      return true;
-    }
-    if ( !( o instanceof Field ) )
-    {
-      return false;
-    }
-
-    Field field1 = (Field) o;
-
-    return !( field != null ? !field.equals( field1.field ) : field1.field != null );
-
-  }
-
-  @Override
-  public int hashCode()
-  {
-    return field != null ? field.hashCode() : 0;
   }
 }

@@ -289,7 +289,7 @@ public class ComponentManager
      */
     int getIdentity( BitVector components )
     {
-      BitVector[] bitsets = compositionBits.getData();
+      Object[] bitsets = compositionBits.getData();
       int size = compositionBits.size();
       for ( int i = NO_COMPONENTS; size > i; i++ )
       { // want to start from 1 so that 0 can mean null

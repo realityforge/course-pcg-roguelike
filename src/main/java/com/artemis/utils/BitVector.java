@@ -1,450 +1,1069 @@
-/*******************************************************************************
- * Copyright 2011 See AUTHORS.libgdx file.
+/*
+ * Copyright 2009 Google Inc.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
  *
- *   http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- ******************************************************************************/
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
+ */
+
 package com.artemis.utils;
 
 import com.artemis.ComponentManager;
 import com.artemis.World;
-import java.util.Arrays;
+import com.artemis.utils.reflect.ClassReflection;
+import com.google.gwt.core.client.JavaScriptObject;
+import com.google.gwt.core.client.JsArrayInteger;
 
 /**
- * <p>Performance optimized bitset implementation. Certain operations are
- * prefixed with <code>unsafe</code>; these methods perform no validation,
- * and are primarily leveraged internally to optimize access on entityId bitsets.</p>
+ * This implementation uses bit groups of size 32 to keep track of when bits are
+ * set to true or false. This implementation also uses the sparse nature of
+ * JavaScript arrays to speed up cases when very few bits are set in a large bit
+ * set.
  *
- * <p>Originally adapted from <code>com.badlogic.gdx.utils.Bits</code>, it has been
- * renamed to avoid namespace confusion.</p>
- *
- * @author mzechner
- * @author jshapcott
- * @author junkdog (fork/changes)
- * @see com.artemis.EntityManager#registerEntityStore(BitVector)
+ * Since there is no speed advantage to pre-allocating array sizes in JavaScript
+ * the underlying array's length is shrunk to Sun's "logical length" whenever
+ * length() is called. This length is the index of the highest true bit, plus
+ * one, or zero if there are aren't any. This may cause the size() method to
+ * return a different size than in a true Java VM.
  */
 public class BitVector
+  implements Cloneable
 {
-  long[] words = { 0 };
+  // To speed up certain operations this class also uses the index properties
+  // of arrays as described in section 15.4 of "Standard ECMA-262" (June
+  // 1997),
+  // which can currently be found here:
+  // http://www.mozilla.org/js/language/E262.pdf
+  //
+  // 15.4 Array Objects
+  // Array objects give special treatment to a certain class of property
+  // names.
+  // A property name P (in the form of a string value) is an array index if
+  // and
+  // only if ToString(ToUint32(P)) is equal to P and ToUint32(P) is not equal
+  // to (2^32)-1.
+
+  // checks the index range
+  private static void checkIndex( int bitIndex )
+  {
+    // we only need to test for negatives, as there is no bit index too
+    // high.
+    if ( bitIndex < 0 )
+    {
+      throw new IndexOutOfBoundsException( "bitIndex < 0: " + bitIndex );
+    }
+  }
+
+  // checks to ensure indexes are not negative and not in reverse order
+  private static void checkRange( int fromIndex, int toIndex )
+  {
+    if ( fromIndex < 0 )
+    {
+      throw new IndexOutOfBoundsException( "fromIndex < 0: " + fromIndex );
+    }
+    if ( toIndex < 0 )
+    {
+      throw new IndexOutOfBoundsException( "toIndex < 0: " + toIndex );
+    }
+    if ( fromIndex > toIndex )
+    {
+      throw new IndexOutOfBoundsException( "fromIndex: " + fromIndex
+                                           + " > toIndex: " + toIndex );
+    }
+  }
+
+  // converts from a bit index to a word index
+  private static int wordIndex( int bitIndex )
+  {
+    // 32 bits per index
+    return bitIndex >>> 5;
+  }
+
+  // converts from a word index to a bit index
+  private static int bitIndex( int wordIndex )
+  {
+    // 1 word index for every 32 bit indexes
+    return wordIndex << 5;
+  }
+
+  // gives the word offset for a bit index
+  private static int bitOffset( int bitIndex )
+  {
+    return bitIndex & 0x1f;
+  }
+
+  //
+  // none of the following static method perform any bounds checking
+  //
+
+  // clears one bit
+  private static void clear( JsArrayInteger array, int bitIndex )
+  {
+    int index = wordIndex( bitIndex );
+    int word = getWord( array, index );
+    if ( word != 0 )
+    {
+      // mask the correct bit out
+      setWord( array, index, word & ~( 1 << ( bitOffset( bitIndex ) ) ) );
+    }
+  }
+
+  // clones the JSArrayInteger array
+  private static native JsArrayInteger clone( JsArrayInteger array ) /*-{
+    return array.slice(0);
+  }-*/;
+
+  // flips one bit
+  private static void flip( JsArrayInteger array, int bitIndex )
+  {
+    // calculate index and offset
+    int index = wordIndex( bitIndex );
+    int offset = bitOffset( bitIndex );
+
+    // figure out if the bit is on or off
+    int word = getWord( array, index );
+    if ( ( ( word >>> offset ) & 1 ) == 1 )
+    {
+      // if on, turn it off
+      setWord( array, index, word & ~( 1 << offset ) );
+    }
+    else
+    {
+      // if off, turn it on
+      array.set( index, word | ( 1 << offset ) );
+    }
+  }
+
+  // gets one bit
+  private static boolean get( JsArrayInteger array, int bitIndex )
+  {
+    // retrieve the bits for the given index
+    int word = getWord( array, wordIndex( bitIndex ) );
+
+    // shift and mask the bit out
+    return ( ( word >>> ( bitOffset( bitIndex ) ) ) & 1 ) == 1;
+  }
+
+  // sets one bit to true
+  private static void set( JsArrayInteger array, int bitIndex )
+  {
+    int index = wordIndex( bitIndex );
+    array.set( index, getWord( array, index ) | ( 1 << ( bitOffset( bitIndex ) ) ) );
+  }
+
+  // sets all bits to true within the given range
+  private static void set( JsArrayInteger array, int fromIndex, int toIndex )
+  {
+    int first = wordIndex( fromIndex );
+    int last = wordIndex( toIndex );
+    int startBit = bitOffset( fromIndex );
+    int endBit = bitOffset( toIndex );
+
+    if ( first == last )
+    {
+      // set the bits in between first and last
+      maskInWord( array, first, startBit, endBit );
+
+    }
+    else
+    {
+      // set the bits from fromIndex to the next 32 bit boundary
+      if ( startBit != 0 )
+      {
+        maskInWord( array, first++, startBit, 32 );
+      }
+
+      // set the bits from the last 32 bit boundary to the toIndex
+      if ( endBit != 0 )
+      {
+        maskInWord( array, last, 0, endBit );
+      }
+
+      //
+      // set everything in between
+      //
+      for ( int i = first; i < last; i++ )
+      {
+        array.set( i, 0xffffffff );
+      }
+    }
+  }
+
+  // copies a subset of the array
+  private static native JsArrayInteger slice( JsArrayInteger array,
+                                              int fromIndex, int toIndex ) /*-{
+    return array.slice(fromIndex, toIndex);
+  }-*/;
+
+  // trims the array to the minimum size it can without losing data
+  // returns index of the last element in the array, or -1 if empty
+  private static native int trimToSize( JsArrayInteger array ) /*-{
+    var length = array.length;
+    if (length === 0) {
+      return -1;
+    }
+
+    // check if the last bit is false
+    var last = length - 1;
+    if (array[last] !== undefined) {
+      return last;
+    }
+
+    // interleave property checks and linear index checks from the end
+    var biggestSeen = -1;
+    for (var property in array) {
+
+      // test the index first
+      if (--last === -1) {
+        return -1;
+      }
+      if (array[last] !== undefined) {
+        return last;
+      }
+
+      // now check the property
+      var number = property >>> 0;
+      if (String(number) == property && number !== 0xffffffff) {
+        if (number > biggestSeen) {
+          biggestSeen = number;
+        }
+      }
+
+    }
+    array.length = biggestSeen + 1;
+
+    return biggestSeen;
+  }-*/;
+
+  //
+  // word methods use the literal index into the array, not the bit index
+  //
+
+  // deletes an element from the array
+  private static native void deleteWord( JsArrayInteger array, int index ) /*-{
+    delete array[index];
+  }-*/;
+
+  // flips all bits stored at a certain index
+  private static void flipWord( JsArrayInteger array, int index )
+  {
+    int word = getWord( array, index );
+    if ( word == 0 )
+    {
+      array.set( index, 0xffffffff );
+    }
+    else
+    {
+      word = ~word;
+      setWord( array, index, word );
+    }
+  }
+
+  // flips all bits stored at a certain index within the given range
+  private static void flipMaskedWord( JsArrayInteger array, int index,
+                                      int from, int to )
+  {
+    if ( from == to )
+    {
+      return;
+    }
+    // get the bits
+    int word = getWord( array, index );
+    // adjust "to" so it will shift out those bits
+    to = 32 - to;
+    // create a mask and XOR it in
+    word ^= ( ( ( 0xffffffff >>> from ) << from ) << to ) >>> to;
+    setWord( array, index, word );
+  }
+
+  // returns all bits stored at a certain index
+  private static native int getWord( JsArrayInteger array, int index ) /*-{
+    // OR converts an undefined to 0
+    return array[index] | 0;
+  }-*/;
+
+  // sets all bits to true at a certain index within the given bit range
+  private static void maskInWord( JsArrayInteger array, int index, int from,
+                                  int to )
+  {
+    // shifting by 32 is the same as shifting by 0, this check prevents that
+    // from happening in addition to the obvious avoidance of extra work
+    if ( from != to )
+    {
+      // adjust "to" so it will shift out those bits
+      to = 32 - to;
+      // create a mask and OR it in
+      int value = getWord( array, index );
+      value |= ( ( 0xffffffff >>> from ) << ( from + to ) ) >>> to;
+      array.set( index, value );
+    }
+  }
+
+  // sets all bits to false at a certain index within the given bit range
+  private static void maskOutWord( JsArrayInteger array, int index, int from,
+                                   int to )
+  {
+    int word = getWord( array, index );
+    // something only happens if word has bits set
+    if ( word != 0 )
+    {
+      // create a mask
+      int mask;
+      if ( from != 0 )
+      {
+        mask = 0xffffffff >>> ( 32 - from );
+      }
+      else
+      {
+        mask = 0;
+      }
+      // shifting by 32 is the same as shifting by 0
+      if ( to != 32 )
+      {
+        mask |= 0xffffffff << to;
+      }
+
+      // mask it out
+      word &= mask;
+      setWord( array, index, word );
+    }
+  }
+
+  private static native int nextSetWord( JsArrayInteger array, int index ) /*-{
+    // interleave property checks and linear "index" checks
+    var length = array.length;
+    var localMinimum = @java.lang.Integer::MAX_VALUE;
+    for (var property in array) {
+
+      // test the index first
+      if (array[index] !== undefined) {
+        return index;
+      }
+      if (++index >= length) {
+        return -1;
+      }
+
+      // now check the property
+      var number = property >>> 0;
+      if (String(number) == property && number !== 0xffffffff) {
+        if (number >= index && number < localMinimum) {
+          localMinimum = number;
+        }
+      }
+    }
+
+    // if local minimum is what we started at, we found nothing
+    if (localMinimum === @java.lang.Integer::MAX_VALUE) {
+      return -1;
+    }
+
+    return localMinimum;
+  }-*/;
+
+  // sets all bits at a certain index to the given value
+  private static void setWord( JsArrayInteger array, int index, int value )
+  {
+    // keep 0s out of the array
+    if ( value == 0 )
+    {
+      deleteWord( array, index );
+    }
+    else
+    {
+      array.set( index, value );
+    }
+  }
+
+  // sets the array length
+  private static native void setLengthWords( JsArrayInteger array, int length ) /*-{
+    array.length = length;
+  }-*/;
+
+  // our array of bits
+  private JsArrayInteger array;
 
   public BitVector()
   {
+    // create a new array
+    array = JavaScriptObject.createArray().cast();
   }
 
-  /**
-   * Creates a bit set whose initial size is large enough to explicitly represent bits with indices in the range 0 through
-   * nbits-1.
-   *
-   * @param nbits the initial size of the bit set
-   */
   public BitVector( int nbits )
   {
-    checkCapacity( nbits >>> 6 );
-  }
+    this();
 
-  /**
-   * Creates a bit set based off another bit vector.
-   */
-  public BitVector( BitVector copyFrom )
-  {
-    words = Arrays.copyOf( copyFrom.words, copyFrom.words.length );
-  }
-
-  /**
-   * @param index the index of the bit
-   * @return whether the bit is set
-   * @throws ArrayIndexOutOfBoundsException if index < 0
-   */
-  public boolean get( int index )
-  {
-    final int word = index >>> 6;
-    return word < words.length &&
-           ( words[ word ] & ( 1L << index ) ) != 0L;
-  }
-
-  /**
-   * @param index the index of the bit to set
-   * @throws ArrayIndexOutOfBoundsException if index < 0
-   */
-  public void set( int index )
-  {
-    final int word = index >>> 6;
-    checkCapacity( word );
-    words[ word ] |= 1L << index;
-  }
-
-  /**
-   * @param index the index of the bit to set
-   * @throws ArrayIndexOutOfBoundsException if index < 0
-   */
-  public void set( int index, boolean value )
-  {
-    if ( value )
+    // throw an exception to be consistent
+    // but (do we want to be consistent?)
+    if ( nbits < 0 )
     {
-      set( index );
+      throw new NegativeArraySizeException( "nbits < 0: " + nbits );
     }
-    else
+
+    // even though the array's length is loosely kept to that of Sun's
+    // "logical
+    // length," this might help in some cases where code uses size() to fill
+    // in
+    // bits after constructing a BitSet, or after having one passed in as a
+    // parameter.
+    setLengthWords( array, wordIndex( nbits + 31 ) );
+  }
+
+  public BitVector( BitVector source )
+  {
+    this();
+    for ( int id = source.nextSetBit( 0 ); id != -1; id = source.nextSetBit( id + 1 ) )
     {
-      clear( index );
+      set( id );
     }
   }
 
-  /**
-   * @param index the index of the bit
-   * @return whether the bit is set
-   * @throws ArrayIndexOutOfBoundsException if index < 0 or index >= words.length</></>
-   */
-  public boolean unsafeGet( int index )
+  private BitVector( JsArrayInteger array )
   {
-    return ( words[ index >>> 6 ] & ( 1L << index ) ) != 0L;
+    this.array = array;
   }
 
-  /**
-   * @param index the index of the bit to set
-   * @throws ArrayIndexOutOfBoundsException if index < 0 or index >= words.length
-   */
-  public void unsafeSet( int index )
+  public void and( BitVector set )
   {
-    words[ index >>> 6 ] |= 1L << index;
-  }
-
-  /**
-   * @param index the index of the bit to set
-   * @throws ArrayIndexOutOfBoundsException if index < 0 or index >= words.length
-   */
-  public void unsafeSet( int index, boolean value )
-  {
-    if ( value )
+    // a & a is just a
+    if ( this == set )
     {
-      unsafeSet( index );
+      return;
     }
-    else
+
+    // trim the second set to avoid extra work
+    trimToSize( set.array );
+
+    // check if the length is longer than otherLength
+    int otherLength = set.array.length();
+    if ( array.length() > otherLength )
     {
-      unsafeClear( index );
+      // shrink the array, effectively ANDing those bits to false
+      setLengthWords( array, otherLength );
     }
-  }
 
-  /**
-   * @param index the index of the bit to flip
-   */
-  public void flip( int index )
-  {
-    final int word = index >>> 6;
-    checkCapacity( word );
-    words[ word ] ^= 1L << index;
-  }
-
-  /**
-   * Grows the backing array (<code>long[]</code>) so that it can hold the requested
-   * bits. Mostly applicable when relying on the <code>unsafe</code> methods,
-   * including {@link #unsafeGet(int)} and {@link #unsafeClear(int)}.
-   *
-   * @param bits number of bits to accomodate
-   */
-  public void ensureCapacity( int bits )
-  {
-    checkCapacity( bits >>> 6 );
-  }
-
-  private void checkCapacity( int len )
-  {
-    if ( len >= words.length )
+    // truth table
+    //
+    // case | a | b | a & b | change?
+    // 1 | false | false | false | a is already false
+    // 2 | false | true | false | a is already false
+    // 3 | true | false | false | set a to false
+    // 4 | true | true | true | a is already true
+    //
+    // we only need to change something in case 3, so iterate over set a
+    int index = 0;
+    while ( ( index = nextSetWord( array, index ) ) != -1 )
     {
-      long[] newBits = new long[ len + 1 ];
-      System.arraycopy( words, 0, newBits, 0, words.length );
-      words = newBits;
+      setWord( array, index, array.get( index ) & getWord( set.array, index ) );
+      index++;
     }
   }
 
-  /**
-   * @param index the index of the bit to clear
-   * @throws ArrayIndexOutOfBoundsException if index < 0
-   */
-  public void clear( int index )
+  public void andNot( BitVector set )
   {
-    final int word = index >>> 6;
-		if ( word >= words.length )
-		{
-			return;
-		}
-    words[ word ] &= ~( 1L << index );
+    // a & !a is false
+    if ( this == set )
+    {
+      // all falses result in an empty BitSet
+      clear();
+      return;
+    }
+
+    // trim the second set to avoid extra work
+    trimToSize( array );
+    int length = array.length();
+
+    // truth table
+    //
+    // case | a | b | !b | a & !b | change?
+    // 1 | false | false | true | false | a is already false
+    // 2 | false | true | false | false | a is already false
+    // 3 | true | false | true | true | a is already true
+    // 4 | true | true | false | false | set a to false
+    //
+    // we only need to change something in case 4
+    // whenever b is true, a should be false, so iterate over set b
+    int index = 0;
+    while ( ( index = nextSetWord( set.array, index ) ) != -1 )
+    {
+      setWord( array, index, getWord( array, index ) & ~set.array.get( index ) );
+      if ( ++index >= length )
+      {
+        // nothing further will affect anything
+        break;
+      }
+    }
+
   }
 
-  /**
-   * @param index the index of the bit to clear
-   * @throws ArrayIndexOutOfBoundsException if index < 0 or index >= words.length
-   */
-  public void unsafeClear( int index )
-  {
-    words[ index >>> 6 ] &= ~( 1L << index );
-  }
+  public native int cardinality() /*-{
+    var count = 0;
+    var array = this.@java.util.BitSet::array;
+    for (var property in array) {
+      var number = property >>> 0;
+      if (String(number) == property && number !== 0xffffffff) {
+        count += @java.lang.Integer::bitCount(I)(array[number]);
+      }
+    }
+    return count;
+  }-*/;
 
-  /**
-   * Clears the entire bitset
-   */
   public void clear()
   {
-    Arrays.fill( words, 0L );
+    // create a new array
+    array = JavaScriptObject.createArray().cast();
   }
 
-  /**
-   * Returns the "logical size" of this bitset: the index of the highest set bit in the bitset plus one. Returns zero if the
-   * bitset contains no set bits.
-   *
-   * @return the logical size of this bitset
-   */
-  public int length()
+  public void clear( int bitIndex )
   {
-    long[] bits = this.words;
-    for ( int word = bits.length - 1; word >= 0; --word )
+    checkIndex( bitIndex );
+    clear( array, bitIndex );
+  }
+
+  public void clear( int fromIndex, int toIndex )
+  {
+    checkRange( fromIndex, toIndex );
+
+    int length = length();
+    if ( fromIndex >= length )
     {
-      long bitsAtWord = bits[ word ];
-			if ( bitsAtWord != 0 )
-			{
-				return ( word << 6 ) + 64 - Long.numberOfLeadingZeros( bitsAtWord );
-			}
+      // nothing to do
+      return;
     }
 
-    return 0;
+    // check to see if toIndex is greater than our array length
+    if ( toIndex >= length )
+    {
+      // truncate the array by setting it's length
+      int newLength = wordIndex( fromIndex + 31 );
+      setLengthWords( array, newLength );
+
+      // remove the extra bits off the end
+      if ( ( bitIndex( newLength ) ) - fromIndex != 0 )
+      {
+        maskOutWord( array, newLength - 1, bitOffset( fromIndex ), 32 );
+      }
+
+    }
+    else
+    {
+      int first = wordIndex( fromIndex );
+      int last = wordIndex( toIndex );
+      int startBit = bitOffset( fromIndex );
+      int endBit = bitOffset( toIndex );
+
+      if ( first == last )
+      {
+        // clear the bits in between first and last
+        maskOutWord( array, first, startBit, endBit );
+
+      }
+      else
+      {
+        // clear the bits from fromIndex to the next 32 bit boundary
+        if ( startBit != 0 )
+        {
+          maskOutWord( array, first++, startBit, 32 );
+        }
+
+        // clear the bits from the last 32 bit boundary to the toIndex
+        if ( endBit != 0 )
+        {
+          maskOutWord( array, last, 0, endBit );
+        }
+
+        //
+        // delete everything in between
+        //
+        for ( int i = first; i < last; i++ )
+        {
+          deleteWord( array, i );
+        }
+      }
+    }
   }
 
-  /**
-   * @return true if this bitset contains no bits that are set to true
-   */
-  public boolean isEmpty()
+  public Object clone()
   {
-    long[] bits = this.words;
-    int length = bits.length;
-    for ( int i = 0; i < length; i++ )
+    return new BitVector( clone( array ) );
+  }
+
+  @Override
+  public boolean equals( Object obj )
+  {
+    if ( this != obj )
     {
-      if ( bits[ i ] != 0L )
+
+      if ( !ClassReflection.isInstance( BitVector.class, obj ) )
       {
         return false;
       }
+
+      BitVector other = (BitVector) obj;
+
+      int last = trimToSize( array );
+      if ( last != trimToSize( other.array ) )
+      {
+        return false;
+      }
+
+      int index = 0;
+      while ( ( index = nextSetWord( array, index ) ) != -1 )
+      {
+        if ( getWord( array, index ) != getWord( other.array, index ) )
+        {
+          return false;
+        }
+        index++;
+      }
     }
+
     return true;
   }
 
-  /**
-   * Returns the index of the first bit that is set to true that occurs on or after the specified starting index. If no such bit
-   * exists then -1 is returned.
-   */
-  public int nextSetBit( int fromIndex )
+  public void flip( int bitIndex )
   {
-    int word = fromIndex >>> 6;
-		if ( word >= words.length )
-		{
-			return -1;
-		}
-
-    long bitmap = words[ word ] >>> fromIndex;
-		if ( bitmap != 0 )
-		{
-			return fromIndex + Long.numberOfTrailingZeros( bitmap );
-		}
-
-    for ( int i = 1 + word; i < words.length; i++ )
-    {
-      bitmap = words[ i ];
-      if ( bitmap != 0 )
-      {
-        return i * 64 + Long.numberOfTrailingZeros( bitmap );
-      }
-    }
-
-    return -1;
+    checkIndex( bitIndex );
+    flip( array, bitIndex );
   }
 
-  /**
-   * Returns the index of the first bit that is set to false that occurs on or after the specified starting index.
-   */
-  public int nextClearBit( int fromIndex )
+  public void flip( int fromIndex, int toIndex )
   {
-    int word = fromIndex >>> 6;
-		if ( word >= words.length )
-		{
-			return Math.min( fromIndex, words.length << 6 );
-		}
+    checkRange( fromIndex, toIndex );
 
-    long bitmap = ~( words[ word ] >>> fromIndex );
-		if ( bitmap != 0 )
-		{
-			return fromIndex + Long.numberOfTrailingZeros( bitmap );
-		}
+    int length = length();
 
-    for ( int i = 1 + word; i < words.length; i++ )
+    // if we are flipping bits beyond our length, we are setting them to
+    // true
+    if ( fromIndex >= length )
     {
-      bitmap = ~words[ i ];
-      if ( bitmap != 0 )
+      set( array, fromIndex, toIndex );
+      return;
+    }
+
+    // check to see if toIndex is greater than our array length
+    if ( toIndex >= length )
+    {
+      set( array, length, toIndex );
+      toIndex = length;
+    }
+
+    int first = wordIndex( fromIndex );
+    int last = wordIndex( toIndex );
+    int startBit = bitOffset( fromIndex );
+    int end = bitOffset( toIndex );
+
+    if ( first == last )
+    {
+      // flip the bits in between first and last
+      flipMaskedWord( array, first, startBit, end );
+
+    }
+    else
+    {
+      // clear the bits from fromIndex to the next 32 bit boundary
+      if ( startBit != 0 )
       {
-        return i * 64 + Long.numberOfTrailingZeros( bitmap );
+        flipMaskedWord( array, first++, startBit, 32 );
       }
-    }
 
-    return Math.min( fromIndex, words.length << 6 );
-  }
-
-  /**
-   * Performs a logical <b>AND</b> of this target bit set with the argument bit set. This bit set is modified so that each bit in
-   * it has the value true if and only if it both initially had the value true and the corresponding bit in the bit set argument
-   * also had the value true.
-   *
-   * @param other a bit set
-   */
-  public void and( BitVector other )
-  {
-    int commonWords = Math.min( words.length, other.words.length );
-    for ( int i = 0; commonWords > i; i++ )
-    {
-      words[ i ] &= other.words[ i ];
-    }
-
-    if ( words.length > commonWords )
-    {
-      for ( int i = commonWords, s = words.length; s > i; i++ )
+      // clear the bits from the last 32 bit boundary to the toIndex
+      if ( end != 0 )
       {
-        words[ i ] = 0L;
+        flipMaskedWord( array, last, 0, end );
+      }
+
+      // flip everything in between
+      for ( int i = first; i < last; i++ )
+      {
+        flipWord( array, i );
       }
     }
   }
 
-  /**
-   * Clears all of the bits in this bit set whose corresponding bit is set in the specified bit set.
-   *
-   * @param other a bit set
-   */
-  public void andNot( BitVector other )
+  public boolean get( int bitIndex )
   {
-    int commonWords = Math.min( words.length, other.words.length );
-    for ( int i = 0; commonWords > i; i++ )
-    {
-      words[ i ] &= ~other.words[ i ];
-    }
+    checkIndex( bitIndex );
+    return get( array, bitIndex );
   }
 
-  /**
-   * Performs a logical <b>OR</b> of this bit set with the bit set argument. This bit set is modified so that a bit in it has the
-   * value true if and only if it either already had the value true or the corresponding bit in the bit set argument has the
-   * value true.
-   *
-   * @param other a bit set
-   */
-  public void or( BitVector other )
+  public BitVector get( int fromIndex, int toIndex )
   {
-    int commonWords = Math.min( words.length, other.words.length );
-    for ( int i = 0; commonWords > i; i++ )
+    checkRange( fromIndex, toIndex );
+
+    // no need to go past our length
+    int length = length();
+    if ( toIndex >= length )
     {
-      words[ i ] |= other.words[ i ];
+      toIndex = length();
     }
 
-    if ( commonWords < other.words.length )
+    // this is the bit shift offset for each group of bits
+    int rightShift = bitOffset( fromIndex );
+
+    if ( rightShift == 0 )
     {
-      checkCapacity( other.words.length );
-      for ( int i = commonWords, s = other.words.length; s > i; i++ )
+      int subFrom = wordIndex( fromIndex );
+      int subTo = wordIndex( toIndex + 31 );
+      JsArrayInteger subSet = slice( array, subFrom, subTo );
+      int leftOvers = bitOffset( toIndex );
+      if ( leftOvers != 0 )
       {
-        words[ i ] = other.words[ i ];
+        maskOutWord( subSet, subTo - subFrom - 1, leftOvers, 32 );
+      }
+      return new BitVector( subSet );
+    }
+
+    BitVector subSet = new BitVector();
+
+    int first = wordIndex( fromIndex );
+    int last = wordIndex( toIndex );
+
+    if ( first == last )
+    {
+      // number of bits to cut from the end
+      int end = 32 - ( bitOffset( toIndex ) );
+      // raw bits
+      int word = getWord( array, first );
+      // shift out those bits
+      word = ( ( word << end ) >>> end ) >>> rightShift;
+      // set it
+      if ( word != 0 )
+      {
+        subSet.set( 0, word );
+      }
+
+    }
+    else
+    {
+      // this will hold the newly packed bits
+      int current = 0;
+
+      // this is the raw index into the sub set
+      int subIndex = 0;
+
+      // fence post, carry over initial bits
+      int word = getWord( array, first++ );
+      current = word >>> rightShift;
+
+      // a left shift will be used to shift our bits to the top of
+      // "current"
+      int leftShift = 32 - rightShift;
+
+      // loop through everything in the middle
+      for ( int i = first; i <= last; i++ )
+      {
+        word = getWord( array, i );
+
+        // shift out the bits from the top, OR them into current bits
+        current |= word << leftShift;
+
+        // flush it out
+        if ( current != 0 )
+        {
+          subSet.array.set( subIndex, current );
+        }
+
+        // keep track of our index
+        subIndex++;
+
+        // carry over the unused bits
+        current = word >>> rightShift;
+      }
+
+      // fence post, flush out the extra bits, but don't go past the "end"
+      int end = 32 - ( bitOffset( toIndex ) );
+      current = ( current << ( rightShift + end ) ) >>> ( rightShift + end );
+      if ( current != 0 )
+      {
+        subSet.array.set( subIndex, current );
       }
     }
+
+    return subSet;
   }
 
   /**
-   * Performs a logical <b>XOR</b> of this bit set with the bit set argument. This bit set is modified so that a bit in it has
-   * the value true if and only if one of the following statements holds:
-   * <ul>
-   * <li>The bit initially has the value true, and the corresponding bit in the argument has the value false.</li>
-   * <li>The bit initially has the value false, and the corresponding bit in the argument has the value true.</li>
-   * </ul>
+   * This hash is different than the one described in Sun's documentation. The
+   * described hash uses 64 bit integers and that's not practical in
+   * JavaScript.
    */
-  public void xor( BitVector other )
+  @Override
+  public int hashCode()
   {
-    int commonWords = Math.min( words.length, other.words.length );
+    // FNV constants
+    final int fnvOffset = 0x811c9dc5;
+    final int fnvPrime = 0x1000193;
 
-    for ( int i = 0; commonWords > i; i++ )
+    // initialize
+    final int last = trimToSize( array );
+    int hash = fnvOffset ^ last;
+
+    // loop over the data
+    for ( int i = 0; i <= last; i++ )
     {
-      words[ i ] ^= other.words[ i ];
+      int value = getWord( array, i );
+      // hash one byte at a time using FNV1
+      hash = ( hash * fnvPrime ) ^ ( value & 0xff );
+      hash = ( hash * fnvPrime ) ^ ( ( value >>> 8 ) & 0xff );
+      hash = ( hash * fnvPrime ) ^ ( ( value >>> 16 ) & 0xff );
+      hash = ( hash * fnvPrime ) ^ ( value >>> 24 );
     }
 
-    if ( commonWords < other.words.length )
-    {
-      checkCapacity( other.words.length );
-      for ( int i = commonWords, s = other.words.length; s > i; i++ )
-      {
-        words[ i ] = other.words[ i ];
-      }
-    }
+    return hash;
   }
 
-  /**
-   * Returns true if the specified BitVector has any bits set to true that are also set to true in this BitVector.
-   *
-   * @param other a bit set
-   * @return boolean indicating whether this bit set intersects the specified bit set
-   */
-  public boolean intersects( BitVector other )
+  public boolean intersects( BitVector set )
   {
-    long[] bits = this.words;
-    long[] otherBits = other.words;
-    for ( int i = 0, s = Math.min( bits.length, otherBits.length ); s > i; i++ )
+    int last = trimToSize( array );
+
+    if ( this == set )
     {
-      if ( ( bits[ i ] & otherBits[ i ] ) != 0 )
+      // if it has any bits then it intersects itself
+      return last != -1;
+    }
+
+    int length = set.array.length();
+    int index = 0;
+    while ( ( index = nextSetWord( array, index ) ) != -1 )
+    {
+      if ( ( array.get( index ) & getWord( set.array, index ) ) != 0 )
       {
         return true;
       }
+      if ( ++index >= length )
+      {
+        // nothing further can intersect
+        break;
+      }
     }
+
     return false;
   }
 
-  /**
-   * Returns true if this bit set is a super set of the specified set,
-   * i.e. it has all bits set to true that are also set to true
-   * in the specified BitVector.
-   *
-   * @param other a bit set
-   * @return boolean indicating whether this bit set is a super set of the specified set
-   */
-  public boolean containsAll( BitVector other )
+  public boolean isEmpty()
   {
-    long[] bits = this.words;
-    long[] otherBits = other.words;
-    int otherBitsLength = otherBits.length;
-    int bitsLength = bits.length;
-
-    for ( int i = bitsLength; i < otherBitsLength; i++ )
-    {
-      if ( otherBits[ i ] != 0 )
-      {
-        return false;
-      }
-    }
-
-    for ( int i = 0, s = Math.min( bitsLength, otherBitsLength ); s > i; i++ )
-    {
-      if ( ( bits[ i ] & otherBits[ i ] ) != otherBits[ i ] )
-      {
-        return false;
-      }
-    }
-    return true;
+    return length() == 0;
   }
 
-  public int cardinality()
+  public int length()
   {
-    int count = 0;
-		for ( int i = 0; i < words.length; i++ )
-		{
-			count += Long.bitCount( words[ i ] );
-		}
+    int last = trimToSize( array );
+    if ( last == -1 )
+    {
+      return 0;
+    }
 
-    return count;
+    // compute the position of the leftmost bit's index
+    int[] offsets = { 16, 8, 4, 2, 1 };
+    int[] bitMasks = { 0xffff0000, 0xff00, 0xf0, 0xc, 0x2 };
+    int position = bitIndex( last ) + 1;
+    int word = getWord( array, last );
+    for ( int i = 0; i < offsets.length; i++ )
+    {
+      if ( ( word & bitMasks[ i ] ) != 0 )
+      {
+        word >>>= offsets[ i ];
+        position += offsets[ i ];
+      }
+    }
+    return position;
+  }
+
+  public int nextClearBit( int fromIndex )
+  {
+    checkIndex( fromIndex );
+    int index = wordIndex( fromIndex );
+
+    // special case for first index
+    int fromBit = fromIndex - ( bitIndex( index ) );
+    int word = getWord( array, index );
+    for ( int i = fromBit; i < 32; i++ )
+    {
+      if ( ( word & ( 1 << i ) ) == 0 )
+      {
+        return ( bitIndex( index ) ) + i;
+      }
+    }
+
+    // loop through the rest
+    while ( true )
+    {
+      index++;
+      word = getWord( array, index );
+      if ( word != 0xffffffff )
+      {
+        return ( bitIndex( index ) ) + Integer.numberOfTrailingZeros( ~word );
+      }
+    }
+  }
+
+  public int nextSetBit( int fromIndex )
+  {
+    checkIndex( fromIndex );
+
+    int index = wordIndex( fromIndex );
+
+    // check the current word
+    int word = getWord( array, index );
+    if ( word != 0 )
+    {
+      for ( int i = bitOffset( fromIndex ); i < 32; i++ )
+      {
+        if ( ( word & ( 1 << i ) ) != 0 )
+        {
+          return ( bitIndex( index ) ) + i;
+        }
+      }
+    }
+    index++;
+
+    // find the next set word
+    trimToSize( array );
+    index = nextSetWord( array, index );
+    if ( index == -1 )
+    {
+      return -1;
+    }
+
+    // return the next set bit
+    return ( bitIndex( index ) )
+           + Integer.numberOfTrailingZeros( array.get( index ) );
+  }
+
+  public void or( BitVector set )
+  {
+    // a | a is just a
+    if ( this == set )
+    {
+      return;
+    }
+
+    // truth table
+    //
+    // case | a | b | a | b | change?
+    // 1 | false | false | false | a is already false
+    // 2 | false | true | true | set a to true
+    // 3 | true | false | true | a is already true
+    // 4 | true | true | true | a is already true
+    //
+    // we only need to change something in case 2
+    // case 2 only happens when b is true, so iterate over set b
+    int index = 0;
+    while ( ( index = nextSetWord( set.array, index ) ) != -1 )
+    {
+      setWord( array, index, getWord( array, index ) | set.array.get( index ) );
+      index++;
+    }
+  }
+
+  public void set( int bitIndex )
+  {
+    checkIndex( bitIndex );
+    set( array, bitIndex );
+  }
+
+  public void set( int bitIndex, boolean value )
+  {
+    if ( value == true )
+    {
+      set( bitIndex );
+    }
+    else
+    {
+      clear( bitIndex );
+    }
+  }
+
+  public void set( int fromIndex, int toIndex )
+  {
+    checkRange( fromIndex, toIndex );
+    set( array, fromIndex, toIndex );
+  }
+
+  public void set( int fromIndex, int toIndex, boolean value )
+  {
+    if ( value == true )
+    {
+      set( fromIndex, toIndex );
+    }
+    else
+    {
+      clear( fromIndex, toIndex );
+    }
+  }
+
+  public int size()
+  {
+    // the number of bytes that can fit without using "more" memory
+    return bitIndex( array.length() );
+  }
+
+  @Override
+  public String toString()
+  {
+    // possibly faster if done in JavaScript and all numerical properties
+    // are
+    // put into an array and sorted
+
+    int length = length();
+    if ( length == 0 )
+    {
+      // a "length" of 0 means there are no bits set to true
+      return "{}";
+    }
+
+    StringBuilder sb = new StringBuilder( "{" );
+
+    // at this point, there is at least one true bit, nextSetBit can not
+    // fail
+    int next = nextSetBit( 0 );
+    sb.append( next );
+
+    // loop until nextSetBit returns -1
+    while ( ( next = nextSetBit( next + 1 ) ) != -1 )
+    {
+      sb.append( ", " );
+      sb.append( next );
+    }
+
+    sb.append( "}" );
+    return sb.toString();
+  }
+
+  public void xor( BitVector set )
+  {
+    // a ^ a is false
+    if ( this == set )
+    {
+      // this results in an empty BitSet
+      clear();
+      return;
+    }
+
+    // truth table
+    //
+    // case | a | b | a ^ b | change?
+    // 1 | false | false | false | a is already false
+    // 2 | false | true | true | set a to true
+    // 3 | true | false | true | a is already true
+    // 4 | true | true | false | set a to false
+    //
+    // we need to change something in cases 2 and 4
+    // cases 2 and 4 only happen when b is true, so iterate over set b
+    int index = 0;
+    while ( ( index = nextSetWord( set.array, index ) ) != -1 )
+    {
+      setWord( array, index, getWord( array, index ) ^ set.array.get( index ) );
+      index++;
+    }
   }
 
   /**
@@ -456,27 +1075,15 @@ public class BitVector
    */
   public IntBag toIntBag( IntBag out )
   {
+    out.setSize( 0 );
     if ( isEmpty() )
     {
-      out.setSize( 0 );
       return out;
     }
 
-    int count = prepareBag( out, 1 );
-
-    int[] data = out.getData();
-    for ( int i = 0, index = 0; count > index; i++ )
+    for ( int id = nextSetBit( 0 ); id >= 0; id = nextSetBit( id + 1 ) )
     {
-      long bitset = words[ i ];
-      int wordBits = i << 6;
-      while ( bitset != 0 )
-      {
-        long t = bitset & -bitset;
-        data[ index ] = wordBits + Long.bitCount( t - 1 );
-        bitset ^= t;
-
-        index++;
-      }
+      out.add( id );
     }
 
     return out;
@@ -493,120 +1100,59 @@ public class BitVector
    */
   public IntBag toIntBagIdCid( ComponentManager cm, IntBag out )
   {
+    out.setSize( 0 );
     if ( isEmpty() )
     {
-      out.setSize( 0 );
       return out;
     }
 
-    int count = prepareBag( out, 2 );
-
-    int[] data = out.getData();
-    for ( int i = 0, index = 0; count > index; i++ )
+    for ( int id = nextSetBit( 0 ); id >= 0; id = nextSetBit( id + 1 ) )
     {
-      long bitset = words[ i ];
-      int wordBits = i << 6;
-      while ( bitset != 0 )
-      {
-        long t = bitset & -bitset;
-        int id = wordBits + Long.bitCount( t - 1 );
-        data[ index ] = id;
-        data[ index + 1 ] = cm.getIdentity( id );
-        index += 2;
-        bitset ^= t;
-      }
+      out.add( id );
+      out.add( cm.getIdentity( id ) );
     }
 
     return out;
   }
 
-  private int prepareBag( IntBag out, int elementsPerEntry )
+  /**
+   * @param index the index of the bit to clear
+   * @throws ArrayIndexOutOfBoundsException if index < 0 or index >= words.length
+   */
+  public void unsafeClear( int index )
   {
-    int count = elementsPerEntry * cardinality();
-    out.ensureCapacity( count );
-    out.setSize( count );
-    return count;
+    clear( index );
   }
 
-  @Override
-  public int hashCode()
+  public void ensureCapacity( int bits )
   {
-    final int word = length() >>> 6;
-    int hash = 0;
-    for ( int i = 0; word >= i; i++ )
-    {
-      hash = 127 * hash + (int) ( words[ i ] ^ ( words[ i ] >>> 32 ) );
-    }
-    return hash;
+  } // no need for it here
+
+  /**
+   * @param index the index of the bit
+   * @return whether the bit is set
+   * @throws ArrayIndexOutOfBoundsException if index < 0 or index >= words.length</></>
+   */
+  public boolean unsafeGet( int index )
+  {
+    return get( index );
   }
 
-  @Override
-  public boolean equals( Object obj )
+  /**
+   * @param index the index of the bit to set
+   * @throws ArrayIndexOutOfBoundsException if index < 0 or index >= words.length
+   */
+  public void unsafeSet( int index )
   {
-		if ( this == obj )
-		{
-			return true;
-		}
-		if ( obj == null )
-		{
-			return false;
-		}
-		if ( getClass() != obj.getClass() )
-		{
-			return false;
-		}
-
-    BitVector other = (BitVector) obj;
-    long[] otherBits = other.words;
-
-    int commonWords = Math.min( words.length, otherBits.length );
-    for ( int i = 0; commonWords > i; i++ )
-    {
-			if ( words[ i ] != otherBits[ i ] )
-			{
-				return false;
-			}
-    }
-
-		if ( words.length == otherBits.length )
-		{
-			return true;
-		}
-
-    return length() == other.length();
+    set( index );
   }
 
-  @Override
-  public String toString()
+  /**
+   * @param index the index of the bit to set
+   * @throws ArrayIndexOutOfBoundsException if index < 0 or index >= words.length
+   */
+  public void unsafeSet( int index, boolean value )
   {
-    int cardinality = cardinality();
-    int end = Math.min( 128, cardinality );
-    int count = 0;
-
-    StringBuilder sb = new StringBuilder();
-    sb.append( "BitVector[" ).append( cardinality );
-    if ( cardinality > 0 )
-    {
-      sb.append( ": {" );
-      for ( int i = nextSetBit( 0 ); end > count && i != -1; i = nextSetBit( i + 1 ) )
-      {
-				if ( count != 0 )
-				{
-					sb.append( ", " );
-				}
-
-        sb.append( i );
-        count++;
-      }
-
-			if ( cardinality > end )
-			{
-				sb.append( " ..." );
-			}
-
-      sb.append( "}" );
-    }
-    sb.append( "]" );
-    return sb.toString();
+    set( index, value );
   }
 }

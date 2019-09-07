@@ -43,7 +43,7 @@ public class Bag<E>
    */
   public Bag( Class<E> type )
   {
-    this( type, 64 );
+    this( 64 );
   }
 
   /**
@@ -59,7 +59,7 @@ public class Bag<E>
 
   public Bag( Class<E> type, int capacity )
   {
-    data = (E[]) ArrayReflection.newInstance( type, capacity );
+    this( capacity );
   }
 
   /**
@@ -279,19 +279,6 @@ public class Bag<E>
   }
 
   /**
-   * <em>Unsafe method.</em> Sets element at specified index in the bag,
-   * without updating size. Internally used by artemis when operation is
-   * known to be safe.
-   *
-   * @param index position of element
-   * @param e     the element
-   */
-  public void unsafeSet( int index, E e )
-  {
-    data[ index ] = e;
-  }
-
-  /**
    * Set element at specified index in the bag.
    *
    * @param index position of element
@@ -305,13 +292,39 @@ public class Bag<E>
 		}
 
     size = Math.max( size, index + 1 );
-    unsafeSet( index, e );
+    data[ index ] = e;
+  }
+
+  /**
+   * <em>Unsafe method.</em> Sets element at specified index in the bag,
+   * without updating size. Internally used by artemis when operation is
+   * known to be safe.
+   *
+   * @param index position of element
+   * @param e     the element
+   */
+  public void unsafeSet( int index, E e )
+  {
+    data[ index ] = e;
+  }
+
+  /**
+   * Increase the capacity of the bag.
+   *
+   * @throws ArrayIndexOutOfBoundsException if new capacity is smaller than old
+   */
+  @SuppressWarnings( "unchecked" )
+  private void grow()
+  {
+    grow( data.length * 2 );
   }
 
   private void grow( int newCapacity )
     throws ArrayIndexOutOfBoundsException
   {
-    data = Arrays.copyOf( data, newCapacity );
+    E[] oldData = data;
+    data = (E[]) new Object[ newCapacity ];
+    System.arraycopy( oldData, 0, data, 0, oldData.length );
   }
 
   /**
@@ -359,15 +372,14 @@ public class Bag<E>
 
   /**
    * Returns this bag's underlying array.
-   *
    * <p>
-   * <b>Use of this method requires typed instantiation, e.g. Bag<E>(Class<E>)</b>
+   * Use with care.
    * </p>
    *
    * @return the underlying array
    * @see Bag#size()
    */
-  public E[] getData()
+  public Object[] getData()
   {
     return data;
   }
