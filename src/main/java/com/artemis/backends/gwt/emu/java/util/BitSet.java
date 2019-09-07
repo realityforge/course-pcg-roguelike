@@ -14,7 +14,7 @@
  * the License.
  */
 
-package com.artemis.backends.gwt.emu.java.util;
+package java.util;
 
 import com.artemis.utils.reflect.ClassReflection;
 import com.google.gwt.core.client.JavaScriptObject;

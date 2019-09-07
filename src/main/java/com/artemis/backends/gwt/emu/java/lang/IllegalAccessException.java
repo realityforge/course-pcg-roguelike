@@ -1,4 +1,4 @@
-package com.artemis.backends.gwt.emu.java.lang;
+package java.lang;
 
 public class IllegalAccessException
   extends Exception

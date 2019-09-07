@@ -1,4 +1,4 @@
-package com.artemis.backends.gwt.emu.java.util;
+package java.util;
 
 import java.io.Serializable;
 

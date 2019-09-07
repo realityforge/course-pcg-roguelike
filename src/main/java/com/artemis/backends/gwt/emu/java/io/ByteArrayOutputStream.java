@@ -16,7 +16,7 @@
  *  limitations under the License.
  */
 // CHECKSTYLE_ON
-package com.artemis.backends.gwt.emu.java.io;
+package java.io;
 
 import java.io.IOException;
 import java.io.OutputStream;
