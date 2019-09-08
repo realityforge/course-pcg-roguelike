@@ -28,7 +28,7 @@ import static com.artemis.Aspect.*;
 public class GroupManager
   extends BaseSystem
 {
-  private static final ImmutableBag<String> EMPTY_BAG = new Bag<String>();
+  private static final ImmutableBag<String> EMPTY_BAG = new Bag<>();
   /**
    * All entities and groups mapped with group names as key.
    */

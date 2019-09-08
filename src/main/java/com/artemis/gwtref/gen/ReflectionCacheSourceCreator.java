@@ -77,11 +77,11 @@ public class ReflectionCacheSourceCreator
   @Nonnull
   StringBuffer source = new StringBuffer();
   @Nonnull
-  List<JType> types = new ArrayList<JType>();
+  List<JType> types = new ArrayList<>();
   @Nonnull
-  List<SetterGetterStub> setterGetterStubs = new ArrayList<SetterGetterStub>();
+  List<SetterGetterStub> setterGetterStubs = new ArrayList<>();
   @Nonnull
-  List<MethodStub> methodStubs = new ArrayList<MethodStub>();
+  List<MethodStub> methodStubs = new ArrayList<>();
   int nextId = 0;
 
   class SetterGetterStub
@@ -105,7 +105,7 @@ public class ReflectionCacheSourceCreator
     @Nullable
     String returnType;
     @Nonnull
-    List<String> parameterTypes = new ArrayList<String>();
+    List<String> parameterTypes = new ArrayList<>();
     String jnsi;
     int methodId;
     boolean isStatic;
@@ -637,7 +637,7 @@ public class ReflectionCacheSourceCreator
   }
 
   @Nonnull
-  private Map<String, Integer> typeNames2typeIds = new HashMap<String, Integer>();
+  private Map<String, Integer> typeNames2typeIds = new HashMap<>();
 
   @Nonnull
   private String createTypeGenerator( JType t )
@@ -1366,7 +1366,7 @@ public class ReflectionCacheSourceCreator
   class SwitchedCodeBlock
   {
     @Nonnull
-    private List<KeyedCodeBlock> blocks = new ArrayList<KeyedCodeBlock>();
+    private List<KeyedCodeBlock> blocks = new ArrayList<>();
     private final String switchStatement;
 
     SwitchedCodeBlock( String switchStatement )

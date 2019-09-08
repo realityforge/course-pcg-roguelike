@@ -27,14 +27,14 @@ public class EntityManager
   private final IntDeque limbo = new IntDeque();
   private int nextId;
   @Nonnull
-  private Bag<BitVector> entityBitVectors = new Bag<BitVector>( BitVector.class );
+  private Bag<BitVector> entityBitVectors = new Bag<>( BitVector.class );
 
   /**
    * Creates a new EntityManager Instance.
    */
   protected EntityManager( int initialContainerSize )
   {
-    entities = new Bag<Entity>( initialContainerSize );
+    entities = new Bag<>( initialContainerSize );
     registerEntityStore( recycled );
   }
 

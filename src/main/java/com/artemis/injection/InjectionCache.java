@@ -24,10 +24,10 @@ import static com.artemis.utils.reflect.ClassReflection.*;
 public class InjectionCache
 {
   public static final SharedInjectionCache sharedCache = new SharedInjectionCache();
-  private final Map<Class<?>, CachedClass> classCache = new HashMap<Class<?>, CachedClass>();
-  private final Map<Class<?>, ClassType> fieldClassTypeCache = new HashMap<Class<?>, ClassType>();
-  private final Map<Field, CachedField> namedWireCache = new HashMap<Field, CachedField>();
-  private final Map<Field, Class<?>> genericsCache = new HashMap<Field, Class<?>>();
+  private final Map<Class<?>, CachedClass> classCache = new HashMap<>();
+  private final Map<Class<?>, ClassType> fieldClassTypeCache = new HashMap<>();
+  private final Map<Field, CachedField> namedWireCache = new HashMap<>();
+  private final Map<Field, Class<?>> genericsCache = new HashMap<>();
   private static final Wire DEFAULT_WIRE = new Wire()
   {
     @Nonnull

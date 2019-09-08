@@ -293,7 +293,7 @@ public class EntitySubscription
     final IntBag removed = new IntBag();
     final Aspect aspect;
     final Aspect.Builder aspectReflection;
-    final Bag<SubscriptionListener> listeners = new Bag<SubscriptionListener>();
+    final Bag<SubscriptionListener> listeners = new Bag<>();
 
     public SubscriptionExtra( Aspect aspect, Aspect.Builder aspectReflection )
     {

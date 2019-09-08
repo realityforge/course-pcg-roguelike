@@ -36,7 +36,7 @@ public class AspectFieldResolver
   private static final Class<? extends Component>[] EMPTY_COMPONENT_CLASS_ARRAY = new Class[ 0 ];
   private World world;
   @Nonnull
-  private IdentityHashMap<Field, Aspect.Builder> fields = new IdentityHashMap<Field, Aspect.Builder>();
+  private IdentityHashMap<Field, Aspect.Builder> fields = new IdentityHashMap<>();
 
   @Override
   public void initialize( World world )

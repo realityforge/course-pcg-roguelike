@@ -15,7 +15,7 @@ public class ComponentPool<T extends PooledComponent>
   ComponentPool( Class<T> type )
   {
     this.type = type;
-    cache = new Bag<T>( type );
+    cache = new Bag<>( type );
   }
 
   @Nullable

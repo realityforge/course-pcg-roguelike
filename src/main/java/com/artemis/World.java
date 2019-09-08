@@ -175,7 +175,7 @@ public class World
    */
   public void dispose()
   {
-    List<Throwable> exceptions = new ArrayList<Throwable>();
+    List<Throwable> exceptions = new ArrayList<>();
 
     for ( BaseSystem system : systemsBag )
     {
@@ -502,7 +502,7 @@ public class World
 
     WorldSegment( @Nonnull WorldConfiguration configuration )
     {
-      systems = new IdentityHashMap<Class<?>, BaseSystem>();
+      systems = new IdentityHashMap<>();
       injector = ( configuration.injector != null )
                  ? configuration.injector
                  : new CachedInjector();

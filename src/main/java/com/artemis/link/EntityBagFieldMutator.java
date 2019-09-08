@@ -14,7 +14,7 @@ import static com.artemis.Aspect.*;
 class EntityBagFieldMutator
   implements MultiFieldMutator<Bag<Entity>, Component>
 {
-  private final Bag<Entity> empty = new Bag<Entity>();
+  private final Bag<Entity> empty = new Bag<>();
   private EntitySubscription all;
 
   @Override

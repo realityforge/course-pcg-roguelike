@@ -8,7 +8,7 @@ import javax.annotation.Nonnull;
 public class ArtemisMultiException
   extends RuntimeException
 {
-  private final List<Throwable> exceptions = new ArrayList<Throwable>();
+  private final List<Throwable> exceptions = new ArrayList<>();
 
   /**
    * required constructor for serialization

@@ -127,7 +127,7 @@ public final class CachedInjector
     Field[] declaredFields = cachedClass.allFields;
     if ( declaredFields == null )
     {
-      List<Field> fieldList = new ArrayList<Field>();
+      List<Field> fieldList = new ArrayList<>();
       Class<?> clazz = cachedClass.clazz;
       collectDeclaredInjectableFields( fieldList, clazz );
 

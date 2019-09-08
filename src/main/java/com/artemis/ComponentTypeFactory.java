@@ -20,9 +20,9 @@ public class ComponentTypeFactory
    * will be stored here.
    */
   private final IdentityHashMap<Class<? extends Component>, ComponentType> componentTypes
-    = new IdentityHashMap<Class<? extends Component>, ComponentType>();
+    = new IdentityHashMap<>();
   private final Bag<ComponentTypeListener> listeners
-    = new Bag<ComponentTypeListener>();
+    = new Bag<>();
   /**
    * Index of this component type in componentTypes.
    */

@@ -25,8 +25,8 @@ import static com.artemis.Aspect.*;
 public class EntityLinkManager
   extends BaseEntitySystem
 {
-  final Bag<LinkSite> linkSites = new Bag<LinkSite>();
-  final Bag<LinkSite> decoratedLinkSites = new Bag<LinkSite>();
+  final Bag<LinkSite> linkSites = new Bag<>();
+  final Bag<LinkSite> decoratedLinkSites = new Bag<>();
   private final boolean requireListener;
   private final boolean fireEventsOnRegistration;
 

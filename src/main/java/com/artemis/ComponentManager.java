@@ -292,7 +292,7 @@ public class ComponentManager
     {
       compositionBits = new Bag( BitVector.class );
       compositionBits.add( new BitVector() );
-      compositionMappers = new Bag<Bag<ComponentMapper>>();
+      compositionMappers = new Bag<>();
       compositionMappers.add( new Bag( ComponentMapper.class ) );
     }
 
@@ -317,7 +317,7 @@ public class ComponentManager
     int allocateIdentity( @Nonnull BitVector componentBits, @Nonnull ComponentManager cm )
     {
       Bag<ComponentMapper> mappers =
-        new Bag<ComponentMapper>( ComponentMapper.class, componentBits.cardinality() );
+        new Bag<>( ComponentMapper.class, componentBits.cardinality() );
 
       ComponentTypeFactory tf = cm.getTypeFactory();
       for ( int i = componentBits.nextSetBit( 0 ); i >= 0; i = componentBits.nextSetBit( i + 1 ) )

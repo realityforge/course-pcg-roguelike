@@ -20,7 +20,7 @@ class LinkFactory
   private static final int NULL_REFERENCE = 0;
   private static final int SINGLE_REFERENCE = 1;
   private static final int MULTI_REFERENCE = 2;
-  private final Bag<LinkSite> links = new Bag<LinkSite>();
+  private final Bag<LinkSite> links = new Bag<>();
   @Nonnull
   private final World world;
   @Nonnull

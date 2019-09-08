@@ -46,7 +46,7 @@ public final class EntityTransmuter
     em = world.getEntityManager();
     entityToIdentity = world.getComponentManager().entityToIdentity;
     batchProcessor = world.batchProcessor;
-    operations = new Bag<TransmuteOperation>( TransmuteOperation.class );
+    operations = new Bag<>( TransmuteOperation.class );
 
     factory = new Factory( world, additions, removals );
   }

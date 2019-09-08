@@ -18,7 +18,7 @@ public class WiredFieldResolver
   implements UseInjectionCache, PojoFieldResolver
 {
   private InjectionCache cache;
-  private Map<String, Object> pojos = new HashMap<String, Object>();
+  private Map<String, Object> pojos = new HashMap<>();
   private World world;
 
   public WiredFieldResolver()

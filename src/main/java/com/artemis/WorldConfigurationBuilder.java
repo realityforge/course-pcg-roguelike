@@ -336,7 +336,7 @@ public class WorldConfigurationBuilder
                                                " registered twice. Only once allowed." );
       }
 
-      this.systems.add( new ConfigurationElement<BaseSystem>( system, priority ) );
+      this.systems.add( new ConfigurationElement<>( system, priority ) );
     }
   }
 

@@ -31,7 +31,7 @@ public class AspectSubscriptionManager
 
   protected AspectSubscriptionManager()
   {
-    subscriptionMap = new HashMap<Aspect.Builder, EntitySubscription>();
+    subscriptionMap = new HashMap<>();
   }
 
   @Override

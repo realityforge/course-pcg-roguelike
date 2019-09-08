@@ -30,17 +30,17 @@ public final class WorldConfiguration
   public static final int COMPONENT_MANAGER_IDX = 0;
   public static final int ENTITY_MANAGER_IDX = 1;
   public static final int ASPECT_SUBSCRIPTION_MANAGER_IDX = 2;
-  final Bag<BaseSystem> systems = new Bag<BaseSystem>( BaseSystem.class );
+  final Bag<BaseSystem> systems = new Bag<>( BaseSystem.class );
   protected int expectedEntityCount = 128;
   @Nonnull
-  protected Map<String, Object> injectables = new HashMap<String, Object>();
+  protected Map<String, Object> injectables = new HashMap<>();
   @Nullable
   protected Injector injector;
   @Nullable
   protected SystemInvocationStrategy invocationStrategy;
   private boolean alwaysDelayComponentRemoval = false;
   @Nonnull
-  private Set<Class<? extends BaseSystem>> registered = new HashSet<Class<? extends BaseSystem>>();
+  private Set<Class<? extends BaseSystem>> registered = new HashSet<>();
 
   public WorldConfiguration()
   {

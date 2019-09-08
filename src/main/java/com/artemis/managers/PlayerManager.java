@@ -35,8 +35,8 @@ public class PlayerManager
    */
   public PlayerManager()
   {
-    playerByEntity = new HashMap<Entity, String>();
-    entitiesByPlayer = new HashMap<String, Bag<Entity>>();
+    playerByEntity = new HashMap<>();
+    entitiesByPlayer = new HashMap<>();
   }
 
   /**
@@ -54,7 +54,7 @@ public class PlayerManager
     Bag<Entity> entities = entitiesByPlayer.get( player );
     if ( entities == null )
     {
-      entities = new Bag<Entity>();
+      entities = new Bag<>();
       entitiesByPlayer.put( player, entities );
     }
     entities.add( e );
@@ -71,7 +71,7 @@ public class PlayerManager
     Bag<Entity> entities = entitiesByPlayer.get( player );
     if ( entities == null )
     {
-      entities = new Bag<Entity>();
+      entities = new Bag<>();
     }
     return entities;
   }

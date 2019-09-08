@@ -18,8 +18,8 @@ public class UuidEntityManager
 
   public UuidEntityManager()
   {
-    this.uuidToEntity = new HashMap<UUID, Entity>();
-    this.entityToUuid = new Bag<UUID>();
+    this.uuidToEntity = new HashMap<>();
+    this.entityToUuid = new Bag<>();
   }
 
   @Override

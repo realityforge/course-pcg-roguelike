@@ -37,8 +37,8 @@ public class TeamManager
    */
   public TeamManager()
   {
-    playersByTeam = new HashMap<String, Bag<String>>();
-    teamByPlayer = new HashMap<String, String>();
+    playersByTeam = new HashMap<>();
+    teamByPlayer = new HashMap<>();
   }
 
   @Override
@@ -75,7 +75,7 @@ public class TeamManager
     Bag<String> players = playersByTeam.get( team );
     if ( players == null )
     {
-      players = new Bag<String>();
+      players = new Bag<>();
       playersByTeam.put( team, players );
     }
     players.add( player );

@@ -25,7 +25,7 @@ public class ArtemisFieldResolver
 
   public ArtemisFieldResolver()
   {
-    systems = new IdentityHashMap<Class<?>, Class<?>>();
+    systems = new IdentityHashMap<>();
   }
 
   @Override

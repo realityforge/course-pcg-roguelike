@@ -65,6 +65,6 @@ class ConfigurationElement<T>
   @Nonnull
   public static <T> ConfigurationElement<T> of( @Nonnull T item, int priority )
   {
-    return new ConfigurationElement<T>( item, priority );
+    return new ConfigurationElement<>( item, priority );
   }
 }

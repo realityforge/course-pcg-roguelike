@@ -30,7 +30,7 @@ public class ArchetypeBuilder
    */
   public ArchetypeBuilder( @Nullable Archetype parent )
   {
-    classes = new Bag<Class<? extends Component>>();
+    classes = new Bag<>();
 		if ( parent == null )
 		{
 			return;

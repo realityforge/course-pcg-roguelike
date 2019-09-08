@@ -40,7 +40,7 @@ public class Type
   Class clazz;
   Class superClass;
   @Nonnull
-  Set<Class> assignables = new HashSet<Class>();
+  Set<Class> assignables = new HashSet<>();
   boolean isAbstract;
   boolean isInterface;
   boolean isPrimitive;
@@ -143,7 +143,7 @@ public class Type
   @Nonnull
   public Field[] getFields()
   {
-    ArrayList<Field> allFields = new ArrayList<Field>();
+    ArrayList<Field> allFields = new ArrayList<>();
     Type t = this;
     while ( t != null )
     {
@@ -207,7 +207,7 @@ public class Type
   @Nonnull
   public Method[] getMethods()
   {
-    ArrayList<Method> allMethods = new ArrayList<Method>();
+    ArrayList<Method> allMethods = new ArrayList<>();
     Type t = this;
     while ( t != null )
     {

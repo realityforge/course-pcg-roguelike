@@ -236,9 +236,9 @@ public class Aspect
 
     private Builder()
     {
-      allTypes = new Bag<Class<? extends Component>>();
-      exclusionTypes = new Bag<Class<? extends Component>>();
-      oneTypes = new Bag<Class<? extends Component>>();
+      allTypes = new Bag<>();
+      exclusionTypes = new Bag<>();
+      oneTypes = new Bag<>();
     }
 
     /**
