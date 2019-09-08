@@ -25,7 +25,6 @@ public class ReflectionCache
   public static final IReflectionCache instance = GWT.create( IReflectionCache.class );
 
   public static Type forName( @Nonnull final String name )
-    throws ClassNotFoundException
   {
     final Type type = instance.forName( convert( name ) );
     if ( type == null )

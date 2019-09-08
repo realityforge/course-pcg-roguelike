@@ -95,7 +95,7 @@ public class Type
     {
       return superClass == null ? null : ReflectionCache.forName( superClass.getName() );
     }
-    catch ( final ClassNotFoundException e )
+    catch ( final Exception e )
     {
       return null;
     }

@@ -42,7 +42,7 @@ public final class ClassReflection
     {
       return ReflectionCache.forName( name ).getClassOfType();
     }
-    catch ( final ClassNotFoundException e )
+    catch ( final Exception e )
     {
       throw new ReflectionException( "Class not found: " + name, e );
     }
