@@ -1,6 +1,8 @@
 package com.artemis;
 
 import com.artemis.utils.reflect.ClassReflection;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * Identifies components in artemis without having to use classes.
@@ -51,6 +53,7 @@ public class ComponentType
     return type;
   }
 
+  @Nonnull
   @Override
   public String toString()
   {
@@ -58,7 +61,7 @@ public class ComponentType
   }
 
   @Override
-  public boolean equals( Object o )
+  public boolean equals( @Nullable Object o )
   {
     if ( this == o )
     {

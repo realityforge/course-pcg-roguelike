@@ -4,6 +4,7 @@ import com.artemis.annotations.DelayedComponentRemoval;
 import com.artemis.utils.Bag;
 import com.artemis.utils.BitVector;
 import com.artemis.utils.IntBag;
+import javax.annotation.Nonnull;
 
 /**
  * Maintains the list of entities matched by an aspect. Entity subscriptions
@@ -19,14 +20,19 @@ import com.artemis.utils.IntBag;
  */
 public class EntitySubscription
 {
+  @Nonnull
   final SubscriptionExtra extra;
+  @Nonnull
   private final IntBag entities;
+  @Nonnull
   private final BitVector activeEntityIds;
+  @Nonnull
   private final BitVector insertedIds;
+  @Nonnull
   private final BitVector removedIds;
   final BitVector aspectCache = new BitVector();
 
-  EntitySubscription( World world, Aspect.Builder builder )
+  EntitySubscription( @Nonnull World world, @Nonnull Aspect.Builder builder )
   {
     extra = new SubscriptionExtra( builder.build( world ), builder );
 
@@ -50,6 +56,7 @@ public class EntitySubscription
    *
    * @return View of all active entities.
    */
+  @Nonnull
   public IntBag getEntities()
   {
       if ( entities.isEmpty() && !activeEntityIds.isEmpty() )
@@ -68,6 +75,7 @@ public class EntitySubscription
    *
    * @return View of all active entities.
    */
+  @Nonnull
   public BitVector getActiveEntityIds()
   {
     return activeEntityIds;
@@ -93,7 +101,7 @@ public class EntitySubscription
    * A new unique component composition detected, check if this
    * subscription's aspect is interested in it.
    */
-  void processComponentIdentity( int id, BitVector componentBits )
+  void processComponentIdentity( int id, @Nonnull BitVector componentBits )
   {
     aspectCache.ensureCapacity( id );
     aspectCache.set( id, extra.aspect.isInterested( componentBits ) );
@@ -131,7 +139,7 @@ public class EntitySubscription
     insertedIds.unsafeSet( entityId );
   }
 
-  void process( IntBag changed, IntBag deleted )
+  void process( @Nonnull IntBag changed, @Nonnull IntBag deleted )
   {
     deleted( deleted );
     changed( changed );
@@ -139,7 +147,7 @@ public class EntitySubscription
     informEntityChanges();
   }
 
-  void processAll( IntBag changed, IntBag deleted )
+  void processAll( @Nonnull IntBag changed, @Nonnull IntBag deleted )
   {
     deletedAll( deleted );
     changed( changed );
@@ -159,7 +167,7 @@ public class EntitySubscription
     entities.setSize( 0 );
   }
 
-  private void transferBitsToInts( IntBag inserted, IntBag removed )
+  private void transferBitsToInts( @Nonnull IntBag inserted, @Nonnull IntBag removed )
   {
     insertedIds.toIntBag( inserted );
     removedIds.toIntBag( removed );
@@ -167,7 +175,7 @@ public class EntitySubscription
     removedIds.clear();
   }
 
-  private void changed( IntBag entitiesWithCompositions )
+  private void changed( @Nonnull IntBag entitiesWithCompositions )
   {
     int[] ids = entitiesWithCompositions.getData();
     for ( int i = 0, s = entitiesWithCompositions.size(); s > i; i += 2 )
@@ -187,7 +195,7 @@ public class EntitySubscription
     }
   }
 
-  private void deleted( IntBag entities )
+  private void deleted( @Nonnull IntBag entities )
   {
     int[] ids = entities.getData();
     for ( int i = 0, s = entities.size(); s > i; i++ )
@@ -200,7 +208,7 @@ public class EntitySubscription
     }
   }
 
-  private void deletedAll( IntBag entities )
+  private void deletedAll( @Nonnull IntBag entities )
   {
     int[] ids = entities.getData();
     for ( int i = 0, s = entities.size(); s > i; i++ )
@@ -226,11 +234,12 @@ public class EntitySubscription
    *
    * @param listener listener to remove.
    */
-  public void removeSubscriptionListener( SubscriptionListener listener )
+  public void removeSubscriptionListener( @Nonnull SubscriptionListener listener )
   {
     extra.listeners.remove( listener );
   }
 
+  @Nonnull
   @Override
   public String toString()
   {

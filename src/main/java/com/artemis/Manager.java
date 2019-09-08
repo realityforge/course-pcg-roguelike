@@ -1,6 +1,7 @@
 package com.artemis;
 
 import com.artemis.utils.IntBag;
+import javax.annotation.Nonnull;
 import static com.artemis.Aspect.*;
 import static com.artemis.EntitySystem.*;
 import static com.artemis.utils.reflect.ReflectionUtil.*;
@@ -66,20 +67,20 @@ public abstract class Manager
       .addSubscriptionListener( new EntitySubscription.SubscriptionListener()
       {
         @Override
-        public void inserted( IntBag entities )
+        public void inserted( @Nonnull IntBag entities )
         {
           added( entities );
         }
 
         @Override
-        public void removed( IntBag entities )
+        public void removed( @Nonnull IntBag entities )
         {
           deleted( entities );
         }
       } );
   }
 
-  private void added( IntBag entities )
+  private void added( @Nonnull IntBag entities )
   {
     // performance hack, skip if manager lacks implementation of inserted.
 		if ( ( methodFlags & FLAG_INSERTED ) == 0 )
@@ -94,7 +95,7 @@ public abstract class Manager
     }
   }
 
-  private void deleted( IntBag entities )
+  private void deleted( @Nonnull IntBag entities )
   {
     // performance hack, skip if manager lacks implementation of removed.
 		if ( ( methodFlags & FLAG_REMOVED ) == 0 )

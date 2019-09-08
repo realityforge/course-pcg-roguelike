@@ -14,6 +14,8 @@ import com.artemis.annotations.One;
 import com.artemis.utils.reflect.Annotation;
 import com.artemis.utils.reflect.Field;
 import java.util.IdentityHashMap;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import static com.artemis.Aspect.*;
 
 /**
@@ -33,6 +35,7 @@ public class AspectFieldResolver
 {
   private static final Class<? extends Component>[] EMPTY_COMPONENT_CLASS_ARRAY = new Class[ 0 ];
   private World world;
+  @Nonnull
   private IdentityHashMap<Field, Aspect.Builder> fields = new IdentityHashMap<Field, Aspect.Builder>();
 
   @Override
@@ -41,9 +44,10 @@ public class AspectFieldResolver
     this.world = world;
   }
 
+  @Nullable
   @Override
   @SuppressWarnings( "unchecked" )
-  public Object resolve( Object target, Class<?> fieldType, Field field )
+  public Object resolve( Object target, Class<?> fieldType, @Nonnull Field field )
   {
     Aspect.Builder aspect = aspect( field );
 		if ( aspect == null )
@@ -78,7 +82,7 @@ public class AspectFieldResolver
     return null;
   }
 
-  private Aspect.Builder aspect( Field field )
+  private Aspect.Builder aspect( @Nonnull Field field )
   {
     if ( !fields.containsKey( field ) )
     {
@@ -108,7 +112,8 @@ public class AspectFieldResolver
     return fields.get( field );
   }
 
-  private AspectDescriptor descriptor( Field field )
+  @Nullable
+  private AspectDescriptor descriptor( @Nonnull Field field )
   {
     Annotation anno = field.getDeclaredAnnotation( AspectDescriptor.class );
     return ( anno != null )
@@ -116,19 +121,20 @@ public class AspectFieldResolver
            : null;
   }
 
-  private Aspect.Builder toAspect( AspectDescriptor ad )
+  private Aspect.Builder toAspect( @Nonnull AspectDescriptor ad )
   {
     return all( ad.all() ).one( ad.one() ).exclude( ad.exclude() );
   }
 
-  private Aspect.Builder toAspect( All all, One one, Exclude exclude )
+  private Aspect.Builder toAspect( @Nullable All all, @Nullable One one, @Nullable Exclude exclude )
   {
     return all( all != null ? all.value() : EMPTY_COMPONENT_CLASS_ARRAY )
       .one( one != null ? one.value() : EMPTY_COMPONENT_CLASS_ARRAY )
       .exclude( exclude != null ? exclude.value() : EMPTY_COMPONENT_CLASS_ARRAY );
   }
 
-  private Class<? extends Component>[] allComponents( Field field )
+  @Nullable
+  private Class<? extends Component>[] allComponents( @Nonnull Field field )
   {
     AspectDescriptor descriptor = descriptor( field );
 

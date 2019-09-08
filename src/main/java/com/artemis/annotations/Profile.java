@@ -6,6 +6,7 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+import javax.annotation.Nonnull;
 
 /**
  * Profile EntitySystems with user-specified profiler class, implementing ArtemisProfiler.
@@ -18,7 +19,7 @@ import java.lang.annotation.Target;
 @Documented
 public @interface Profile
 {
-  Class<? extends ArtemisProfiler> using();
+  @Nonnull Class<? extends ArtemisProfiler> using();
 
   boolean enabled() default true;
 }

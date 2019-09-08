@@ -2,6 +2,7 @@ package com.artemis.components;
 
 import com.artemis.PooledComponent;
 import com.artemis.annotations.Transient;
+import javax.annotation.Nullable;
 
 /**
  * Creates a tag, local to an instance of {@link com.artemis.io.SaveFileFormat}.
@@ -13,6 +14,7 @@ import com.artemis.annotations.Transient;
 public class SerializationTag
   extends PooledComponent
 {
+  @Nullable
   public String tag;
 
   @Override

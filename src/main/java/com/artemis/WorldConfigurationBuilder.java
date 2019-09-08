@@ -10,6 +10,8 @@ import com.artemis.utils.IntBag;
 import com.artemis.utils.Sort;
 import com.artemis.utils.reflect.ClassReflection;
 import com.artemis.utils.reflect.ReflectionException;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * World builder.
@@ -25,8 +27,11 @@ public class WorldConfigurationBuilder
   private Bag<ConfigurationElement<? extends FieldResolver>> fieldResolvers;
   private Bag<ConfigurationElement<? extends ArtemisPlugin>> plugins;
   private boolean alwaysDelayComponentRemoval = false;
+  @Nullable
   private ArtemisPlugin activePlugin;
+  @Nonnull
   private final InjectionCache cache;
+  @Nullable
   private SystemInvocationStrategy invocationStrategy;
 
   public WorldConfigurationBuilder()
@@ -40,6 +45,7 @@ public class WorldConfigurationBuilder
    * <p/>
    * Deprecated: World Configuration
    */
+  @Nonnull
   public WorldConfiguration build()
   {
     appendPlugins();
@@ -52,7 +58,7 @@ public class WorldConfigurationBuilder
     return config;
   }
 
-  private void registerInvocationStrategies( WorldConfiguration config )
+  private void registerInvocationStrategies( @Nonnull WorldConfiguration config )
   {
     if ( invocationStrategy != null )
     {
@@ -80,7 +86,7 @@ public class WorldConfigurationBuilder
   /**
    * add custom field handler with resolvers.
    */
-  protected void registerFieldResolvers( WorldConfiguration config )
+  protected void registerFieldResolvers( @Nonnull WorldConfiguration config )
   {
 
     if ( fieldResolvers.size() > 0 )
@@ -101,7 +107,7 @@ public class WorldConfigurationBuilder
   /**
    * add systems to config.
    */
-  private void registerSystems( WorldConfiguration config )
+  private void registerSystems( @Nonnull WorldConfiguration config )
   {
     Sort.instance().sort( systems );
     for ( ConfigurationElement<? extends BaseSystem> configurationElement : systems )
@@ -135,6 +141,7 @@ public class WorldConfigurationBuilder
    *              have been notified. When {@code false}, only components with {@code @DelayedComponentRemoval}
    *              will be delayed. Components without the annotation will not be retrievable in listeners.
    */
+  @Nonnull
   public WorldConfigurationBuilder alwaysDelayComponentRemoval( boolean value )
   {
     this.alwaysDelayComponentRemoval = value;
@@ -146,7 +153,8 @@ public class WorldConfigurationBuilder
    *
    * @return this
    */
-  public WorldConfigurationBuilder register( FieldResolver... fieldResolvers )
+  @Nonnull
+  public WorldConfigurationBuilder register( @Nonnull FieldResolver... fieldResolvers )
   {
     for ( FieldResolver fieldResolver : fieldResolvers )
     {
@@ -161,6 +169,7 @@ public class WorldConfigurationBuilder
    * @param strategy strategy to invoke.
    * @return this
    */
+  @Nonnull
   public WorldConfigurationBuilder register( SystemInvocationStrategy strategy )
   {
     this.invocationStrategy = strategy;
@@ -178,6 +187,7 @@ public class WorldConfigurationBuilder
    * @param types required systems.
    * @return this
    */
+  @Nonnull
   public final WorldConfigurationBuilder dependsOn( Class... types )
   {
     return dependsOn( Priority.NORMAL, types );
@@ -192,8 +202,9 @@ public class WorldConfigurationBuilder
    * @return this
    * @throws WorldConfigurationException if unsupported classes are passed or plugins are given a priority.
    */
+  @Nonnull
   @SuppressWarnings( "unchecked" )
-  public final WorldConfigurationBuilder dependsOn( int priority, Class... types )
+  public final WorldConfigurationBuilder dependsOn( int priority, @Nonnull Class... types )
   {
     for ( Class type : types )
     {
@@ -227,7 +238,7 @@ public class WorldConfigurationBuilder
     return this;
   }
 
-  protected void dependsOnSystem( int priority, Class<? extends BaseSystem> type )
+  protected void dependsOnSystem( int priority, @Nonnull Class<? extends BaseSystem> type )
     throws ReflectionException
   {
     if ( !containsType( systems, type ) )
@@ -236,7 +247,7 @@ public class WorldConfigurationBuilder
     }
   }
 
-  private void dependsOnPlugin( Class<? extends ArtemisPlugin> type )
+  private void dependsOnPlugin( @Nonnull Class<? extends ArtemisPlugin> type )
     throws ReflectionException
   {
 
@@ -268,7 +279,8 @@ public class WorldConfigurationBuilder
    * @return this
    * @throws WorldConfigurationException if registering the same class twice.
    */
-  public WorldConfigurationBuilder with( int priority, BaseSystem... systems )
+  @Nonnull
+  public WorldConfigurationBuilder with( int priority, @Nonnull BaseSystem... systems )
   {
     addSystems( priority, systems );
     return this;
@@ -283,7 +295,8 @@ public class WorldConfigurationBuilder
    * @return this
    * @throws WorldConfigurationException if registering the same class twice.
    */
-  public WorldConfigurationBuilder with( BaseSystem... systems )
+  @Nonnull
+  public WorldConfigurationBuilder with( @Nonnull BaseSystem... systems )
   {
     addSystems( Priority.NORMAL, systems );
     return this;
@@ -301,7 +314,8 @@ public class WorldConfigurationBuilder
    * @return this
    * @throws WorldConfigurationException if type is added more than once.
    */
-  public WorldConfigurationBuilder with( ArtemisPlugin... plugins )
+  @Nonnull
+  public WorldConfigurationBuilder with( @Nonnull ArtemisPlugin... plugins )
   {
     addPlugins( plugins );
     return this;
@@ -310,7 +324,7 @@ public class WorldConfigurationBuilder
   /**
    * helper to queue systems for registration.
    */
-  private void addSystems( int priority, BaseSystem[] systems )
+  private void addSystems( int priority, @Nonnull BaseSystem[] systems )
   {
     for ( BaseSystem system : systems )
     {
@@ -369,7 +383,7 @@ public class WorldConfigurationBuilder
   /**
    * Add new plugins.
    */
-  private void addPlugins( ArtemisPlugin[] plugins )
+  private void addPlugins( @Nonnull ArtemisPlugin[] plugins )
   {
     for ( ArtemisPlugin plugin : plugins )
     {

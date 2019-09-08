@@ -7,6 +7,7 @@ import com.artemis.utils.ImmutableBag;
 import com.artemis.utils.IntBag;
 import java.util.HashMap;
 import java.util.Map;
+import javax.annotation.Nonnull;
 import static com.artemis.Aspect.*;
 
 /**
@@ -22,6 +23,7 @@ import static com.artemis.Aspect.*;
 public class AspectSubscriptionManager
   extends BaseSystem
 {
+  @Nonnull
   private final Map<Aspect.Builder, EntitySubscription> subscriptionMap;
   private final Bag<EntitySubscription> subscriptions = new Bag( EntitySubscription.class );
   private final IntBag changed = new IntBag();
@@ -61,13 +63,15 @@ public class AspectSubscriptionManager
    * @param builder Aspect to match.
    * @return {@link EntitySubscription} for aspect.
    */
-  public EntitySubscription get( Aspect.Builder builder )
+  @Nonnull
+  public EntitySubscription get( @Nonnull Aspect.Builder builder )
   {
     EntitySubscription subscription = subscriptionMap.get( builder );
     return ( subscription != null ) ? subscription : createSubscription( builder );
   }
 
-  private EntitySubscription createSubscription( Aspect.Builder builder )
+  @Nonnull
+  private EntitySubscription createSubscription( @Nonnull Aspect.Builder builder )
   {
     EntitySubscription entitySubscription = new EntitySubscription( world, builder );
     subscriptionMap.put( builder, entitySubscription );
@@ -90,7 +94,7 @@ public class AspectSubscriptionManager
    * @param changedBits Entities with changedBits composition or state.
    * @param deletedBits Entities removed from world.
    */
-  void process( BitVector changedBits, BitVector deletedBits )
+  void process( @Nonnull BitVector changedBits, @Nonnull BitVector deletedBits )
   {
     toEntityIntBags( changedBits, deletedBits );
 
@@ -103,7 +107,7 @@ public class AspectSubscriptionManager
     }
   }
 
-  private void toEntityIntBags( BitVector changed, BitVector deleted )
+  private void toEntityIntBags( @Nonnull BitVector changed, @Nonnull BitVector deleted )
   {
     changed.toIntBagIdCid( world.getComponentManager(), this.changed );
     deleted.toIntBag( this.deleted );
@@ -112,7 +116,7 @@ public class AspectSubscriptionManager
     deleted.clear();
   }
 
-  void processComponentIdentity( int id, BitVector componentBits )
+  void processComponentIdentity( int id, @Nonnull BitVector componentBits )
   {
     for ( int i = 0, s = subscriptions.size(); s > i; i++ )
     {
@@ -126,6 +130,7 @@ public class AspectSubscriptionManager
    *
    * @return All active subscriptions.
    */
+  @Nonnull
   public ImmutableBag<EntitySubscription> getSubscriptions()
   {
     return subscriptions;

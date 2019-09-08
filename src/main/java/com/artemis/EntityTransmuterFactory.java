@@ -1,6 +1,7 @@
 package com.artemis;
 
 import com.artemis.utils.BitVector;
+import javax.annotation.Nonnull;
 
 /**
  * Builder for {@link EntityTransmuter}.
@@ -9,15 +10,19 @@ import com.artemis.utils.BitVector;
  */
 public final class EntityTransmuterFactory
 {
+  @Nonnull
   private final ComponentTypeFactory types;
+  @Nonnull
   private final BitVector additions;
+  @Nonnull
   private final BitVector removals;
+  @Nonnull
   private final World world;
 
   /**
    * Prepare new builder.
    */
-  public EntityTransmuterFactory( World world )
+  public EntityTransmuterFactory( @Nonnull World world )
   {
     this.world = world;
     types = world.getComponentManager().typeFactory;
@@ -28,7 +33,8 @@ public final class EntityTransmuterFactory
   /**
    * Component to add upon transmutation. Overwrites and retires if component exists!
    */
-  public EntityTransmuterFactory add( Class<? extends Component> component )
+  @Nonnull
+  public EntityTransmuterFactory add( @Nonnull Class<? extends Component> component )
   {
     int index = types.getIndexFor( component );
     additions.set( index, true );
@@ -39,7 +45,8 @@ public final class EntityTransmuterFactory
   /**
    * Component to remove upon transmutation. Does nothing if missing.
    */
-  public EntityTransmuterFactory remove( Class<? extends Component> component )
+  @Nonnull
+  public EntityTransmuterFactory remove( @Nonnull Class<? extends Component> component )
   {
     int index = types.getIndexFor( component );
     additions.set( index, false );
@@ -50,6 +57,7 @@ public final class EntityTransmuterFactory
   /**
    * Build instance
    */
+  @Nonnull
   public EntityTransmuter build()
   {
     return new EntityTransmuter( world, additions, removals );

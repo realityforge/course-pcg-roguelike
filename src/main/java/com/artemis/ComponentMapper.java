@@ -2,6 +2,8 @@ package com.artemis;
 
 import com.artemis.annotations.DelayedComponentRemoval;
 import com.artemis.utils.Bag;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import static com.artemis.utils.reflect.ClassReflection.*;
 
 /**
@@ -19,14 +21,19 @@ public class ComponentMapper<A extends Component>
   /**
    * Holds all components of given type in the world.
    */
+  @Nonnull
   final Bag<A> components;
+  @Nonnull
   private final EntityTransmuter createTransmuter;
+  @Nonnull
   private final EntityTransmuter removeTransmuter;
+  @Nonnull
   private final ComponentPool pool;
+  @Nonnull
   private final ComponentRemover<A> purgatory;
 
   @SuppressWarnings( "unchecked" )
-  public ComponentMapper( Class<A> type, World world )
+  public ComponentMapper( Class<A> type, @Nonnull World world )
   {
     super( world.getComponentManager().typeFactory.getTypeFor( type ) );
     components = new Bag<>( type );
@@ -125,6 +132,7 @@ public class ComponentMapper<A extends Component>
    * @param entityId the entity that should possess the component
    * @return the instance of the component.
    */
+  @Nullable
   @Override
   public A create( int entityId )
   {
@@ -140,6 +148,7 @@ public class ComponentMapper<A extends Component>
     return component;
   }
 
+  @Nullable
   @Override
   public A internalCreate( int entityId )
   {
@@ -153,6 +162,7 @@ public class ComponentMapper<A extends Component>
     return component;
   }
 
+  @Nullable
   private A createNew()
   {
     return (A) ( ( pool != null )

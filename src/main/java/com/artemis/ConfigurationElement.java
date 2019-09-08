@@ -1,5 +1,8 @@
 package com.artemis;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 /**
  * Artemis pieces with priority pending registration.
  *
@@ -13,7 +16,7 @@ class ConfigurationElement<T>
   public final Class<?> itemType;
   public T item;
 
-  public ConfigurationElement( T item, int priority )
+  public ConfigurationElement( @Nonnull T item, int priority )
   {
     this.item = item;
     itemType = item.getClass();
@@ -21,14 +24,14 @@ class ConfigurationElement<T>
   }
 
   @Override
-  public int compareTo( ConfigurationElement<T> o )
+  public int compareTo( @Nonnull ConfigurationElement<T> o )
   {
     // Sort by priority descending.
     return Integer.compare( o.priority, priority );
   }
 
   @Override
-  public boolean equals( Object o )
+  public boolean equals( @Nullable Object o )
   {
 		if ( this == o )
 		{
@@ -50,7 +53,8 @@ class ConfigurationElement<T>
   /**
    * create instance of Registerable.
    */
-  public static <T> ConfigurationElement<T> of( T item )
+  @Nonnull
+  public static <T> ConfigurationElement<T> of( @Nonnull T item )
   {
     return of( item, WorldConfigurationBuilder.Priority.NORMAL );
   }
@@ -58,7 +62,8 @@ class ConfigurationElement<T>
   /**
    * create instance of Registerable.
    */
-  public static <T> ConfigurationElement<T> of( T item, int priority )
+  @Nonnull
+  public static <T> ConfigurationElement<T> of( @Nonnull T item, int priority )
   {
     return new ConfigurationElement<T>( item, priority );
   }

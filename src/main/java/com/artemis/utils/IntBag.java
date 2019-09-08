@@ -1,6 +1,8 @@
 package com.artemis.utils;
 
 import java.util.Arrays;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import static java.lang.Math.*;
 
 /**
@@ -199,7 +201,7 @@ public class IntBag
    *
    * @param other elements to be added to this list
    */
-  public void addAll( IntBag other )
+  public void addAll( @Nonnull IntBag other )
   {
     for ( int i = 0; i < other.size(); i++ )
     {
@@ -289,7 +291,7 @@ public class IntBag
   }
 
   @Override
-  public boolean equals( Object o )
+  public boolean equals( @Nullable Object o )
   {
 		if ( this == o )
 		{
@@ -329,6 +331,7 @@ public class IntBag
     return hash;
   }
 
+  @Nonnull
   @Override
   public String toString()
   {

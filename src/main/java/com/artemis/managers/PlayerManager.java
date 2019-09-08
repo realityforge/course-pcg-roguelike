@@ -6,6 +6,7 @@ import com.artemis.utils.Bag;
 import com.artemis.utils.ImmutableBag;
 import java.util.HashMap;
 import java.util.Map;
+import javax.annotation.Nonnull;
 
 /**
  * You may sometimes want to specify to which player an entity belongs to.
@@ -21,10 +22,12 @@ public class PlayerManager
   /**
    * All players mapped to entities as key.
    */
+  @Nonnull
   private final Map<Entity, String> playerByEntity;
   /**
    * All entities that are mapped to a player, with the player as key.
    */
+  @Nonnull
   private final Map<String, Bag<Entity>> entitiesByPlayer;
 
   /**
@@ -78,7 +81,7 @@ public class PlayerManager
    *
    * @param e the entity to remove
    */
-  public void removeFromPlayer( Entity e )
+  public void removeFromPlayer( @Nonnull Entity e )
   {
     String player = playerByEntity.get( e );
     if ( player != null )
@@ -108,7 +111,7 @@ public class PlayerManager
    * @param e the deleted entity
    */
   @Override
-  public void deleted( Entity e )
+  public void deleted( @Nonnull Entity e )
   {
     removeFromPlayer( e );
   }

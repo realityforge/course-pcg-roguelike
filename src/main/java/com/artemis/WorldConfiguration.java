@@ -10,6 +10,8 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import static com.artemis.ComponentManager.*;
 
 /**
@@ -30,10 +32,14 @@ public final class WorldConfiguration
   public static final int ASPECT_SUBSCRIPTION_MANAGER_IDX = 2;
   final Bag<BaseSystem> systems = new Bag<BaseSystem>( BaseSystem.class );
   protected int expectedEntityCount = 128;
+  @Nonnull
   protected Map<String, Object> injectables = new HashMap<String, Object>();
+  @Nullable
   protected Injector injector;
+  @Nullable
   protected SystemInvocationStrategy invocationStrategy;
   private boolean alwaysDelayComponentRemoval = false;
+  @Nonnull
   private Set<Class<? extends BaseSystem>> registered = new HashSet<Class<? extends BaseSystem>>();
 
   public WorldConfiguration()
@@ -55,6 +61,7 @@ public final class WorldConfiguration
    * @param expectedEntityCount count of expected entities.
    * @return This instance for chaining.
    */
+  @Nonnull
   public WorldConfiguration expectedEntityCount( int expectedEntityCount )
   {
     this.expectedEntityCount = expectedEntityCount;
@@ -67,7 +74,8 @@ public final class WorldConfiguration
    * @param injector Injector to handle dependency injections.
    * @return This instance for chaining.
    */
-  public WorldConfiguration setInjector( Injector injector )
+  @Nonnull
+  public WorldConfiguration setInjector( @Nullable Injector injector )
   {
 		if ( injector == null )
 		{
@@ -84,7 +92,8 @@ public final class WorldConfiguration
    * @param invocationStrategy Strategy that will invoke systems.
    * @return This instance for chaining.
    */
-  public WorldConfiguration setInvocationStrategy( SystemInvocationStrategy invocationStrategy )
+  @Nonnull
+  public WorldConfiguration setInvocationStrategy( @Nullable SystemInvocationStrategy invocationStrategy )
   {
 		if ( invocationStrategy == null )
 		{
@@ -108,7 +117,8 @@ public final class WorldConfiguration
    * @param o object to inject.
    * @return This instance for chaining.
    */
-  public WorldConfiguration register( Object o )
+  @Nonnull
+  public WorldConfiguration register( @Nonnull Object o )
   {
     return register( o.getClass().getName(), o );
   }
@@ -125,6 +135,7 @@ public final class WorldConfiguration
    * @param o    object to inject.
    * @return This instance for chaining.
    */
+  @Nonnull
   public WorldConfiguration register( String name, Object o )
   {
     injectables.put( name, o );
@@ -138,7 +149,8 @@ public final class WorldConfiguration
    * @param system the system to add
    * @return the added system
    */
-  public WorldConfiguration setSystem( Class<? extends BaseSystem> system )
+  @Nonnull
+  public WorldConfiguration setSystem( @Nonnull Class<? extends BaseSystem> system )
   {
     try
     {
@@ -157,7 +169,8 @@ public final class WorldConfiguration
    * @param system the system to add
    * @return the added system
    */
-  public <T extends BaseSystem> WorldConfiguration setSystem( T system )
+  @Nonnull
+  public <T extends BaseSystem> WorldConfiguration setSystem( @Nonnull T system )
   {
     systems.add( system );
 
@@ -170,7 +183,7 @@ public final class WorldConfiguration
     return this;
   }
 
-  void initialize( World world, Injector injector, AspectSubscriptionManager asm )
+  void initialize( @Nonnull World world, @Nonnull Injector injector, @Nonnull AspectSubscriptionManager asm )
   {
 		if ( invocationStrategy == null )
 		{
@@ -205,7 +218,7 @@ public final class WorldConfiguration
     invocationStrategy.initialize();
   }
 
-  private void initializeSystems( Injector injector )
+  private void initializeSystems( @Nonnull Injector injector )
   {
     for ( int i = 0, s = systems.size(); i < s; i++ )
     {

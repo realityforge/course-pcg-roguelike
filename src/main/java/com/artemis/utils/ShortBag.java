@@ -1,6 +1,8 @@
 package com.artemis.utils;
 
 import java.util.Arrays;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * Collection type a bit like ArrayList but does not preserve the order of its
@@ -180,7 +182,7 @@ public class ShortBag
    *
    * @param other elements to be added to this list
    */
-  public void addAll( ShortBag other )
+  public void addAll( @Nonnull ShortBag other )
   {
     for ( int i = 0; i < other.size(); i++ )
     {
@@ -296,7 +298,7 @@ public class ShortBag
   }
 
   @Override
-  public boolean equals( Object o )
+  public boolean equals( @Nullable Object o )
   {
 		if ( this == o )
 		{
@@ -323,6 +325,7 @@ public class ShortBag
     return hash;
   }
 
+  @Nonnull
   @Override
   public String toString()
   {

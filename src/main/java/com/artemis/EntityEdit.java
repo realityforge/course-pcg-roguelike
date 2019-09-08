@@ -1,5 +1,7 @@
 package com.artemis;
 
+import javax.annotation.Nonnull;
+
 /**
  * Entity mutator.
  * <p/>
@@ -23,7 +25,7 @@ public final class EntityEdit
   int entityId;
   private ComponentManager cm;
 
-  EntityEdit( World world )
+  EntityEdit( @Nonnull World world )
   {
     cm = world.getComponentManager();
   }
@@ -48,7 +50,8 @@ public final class EntityEdit
    * @return this EntityEdit for chaining
    * @see #create(Class)
    */
-  public EntityEdit add( Component component )
+  @Nonnull
+  public EntityEdit add( @Nonnull Component component )
   {
     return add( component, cm.typeFactory.getTypeFor( component.getClass() ) );
   }
@@ -65,7 +68,8 @@ public final class EntityEdit
    * @return this EntityEdit for chaining
    * @see #create(Class)
    */
-  public EntityEdit add( Component component, ComponentType type )
+  @Nonnull
+  public EntityEdit add( @Nonnull Component component, @Nonnull ComponentType type )
   {
     if ( type.isPooled )
     {
@@ -107,7 +111,8 @@ public final class EntityEdit
    * @param component the component to remove from this entity.
    * @return this EntityEdit for chaining
    */
-  public EntityEdit remove( Component component )
+  @Nonnull
+  public EntityEdit remove( @Nonnull Component component )
   {
     return remove( component.getClass() );
   }
@@ -120,7 +125,8 @@ public final class EntityEdit
    * @param type the type of component to remove from this entity
    * @return this EntityEdit for chaining
    */
-  public EntityEdit remove( ComponentType type )
+  @Nonnull
+  public EntityEdit remove( @Nonnull ComponentType type )
   {
     cm.getMapper( type.getType() ).remove( entityId );
     return this;
@@ -132,11 +138,13 @@ public final class EntityEdit
    * @param type the class type of component to remove from this entity
    * @return this EntityEdit for chaining
    */
+  @Nonnull
   public EntityEdit remove( Class<? extends Component> type )
   {
     return remove( cm.typeFactory.getTypeFor( type ) );
   }
 
+  @Nonnull
   @Override
   public String toString()
   {

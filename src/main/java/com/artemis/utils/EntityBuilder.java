@@ -13,6 +13,7 @@ import com.artemis.managers.TagManager;
 import com.artemis.managers.UuidEntityManager;
 import com.artemis.utils.reflect.ClassReflection;
 import java.util.UUID;
+import javax.annotation.Nonnull;
 
 /**
  * Non-reusable entity creation helper for rapid prototyping.
@@ -34,13 +35,14 @@ import java.util.UUID;
  */
 public class EntityBuilder
 {
+  @Nonnull
   protected final World world;
   protected final EntityEdit edit;
 
   /**
    * Begin building new entity.
    */
-  public EntityBuilder( World world )
+  public EntityBuilder( @Nonnull World world )
   {
     this.world = world;
     edit = world.createEntity().edit();
@@ -49,7 +51,7 @@ public class EntityBuilder
   /**
    * Begin building new entity based on archetype.
    */
-  public EntityBuilder( World world, Archetype archetype )
+  public EntityBuilder( @Nonnull World world, @Nonnull Archetype archetype )
   {
     this.world = world;
     edit = world.createEntity( archetype ).edit();
@@ -58,6 +60,7 @@ public class EntityBuilder
   /**
    * Add component to entity.
    */
+  @Nonnull
   public EntityBuilder with( Component component )
   {
     edit.add( component );
@@ -67,6 +70,7 @@ public class EntityBuilder
   /**
    * Add components to entity.
    */
+  @Nonnull
   public EntityBuilder with( Component component1, Component component2 )
   {
     edit.add( component1 );
@@ -77,6 +81,7 @@ public class EntityBuilder
   /**
    * Add components to entity.
    */
+  @Nonnull
   public EntityBuilder with( Component component1, Component component2, Component component3 )
   {
     edit.add( component1 );
@@ -88,6 +93,7 @@ public class EntityBuilder
   /**
    * Add components to entity.
    */
+  @Nonnull
   public EntityBuilder with( Component component1, Component component2, Component component3, Component component4 )
   {
     edit.add( component1 );
@@ -100,6 +106,7 @@ public class EntityBuilder
   /**
    * Add components to entity.
    */
+  @Nonnull
   public EntityBuilder with( Component component1,
                              Component component2,
                              Component component3,
@@ -117,7 +124,8 @@ public class EntityBuilder
   /**
    * Add components to entity.
    */
-  public EntityBuilder with( Component... components )
+  @Nonnull
+  public EntityBuilder with( @Nonnull Component... components )
   {
     for ( int i = 0, n = components.length; i < n; i++ )
     {
@@ -129,6 +137,7 @@ public class EntityBuilder
   /**
    * Add artemis managed components to entity.
    */
+  @Nonnull
   public EntityBuilder with( Class<? extends Component> component )
   {
     edit.create( component );
@@ -138,6 +147,7 @@ public class EntityBuilder
   /**
    * Add artemis managed components to entity.
    */
+  @Nonnull
   public EntityBuilder with( Class<? extends Component> component1, Class<? extends Component> component2 )
   {
     edit.create( component1 );
@@ -148,6 +158,7 @@ public class EntityBuilder
   /**
    * Add artemis managed components to entity.
    */
+  @Nonnull
   public EntityBuilder with( Class<? extends Component> component1,
                              Class<? extends Component> component2,
                              Class<? extends Component> component3 )
@@ -161,6 +172,7 @@ public class EntityBuilder
   /**
    * Add artemis managed components to entity.
    */
+  @Nonnull
   public EntityBuilder with( Class<? extends Component> component1,
                              Class<? extends Component> component2,
                              Class<? extends Component> component3,
@@ -176,6 +188,7 @@ public class EntityBuilder
   /**
    * Add artemis managed components to entity.
    */
+  @Nonnull
   public EntityBuilder with( Class<? extends Component> component1,
                              Class<? extends Component> component2,
                              Class<? extends Component> component3,
@@ -193,7 +206,8 @@ public class EntityBuilder
   /**
    * Add artemis managed components to entity.
    */
-  public EntityBuilder with( Class<? extends Component>... components )
+  @Nonnull
+  public EntityBuilder with( @Nonnull Class<? extends Component>... components )
   {
     for ( int i = 0, n = components.length; i < n; i++ )
     {
@@ -205,6 +219,7 @@ public class EntityBuilder
   /**
    * Set UUID of entity
    */
+  @Nonnull
   public EntityBuilder UUID( UUID uuid )
   {
     resolveManager( UuidEntityManager.class ).setUuid( edit.getEntity(), uuid );
@@ -216,6 +231,7 @@ public class EntityBuilder
    * An entity can only belong to a single player at a time.
    * Requires registered PlayerManager.
    */
+  @Nonnull
   public EntityBuilder player( String player )
   {
     resolveManager( PlayerManager.class ).setPlayer( edit.getEntity(), player );
@@ -225,6 +241,7 @@ public class EntityBuilder
   /**
    * Register entity with tag. Requires registered TagManager
    */
+  @Nonnull
   public EntityBuilder tag( String tag )
   {
     resolveManager( TagManager.class ).register( tag, edit.getEntity() );
@@ -234,6 +251,7 @@ public class EntityBuilder
   /**
    * Register entity with group. Requires registered TagManager
    */
+  @Nonnull
   public EntityBuilder group( String group )
   {
     resolveManager( GroupManager.class ).add( edit.getEntity(), group );
@@ -243,7 +261,8 @@ public class EntityBuilder
   /**
    * Register entity with multiple groups. Requires registered TagManager
    */
-  public EntityBuilder groups( String... groups )
+  @Nonnull
+  public EntityBuilder groups( @Nonnull String... groups )
   {
     for ( int i = 0; groups.length > i; i++ )
     {
@@ -263,7 +282,7 @@ public class EntityBuilder
   /**
    * Fetch manager or throw RuntimeException if not registered.
    */
-  protected <T extends BaseSystem> T resolveManager( Class<T> type )
+  protected <T extends BaseSystem> T resolveManager( @Nonnull Class<T> type )
   {
     final T teamManager = world.getSystem( type );
     if ( teamManager == null )

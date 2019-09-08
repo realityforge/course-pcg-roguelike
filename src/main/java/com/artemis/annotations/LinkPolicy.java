@@ -4,6 +4,7 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+import javax.annotation.Nonnull;
 
 /**
  * <p>Annotation for entity-referencing fields in component types. This annotation
@@ -16,7 +17,7 @@ import java.lang.annotation.Target;
 @Target( ElementType.FIELD )
 public @interface LinkPolicy
 {
-  Policy value();
+  @Nonnull Policy value();
 
   enum Policy
   {

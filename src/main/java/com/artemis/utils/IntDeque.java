@@ -1,6 +1,8 @@
 package com.artemis.utils;
 
 import java.util.Arrays;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * <p>Missing tests and missing methods: (push|peek|pop)(Back|Front).</p>
@@ -218,7 +220,7 @@ public class IntDeque
   }
 
   @Override
-  public boolean equals( Object o )
+  public boolean equals( @Nullable Object o )
   {
 		if ( this == o )
 		{
@@ -258,6 +260,7 @@ public class IntDeque
     return hash;
   }
 
+  @Nonnull
   @Override
   public String toString()
   {

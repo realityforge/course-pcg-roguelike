@@ -5,6 +5,7 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+import javax.annotation.Nonnull;
 
 /**
  * Holds the path or identifier for <code>Prefab</code> types.
@@ -16,5 +17,5 @@ import java.lang.annotation.Target;
 @Documented
 public @interface PrefabData
 {
-  String value();
+  @Nonnull String value();
 }

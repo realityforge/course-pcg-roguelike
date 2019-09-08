@@ -5,16 +5,19 @@ import com.artemis.World;
 import com.artemis.annotations.LinkPolicy;
 import com.artemis.utils.IntBag;
 import com.artemis.utils.reflect.Field;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 class UniLinkSite
   extends LinkSite
 {
+  @Nullable
   UniFieldMutator fieldMutator;
   private final IntBag sourceToTarget = new IntBag();
 
-  protected UniLinkSite( World world,
-                         ComponentType type,
-                         Field field )
+  protected UniLinkSite( @Nonnull World world,
+                         @Nonnull ComponentType type,
+                         @Nonnull Field field )
   {
 
     super( world, type, field, LinkPolicy.Policy.CHECK_SOURCE_AND_TARGETS );

@@ -12,6 +12,7 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+import javax.annotation.Nonnull;
 
 /**
  * <p>Auto-configures fields pertaining to aspects. The annotated field
@@ -40,15 +41,15 @@ public @interface AspectDescriptor
   /**
    * @return required types
    */
-  Class<? extends Component>[] all() default {};
+  @Nonnull Class<? extends Component>[] all() default {};
 
   /**
    * @return match at least one
    */
-  Class<? extends Component>[] one() default {};
+  @Nonnull Class<? extends Component>[] one() default {};
 
   /**
    * @return excluding types
    */
-  Class<? extends Component>[] exclude() default {};
+  @Nonnull Class<? extends Component>[] exclude() default {};
 }

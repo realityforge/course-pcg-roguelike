@@ -17,6 +17,8 @@ package com.artemis.gwtref.client;
 
 import java.lang.annotation.Annotation;
 import java.util.Arrays;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * Describes a method of a {@link Type}.
@@ -40,14 +42,16 @@ public class Method
   final boolean isVarArgs;
   final boolean isMethod;
   final boolean isConstructor;
+  @Nonnull
   final Parameter[] parameters;
   final int methodId;
+  @Nonnull
   final Annotation[] annotations;
 
   public Method( String name,
                  Class enclosingType,
                  Class returnType,
-                 Parameter[] parameters,
+                 @Nullable Parameter[] parameters,
                  boolean isAbstract,
                  boolean isFinal,
                  boolean isStatic,
@@ -60,7 +64,7 @@ public class Method
                  boolean isMethod,
                  boolean isConstructor,
                  int methodId,
-                 Annotation[] annotations )
+                 @Nullable Annotation[] annotations )
   {
     this.name = name;
     this.enclosingType = enclosingType;
@@ -100,6 +104,7 @@ public class Method
   /**
    * @return the list of parameters, can be a zero size array.
    */
+  @Nonnull
   public Parameter[] getParameters()
   {
     return parameters;
@@ -176,7 +181,7 @@ public class Method
    * @param params the parameters to pass to the method or null.
    * @return the return value or null if the method does not return anything.
    */
-  public Object invoke( Object obj, Object... params )
+  public Object invoke( Object obj, @Nullable Object... params )
   {
 		if ( parameters.length != ( params != null ? params.length : 0 ) )
 		{
@@ -191,7 +196,7 @@ public class Method
     return this.name.equals( name ) && match( types );
   }
 
-  boolean match( Class... types )
+  boolean match( @Nullable Class... types )
   {
 		if ( types == null )
 		{
@@ -213,11 +218,13 @@ public class Method
     return true;
   }
 
+  @Nonnull
   public Annotation[] getDeclaredAnnotations()
   {
     return annotations;
   }
 
+  @Nonnull
   @Override
   public String toString()
   {

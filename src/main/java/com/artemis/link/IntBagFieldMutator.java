@@ -6,6 +6,8 @@ import com.artemis.World;
 import com.artemis.utils.IntBag;
 import com.artemis.utils.reflect.Field;
 import com.artemis.utils.reflect.ReflectionException;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import static com.artemis.Aspect.*;
 
 class IntBagFieldMutator
@@ -15,7 +17,7 @@ class IntBagFieldMutator
   private EntitySubscription all;
 
   @Override
-  public void validate( int sourceId, IntBag ids, LinkListener listener )
+  public void validate( int sourceId, @Nonnull IntBag ids, @Nullable LinkListener listener )
   {
     for ( int i = 0; ids.size() > i; i++ )
     {
@@ -31,8 +33,9 @@ class IntBagFieldMutator
     }
   }
 
+  @Nonnull
   @Override
-  public IntBag read( Component c, Field f )
+  public IntBag read( Component c, @Nonnull Field f )
   {
     try
     {
@@ -55,7 +58,7 @@ class IntBagFieldMutator
   }
 
   @Override
-  public void setWorld( World world )
+  public void setWorld( @Nonnull World world )
   {
     all = world.getAspectSubscriptionManager().get( all() );
   }

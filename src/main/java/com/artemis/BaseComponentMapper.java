@@ -1,6 +1,8 @@
 package com.artemis;
 
 import com.artemis.annotations.DelayedComponentRemoval;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public abstract class BaseComponentMapper<A extends Component>
 {
@@ -23,7 +25,7 @@ public abstract class BaseComponentMapper<A extends Component>
    * @return a new mapper
    */
   @SuppressWarnings( "unchecked" )
-  public static <T extends Component> BaseComponentMapper<T> getFor( Class<T> type, World world )
+  public static <T extends Component> BaseComponentMapper<T> getFor( Class<T> type, @Nonnull World world )
   {
     return world.getMapper( type );
   }
@@ -43,7 +45,7 @@ public abstract class BaseComponentMapper<A extends Component>
    * @param e the entity that should possess the component
    * @return the instance of the component.
    */
-  public A get( Entity e )
+  public A get( @Nonnull Entity e )
     throws ArrayIndexOutOfBoundsException
   {
     return get( e.getId() );
@@ -73,7 +75,7 @@ public abstract class BaseComponentMapper<A extends Component>
    * @param e the entity to check
    * @return true if the entity has this component type, false if it doesn't
    */
-  public boolean has( Entity e )
+  public boolean has( @Nonnull Entity e )
     throws ArrayIndexOutOfBoundsException
   {
     return has( e.getId() );
@@ -88,7 +90,8 @@ public abstract class BaseComponentMapper<A extends Component>
    * @param entity the entity that should possess the component
    * @return the instance of the component.
    */
-  public A create( Entity entity )
+  @Nullable
+  public A create( @Nonnull Entity entity )
   {
     return create( entity.getId() );
   }
@@ -101,15 +104,17 @@ public abstract class BaseComponentMapper<A extends Component>
    *
    * @param entity entity to remove.
    */
-  public void remove( Entity entity )
+  public void remove( @Nonnull Entity entity )
   {
     remove( entity.getId() );
   }
 
   protected abstract void internalRemove( int entityId );
 
+  @Nullable
   public abstract A create( int entityId );
 
+  @Nullable
   public abstract A internalCreate( int entityId );
 
   /**
@@ -135,6 +140,7 @@ public abstract class BaseComponentMapper<A extends Component>
    * @param value    {@code true} to create component (if missing), {@code false} to remove (if exists).
    * @return the instance of the component, or {@code null} if removed.
    */
+  @Nullable
   public A set( int entityId, boolean value )
   {
     if ( value )
@@ -157,7 +163,8 @@ public abstract class BaseComponentMapper<A extends Component>
    * @param value  {@code true} to create component (if missing), {@code false} to remove (if exists).
    * @return the instance of the component, or {@code null} if removed.
    */
-  public A set( Entity entity, boolean value )
+  @Nullable
+  public A set( @Nonnull Entity entity, boolean value )
   {
     return set( entity.getId(), value );
   }
@@ -170,7 +177,7 @@ public abstract class BaseComponentMapper<A extends Component>
    * @param fallback fallback component to return, or {@code null} to return null.
    * @return the instance of the component
    */
-  public A getSafe( Entity entity, A fallback )
+  public A getSafe( @Nonnull Entity entity, A fallback )
   {
     return getSafe( entity.getId(), fallback );
   }
@@ -184,6 +191,7 @@ public abstract class BaseComponentMapper<A extends Component>
     return type;
   }
 
+  @Nonnull
   @Override
   public String toString()
   {

@@ -16,29 +16,36 @@
 package com.artemis.gwtref.client;
 
 import java.util.Collection;
+import javax.annotation.Nonnull;
 
 public interface IReflectionCache
 {
   // Class level methods
-	Collection<Type> getKnownTypes();
+  @Nonnull
+  Collection<Type> getKnownTypes();
 
+  @Nonnull
   Type forName( String name );
 
+  @Nonnull
   Object newArray( Class componentType, int size );
 
   int getArrayLength( Type type, Object obj );
 
+  @Nonnull
   Object getArrayElement( Type type, Object obj, int i );
 
   void setArrayElement( Type type, Object obj, int i, Object value );
 
   // Field Methods
-	Object get( Field field, Object obj )
+  @Nonnull
+  Object get( Field field, Object obj )
     throws IllegalAccessException;
 
   void set( Field field, Object obj, Object value )
     throws IllegalAccessException;
 
   // Method Methods :p
-	Object invoke( Method m, Object obj, Object[] params );
+  @Nonnull
+  Object invoke( Method m, Object obj, Object[] params );
 }

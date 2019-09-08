@@ -17,6 +17,8 @@ package com.artemis.gwtref.client;
 
 import java.lang.annotation.Annotation;
 import java.util.Arrays;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public class Field
 {
@@ -34,6 +36,7 @@ public class Field
   final int getter;
   final int setter;
   final Class[] elementTypes;
+  @Nonnull
   final Annotation[] annotations;
 
   Field( String name,
@@ -50,7 +53,7 @@ public class Field
          int getter,
          int setter,
          Class[] elementTypes,
-         Annotation[] annotations )
+         @Nullable Annotation[] annotations )
   {
     this.name = name;
     this.enclosingType = enclosingType;
@@ -69,6 +72,7 @@ public class Field
     this.annotations = annotations != null ? annotations : new Annotation[]{};
   }
 
+  @Nonnull
   public Annotation[] getDeclaredAnnotations()
   {
     return annotations;
@@ -86,6 +90,7 @@ public class Field
     ReflectionCache.instance.set( this, obj, value );
   }
 
+  @Nullable
   public Type getElementType( int index )
   {
 		if ( elementTypes != null && index < elementTypes.length )
@@ -155,6 +160,7 @@ public class Field
     return isVolatile;
   }
 
+  @Nonnull
   @Override
   public String toString()
   {

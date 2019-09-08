@@ -5,6 +5,7 @@ import com.artemis.utils.Bag;
 import com.artemis.utils.BitVector;
 import com.artemis.utils.IntBag;
 import com.artemis.utils.IntDeque;
+import javax.annotation.Nonnull;
 import static com.artemis.Aspect.*;
 
 /**
@@ -20,10 +21,12 @@ public class EntityManager
   /**
    * Contains all entities in the manager.
    */
+  @Nonnull
   final Bag<Entity> entities;
   private final BitVector recycled = new BitVector();
   private final IntDeque limbo = new IntDeque();
   private int nextId;
+  @Nonnull
   private Bag<BitVector> entityBitVectors = new Bag<BitVector>( BitVector.class );
 
   /**
@@ -60,7 +63,7 @@ public class EntityManager
     return obtain().id;
   }
 
-  void clean( IntBag pendingDeletion )
+  void clean( @Nonnull IntBag pendingDeletion )
   {
     int[] ids = pendingDeletion.getData();
     for ( int i = 0, s = pendingDeletion.size(); s > i; i++ )
@@ -91,7 +94,7 @@ public class EntityManager
     return !recycled.unsafeGet( entityId );
   }
 
-  public void registerEntityStore( BitVector bv )
+  public void registerEntityStore( @Nonnull BitVector bv )
   {
     bv.ensureCapacity( entities.getCapacity() );
     entityBitVectors.add( bv );
@@ -145,6 +148,7 @@ public class EntityManager
    *
    * @param id The ID to be set on the Entity
    */
+  @Nonnull
   private Entity createEntity( int id )
   {
     Entity e = new Entity( world, id );

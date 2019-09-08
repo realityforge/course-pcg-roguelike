@@ -21,13 +21,14 @@ import com.google.gwt.core.ext.TreeLogger;
 import com.google.gwt.core.ext.UnableToCompleteException;
 import com.google.gwt.core.ext.typeinfo.JClassType;
 import com.google.gwt.core.ext.typeinfo.TypeOracle;
+import javax.annotation.Nonnull;
 import static com.google.gwt.core.ext.TreeLogger.*;
 
 public class ReflectionCacheGenerator
   extends Generator
 {
   @Override
-  public String generate( TreeLogger logger, GeneratorContext context, String typeName )
+  public String generate( @Nonnull TreeLogger logger, @Nonnull GeneratorContext context, String typeName )
     throws UnableToCompleteException
   {
     TypeOracle oracle = context.getTypeOracle();

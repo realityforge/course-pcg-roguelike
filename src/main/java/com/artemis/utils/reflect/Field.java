@@ -16,6 +16,8 @@
 package com.artemis.utils.reflect;
 
 import com.artemis.gwtref.client.Type;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * Provides information about, and access to, a single field of a class or interface.
@@ -141,6 +143,7 @@ public final class Field
    * If the type of the field is parameterized, returns the Class object representing the parameter type at the specified index,
    * null otherwise.
    */
+  @Nullable
   public Class getElementType( int index )
   {
     Type elementType = field.getElementType( index );
@@ -192,6 +195,7 @@ public final class Field
   /**
    * Returns this element's annotation for the specified type if such an annotation is present, else null.
    */
+  @Nullable
   public <T extends java.lang.annotation.Annotation> T getAnnotation( Class<T> annotationClass )
   {
     final Annotation declaredAnnotation = getDeclaredAnnotation( annotationClass );
@@ -218,6 +222,7 @@ public final class Field
    * Returns an array of {@link Annotation} objects reflecting all annotations declared by this field,
    * or an empty array if there are none. Does not include inherited annotations.
    */
+  @Nonnull
   public Annotation[] getDeclaredAnnotations()
   {
     java.lang.annotation.Annotation[] annotations = field.getDeclaredAnnotations();
@@ -234,6 +239,7 @@ public final class Field
    * have such an annotation. This is a convenience function if the caller knows already which annotation
    * type he's looking for.
    */
+  @Nullable
   public Annotation getDeclaredAnnotation( Class<? extends java.lang.annotation.Annotation> annotationType )
   {
     java.lang.annotation.Annotation[] annotations = field.getDeclaredAnnotations();

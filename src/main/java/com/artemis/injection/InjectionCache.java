@@ -11,6 +11,8 @@ import com.artemis.utils.reflect.ReflectionException;
 import java.lang.annotation.Annotation;
 import java.util.HashMap;
 import java.util.Map;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import static com.artemis.utils.reflect.ClassReflection.*;
 
 /**
@@ -28,6 +30,7 @@ public class InjectionCache
   private final Map<Field, Class<?>> genericsCache = new HashMap<Field, Class<?>>();
   private static final Wire DEFAULT_WIRE = new Wire()
   {
+    @Nonnull
     @Override
     public Class<? extends Annotation> annotationType()
     {
@@ -46,6 +49,7 @@ public class InjectionCache
       return true;
     }
 
+    @Nullable
     @Override
     public String name()
     {
@@ -79,7 +83,7 @@ public class InjectionCache
   /**
    * Set {@code @Wire} annotation value for cached class.
    */
-  private void setWireAnnotation( CachedClass cachedClass, Wire wireAnnotation )
+  private void setWireAnnotation( @Nonnull CachedClass cachedClass, @Nonnull Wire wireAnnotation )
   {
     cachedClass.wireType = WireType.WIRE;
     cachedClass.wireAnnotation = wireAnnotation;
@@ -91,6 +95,7 @@ public class InjectionCache
    * Determine desired wiring on class by annotation.
    * Convention is {@code Wire(injectInherited=true)}
    */
+  @Nonnull
   private WireType getWireType( Class<?> clazz )
   {
     return
@@ -99,7 +104,7 @@ public class InjectionCache
       WireType.IGNORED;
   }
 
-  public CachedField getCachedField( Field field )
+  public CachedField getCachedField( @Nonnull Field field )
   {
     CachedField cachedField = namedWireCache.get( field );
     if ( cachedField == null )
@@ -148,7 +153,8 @@ public class InjectionCache
     return injectionType;
   }
 
-  public Class<?> getGenericType( Field field )
+  @Nullable
+  public Class<?> getGenericType( @Nonnull Field field )
   {
     Class<?> genericsType = genericsCache.get( field );
     if ( genericsType == null )

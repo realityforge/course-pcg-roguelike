@@ -3,10 +3,14 @@ package com.artemis;
 import com.artemis.utils.Bag;
 import com.artemis.utils.BitVector;
 import com.artemis.utils.IntBag;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 final class BatchChangeProcessor
 {
+  @Nonnull
   private final World world;
+  @Nonnull
   private final AspectSubscriptionManager asm;
   final BitVector changed = new BitVector();
   final WildBag<ComponentRemover> purgatories = new WildBag<ComponentRemover>( ComponentRemover.class );
@@ -19,7 +23,7 @@ final class BatchChangeProcessor
   private final Bag<EntityEdit> pool = new Bag<EntityEdit>();
   private final WildBag<EntityEdit> edited = new WildBag( EntityEdit.class );
 
-  BatchChangeProcessor( World world )
+  BatchChangeProcessor( @Nonnull World world )
   {
     this.world = world;
     asm = world.getAspectSubscriptionManager();
@@ -50,6 +54,7 @@ final class BatchChangeProcessor
    * @param entityId entity to fetch editor for.
    * @return a fast albeit verbose editor to perform batch changes to entities.
    */
+  @Nullable
   EntityEdit obtainEditor( int entityId )
   {
     int size = edited.size();
@@ -66,6 +71,7 @@ final class BatchChangeProcessor
     return edit;
   }
 
+  @Nullable
   private EntityEdit entityEdit()
   {
     if ( pool.isEmpty() )
@@ -99,6 +105,7 @@ final class BatchChangeProcessor
     purgatories.setSize( 0 );
   }
 
+  @Nonnull
   IntBag getPendingPurge()
   {
     pendingPurge.toIntBag( toPurge );

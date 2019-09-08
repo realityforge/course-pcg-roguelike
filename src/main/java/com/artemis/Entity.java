@@ -2,6 +2,8 @@ package com.artemis;
 
 import com.artemis.utils.Bag;
 import com.artemis.utils.BitVector;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * <p>
@@ -82,6 +84,7 @@ public final class Entity
     return world.edit( id );
   }
 
+  @Nonnull
   @Override
   public String toString()
   {
@@ -112,7 +115,7 @@ public final class Entity
    *             ComponentType instance for the expected component
    * @return component that matches, or {@code null} if none is found
    */
-  public Component getComponent( ComponentType type )
+  public Component getComponent( @Nonnull ComponentType type )
   {
     return world.getComponentManager().getComponent( id, type );
   }
@@ -127,6 +130,7 @@ public final class Entity
    * @param type the expected return component class type
    * @return component that matches, or {@code null} if none is found
    */
+  @Nonnull
   @SuppressWarnings( "unchecked" )
   public <T extends Component> T getComponent( Class<T> type )
   {
@@ -181,7 +185,7 @@ public final class Entity
    * id equality
    */
   @Override
-  public boolean equals( Object o )
+  public boolean equals( @Nullable Object o )
   {
 		if ( this == o )
 		{
@@ -201,7 +205,7 @@ public final class Entity
   /**
    * id equality
    */
-  public boolean equals( Entity o )
+  public boolean equals( @Nullable Entity o )
   {
     return o != null && o.id == id;
   }

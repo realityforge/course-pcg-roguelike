@@ -21,6 +21,7 @@ import com.artemis.World;
 import com.artemis.utils.reflect.ClassReflection;
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.core.client.JsArrayInteger;
+import javax.annotation.Nonnull;
 
 /**
  * This implementation uses bit groups of size 32 to keep track of when bits are
@@ -105,7 +106,7 @@ public class BitVector
   //
 
   // clears one bit
-  private static void clear( JsArrayInteger array, int bitIndex )
+  private static void clear( @Nonnull JsArrayInteger array, int bitIndex )
   {
     int index = wordIndex( bitIndex );
     int word = getWord( array, index );
@@ -117,12 +118,13 @@ public class BitVector
   }
 
   // clones the JSArrayInteger array
+  @Nonnull
   private static native JsArrayInteger clone( JsArrayInteger array ) /*-{
     return array.slice(0);
   }-*/;
 
   // flips one bit
-  private static void flip( JsArrayInteger array, int bitIndex )
+  private static void flip( @Nonnull JsArrayInteger array, int bitIndex )
   {
     // calculate index and offset
     int index = wordIndex( bitIndex );
@@ -153,14 +155,14 @@ public class BitVector
   }
 
   // sets one bit to true
-  private static void set( JsArrayInteger array, int bitIndex )
+  private static void set( @Nonnull JsArrayInteger array, int bitIndex )
   {
     int index = wordIndex( bitIndex );
     array.set( index, getWord( array, index ) | ( 1 << ( bitOffset( bitIndex ) ) ) );
   }
 
   // sets all bits to true within the given range
-  private static void set( JsArrayInteger array, int fromIndex, int toIndex )
+  private static void set( @Nonnull JsArrayInteger array, int fromIndex, int toIndex )
   {
     int first = wordIndex( fromIndex );
     int last = wordIndex( toIndex );
@@ -198,6 +200,7 @@ public class BitVector
   }
 
   // copies a subset of the array
+  @Nonnull
   private static native JsArrayInteger slice( JsArrayInteger array,
                                               int fromIndex, int toIndex ) /*-{
     return array.slice(fromIndex, toIndex);
@@ -253,7 +256,7 @@ public class BitVector
   }-*/;
 
   // flips all bits stored at a certain index
-  private static void flipWord( JsArrayInteger array, int index )
+  private static void flipWord( @Nonnull JsArrayInteger array, int index )
   {
     int word = getWord( array, index );
     if ( word == 0 )
@@ -268,7 +271,7 @@ public class BitVector
   }
 
   // flips all bits stored at a certain index within the given range
-  private static void flipMaskedWord( JsArrayInteger array, int index,
+  private static void flipMaskedWord( @Nonnull JsArrayInteger array, int index,
                                       int from, int to )
   {
     if ( from == to )
@@ -291,7 +294,7 @@ public class BitVector
   }-*/;
 
   // sets all bits to true at a certain index within the given bit range
-  private static void maskInWord( JsArrayInteger array, int index, int from,
+  private static void maskInWord( @Nonnull JsArrayInteger array, int index, int from,
                                   int to )
   {
     // shifting by 32 is the same as shifting by 0, this check prevents that
@@ -308,7 +311,7 @@ public class BitVector
   }
 
   // sets all bits to false at a certain index within the given bit range
-  private static void maskOutWord( JsArrayInteger array, int index, int from,
+  private static void maskOutWord( @Nonnull JsArrayInteger array, int index, int from,
                                    int to )
   {
     int word = getWord( array, index );
@@ -369,7 +372,7 @@ public class BitVector
   }-*/;
 
   // sets all bits at a certain index to the given value
-  private static void setWord( JsArrayInteger array, int index, int value )
+  private static void setWord( @Nonnull JsArrayInteger array, int index, int value )
   {
     // keep 0s out of the array
     if ( value == 0 )
@@ -416,7 +419,7 @@ public class BitVector
     setLengthWords( array, wordIndex( nbits + 31 ) );
   }
 
-  public BitVector( BitVector source )
+  public BitVector( @Nonnull BitVector source )
   {
     this();
     for ( int id = source.nextSetBit( 0 ); id != -1; id = source.nextSetBit( id + 1 ) )
@@ -430,7 +433,7 @@ public class BitVector
     this.array = array;
   }
 
-  public void and( BitVector set )
+  public void and( @Nonnull BitVector set )
   {
     // a & a is just a
     if ( this == set )
@@ -466,7 +469,7 @@ public class BitVector
     }
   }
 
-  public void andNot( BitVector set )
+  public void andNot( @Nonnull BitVector set )
   {
     // a & !a is false
     if ( this == set )
@@ -590,13 +593,14 @@ public class BitVector
     }
   }
 
+  @Nonnull
   public Object clone()
   {
     return new BitVector( clone( array ) );
   }
 
   @Override
-  public boolean equals( Object obj )
+  public boolean equals( @Nonnull Object obj )
   {
     if ( this != obj )
     {
@@ -694,6 +698,7 @@ public class BitVector
     return get( array, bitIndex );
   }
 
+  @Nonnull
   public BitVector get( int fromIndex, int toIndex )
   {
     checkRange( fromIndex, toIndex );
@@ -820,7 +825,7 @@ public class BitVector
     return hash;
   }
 
-  public boolean intersects( BitVector set )
+  public boolean intersects( @Nonnull BitVector set )
   {
     int last = trimToSize( array );
 
@@ -938,7 +943,7 @@ public class BitVector
            + Integer.numberOfTrailingZeros( array.get( index ) );
   }
 
-  public void or( BitVector set )
+  public void or( @Nonnull BitVector set )
   {
     // a | a is just a
     if ( this == set )
@@ -1006,6 +1011,7 @@ public class BitVector
     return bitIndex( array.length() );
   }
 
+  @Nonnull
   @Override
   public String toString()
   {
@@ -1038,7 +1044,7 @@ public class BitVector
     return sb.toString();
   }
 
-  public void xor( BitVector set )
+  public void xor( @Nonnull BitVector set )
   {
     // a ^ a is false
     if ( this == set )
@@ -1073,7 +1079,8 @@ public class BitVector
    * @param out decoded ints end up here
    * @return Same as out
    */
-  public IntBag toIntBag( IntBag out )
+  @Nonnull
+  public IntBag toIntBag( @Nonnull IntBag out )
   {
     out.setSize( 0 );
     if ( isEmpty() )
@@ -1098,7 +1105,8 @@ public class BitVector
    * @param out decoded ints end up here
    * @return Same as out
    */
-  public IntBag toIntBagIdCid( ComponentManager cm, IntBag out )
+  @Nonnull
+  public IntBag toIntBagIdCid( @Nonnull ComponentManager cm, @Nonnull IntBag out )
   {
     out.setSize( 0 );
     if ( isEmpty() )

@@ -1,6 +1,7 @@
 package com.artemis.utils;
 
 import java.util.BitSet;
+import javax.annotation.Nonnull;
 
 public final class ConverterUtil
 {
@@ -8,12 +9,14 @@ public final class ConverterUtil
   {
   }
 
-  public static IntBag toIntBag( BitVector bs, IntBag out )
+  @Nonnull
+  public static IntBag toIntBag( @Nonnull BitVector bs, @Nonnull IntBag out )
   {
     return bs.toIntBag( out );
   }
 
-  public static IntBag toIntBag( BitSet bs, IntBag out )
+  @Nonnull
+  public static IntBag toIntBag( @Nonnull BitSet bs, @Nonnull IntBag out )
   {
     if ( bs.isEmpty() )
     {
@@ -35,7 +38,8 @@ public final class ConverterUtil
     return out;
   }
 
-  public static BitVector toBitVector( IntBag bag, BitVector out )
+  @Nonnull
+  public static BitVector toBitVector( @Nonnull IntBag bag, @Nonnull BitVector out )
   {
     int[] data = bag.getData();
     for ( int i = 0, s = bag.size(); s > i; i++ )
@@ -46,7 +50,8 @@ public final class ConverterUtil
     return out;
   }
 
-  public static BitSet toBitSet( IntBag bag, BitSet out )
+  @Nonnull
+  public static BitSet toBitSet( @Nonnull IntBag bag, @Nonnull BitSet out )
   {
     int[] data = bag.getData();
     for ( int i = 0, s = bag.size(); s > i; i++ )

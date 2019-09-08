@@ -20,6 +20,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * Describes a type (equivalent to {@link Class}), providing methods to retrieve fields, constructors, methods and super
@@ -37,6 +39,7 @@ public class Type
   int id;
   Class clazz;
   Class superClass;
+  @Nonnull
   Set<Class> assignables = new HashSet<Class>();
   boolean isAbstract;
   boolean isInterface;
@@ -46,9 +49,13 @@ public class Type
   boolean isMemberClass;
   boolean isStatic;
   boolean isAnnotation;
+  @Nonnull
   Field[] fields = EMPTY_FIELDS;
+  @Nonnull
   Method[] methods = EMPTY_METHODS;
+  @Nonnull
   Constructor[] constructors = EMPTY_CONSTRUCTORS;
+  @Nonnull
   Annotation[] annotations = EMPTY_ANNOTATIONS;
   Class componentType;
   Object[] enumConstants;
@@ -81,6 +88,7 @@ public class Type
   /**
    * @return the super class of this type or null
    */
+  @Nullable
   public Type getSuperclass()
   {
     try
@@ -97,7 +105,7 @@ public class Type
    * @param otherType the other type
    * @return whether this type is assignable to the other type.
    */
-  public boolean isAssignableFrom( Type otherType )
+  public boolean isAssignableFrom( @Nonnull Type otherType )
   {
     return otherType.assignables.contains( getClassOfType() );
   }
@@ -107,6 +115,7 @@ public class Type
    * @return the public field of this type or one of its super interfaces with the given name or null. See
    * {@link Class#getField(String)}.
    */
+  @Nullable
   public Field getField( String name )
   {
     Type t = this;
@@ -131,6 +140,7 @@ public class Type
   /**
    * @return an array containing all the public fields of this class and its super classes. See {@link Class#getFields()}.
    */
+  @Nonnull
   public Field[] getFields()
   {
     ArrayList<Field> allFields = new ArrayList<Field>();
@@ -157,6 +167,7 @@ public class Type
    * @return an array containing all the fields of this class, including private and protected fields. See
    * {@link Class#getDeclaredFields()}.
    */
+  @Nonnull
   public Field[] getDeclaredFields()
   {
     return fields;
@@ -167,6 +178,7 @@ public class Type
    * @param parameterTypes the types of the parameters of the method
    * @return the public method that matches the name and parameter types of this type or one of its super interfaces.
    */
+  @Nonnull
   public Method getMethod( String name, Class... parameterTypes )
     throws NoSuchMethodException
   {
@@ -192,6 +204,7 @@ public class Type
   /**
    * s * @return an array containing all public methods of this class and its super classes. See {@link Class#getMethods()}.
    */
+  @Nonnull
   public Method[] getMethods()
   {
     ArrayList<Method> allMethods = new ArrayList<Method>();
@@ -218,22 +231,26 @@ public class Type
    * @return an array containing all methods of this class, including abstract, private and protected methods. See
    * {@link Class#getDeclaredMethods()}.
    */
+  @Nonnull
   public Method[] getDeclaredMethods()
   {
     return methods;
   }
 
+  @Nonnull
   public Constructor[] getConstructors()
   {
     return constructors;
   }
 
+  @Nonnull
   public Constructor getDeclaredConstructor( Class... parameterTypes )
     throws NoSuchMethodException
   {
     return getConstructor( parameterTypes );
   }
 
+  @Nonnull
   public Constructor getConstructor( Class... parameterTypes )
     throws NoSuchMethodException
   {
@@ -337,6 +354,7 @@ public class Type
     return enumConstants;
   }
 
+  @Nonnull
   @Override
   public String toString()
   {
@@ -385,6 +403,7 @@ public class Type
            "]";
   }
 
+  @Nonnull
   public Annotation[] getDeclaredAnnotations()
   {
     return annotations;

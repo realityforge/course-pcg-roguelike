@@ -3,6 +3,7 @@ package com.artemis;
 import com.artemis.utils.Bag;
 import com.artemis.utils.BitVector;
 import com.artemis.utils.ImmutableBag;
+import javax.annotation.Nonnull;
 
 /**
  * Delegate for system invocation.
@@ -70,7 +71,7 @@ public abstract class SystemInvocationStrategy
 
   protected abstract void process();
 
-  public boolean isEnabled( BaseSystem system )
+  public boolean isEnabled( @Nonnull BaseSystem system )
   {
     Class<? extends BaseSystem> target = system.getClass();
     ImmutableBag<BaseSystem> systems = world.getSystems();
@@ -85,7 +86,7 @@ public abstract class SystemInvocationStrategy
     throw new RuntimeException( "huh?" );
   }
 
-  public void setEnabled( BaseSystem system, boolean value )
+  public void setEnabled( @Nonnull BaseSystem system, boolean value )
   {
     Class<? extends BaseSystem> target = system.getClass();
     ImmutableBag<BaseSystem> systems = world.getSystems();

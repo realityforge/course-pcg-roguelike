@@ -15,6 +15,8 @@
  ******************************************************************************/
 package com.artemis.gwtref.client;
 
+import javax.annotation.Nonnull;
+
 public class Parameter
 {
   final String name;
@@ -43,6 +45,7 @@ public class Parameter
     return jnsi;
   }
 
+  @Nonnull
   @Override
   public String toString()
   {

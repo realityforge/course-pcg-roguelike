@@ -9,6 +9,8 @@ import com.artemis.utils.Bag;
 import com.artemis.utils.reflect.ClassReflection;
 import com.artemis.utils.reflect.Field;
 import com.artemis.utils.reflect.ReflectionException;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import static com.artemis.Aspect.*;
 
 /**
@@ -68,7 +70,7 @@ public class EntityLinkManager
     }
   }
 
-  private void process( Bag<LinkSite> sites )
+  private void process( @Nonnull Bag<LinkSite> sites )
   {
     for ( LinkSite ls : sites )
     {
@@ -101,7 +103,7 @@ public class EntityLinkManager
    * @param field     target field for listener
    * @param listener  link listener
    */
-  public void register( Class<? extends Component> component, String field, LinkListener listener )
+  public void register( Class<? extends Component> component, @Nullable String field, LinkListener listener )
   {
     world.inject( listener );
     try
@@ -137,17 +139,19 @@ public class EntityLinkManager
   private static class LinkCreateListener
     implements ComponentTypeFactory.ComponentTypeListener
   {
+    @Nonnull
     private final EntityLinkManager elm;
+    @Nonnull
     private final LinkFactory linkFactory;
 
-    public LinkCreateListener( EntityLinkManager elm )
+    public LinkCreateListener( @Nonnull EntityLinkManager elm )
     {
       this.elm = elm;
       this.linkFactory = new LinkFactory( elm.getWorld() );
     }
 
     @Override
-    public void initialize( Bag<ComponentType> types )
+    public void initialize( @Nonnull Bag<ComponentType> types )
     {
       for ( int i = 0, s = types.size(); s > i; i++ )
       {
@@ -156,7 +160,7 @@ public class EntityLinkManager
     }
 
     @Override
-    public void onCreated( ComponentType type )
+    public void onCreated( @Nonnull ComponentType type )
     {
       Bag<LinkSite> links = linkFactory.create( type );
 			if ( links.isEmpty() )

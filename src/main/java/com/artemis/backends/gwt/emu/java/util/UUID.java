@@ -1,6 +1,8 @@
 package java.util;
 
 import java.io.Serializable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * @author senk.christian@gmail.com
@@ -22,6 +24,7 @@ public class UUID
   /**
    *
    */
+  @Nonnull
   public static UUID fromString( String uuidString )
   {
     //TODO: Validation
@@ -35,6 +38,7 @@ public class UUID
   /**
    *
    */
+  @Nonnull
   public static UUID randomUUID()
   {
     return fromString( generateUUIDString() );
@@ -44,6 +48,7 @@ public class UUID
    * Generate a RFC4122, version 4 ID. Example:
    * "92329D39-6F5C-4520-ABFC-AAB64544E172"
    */
+  @Nonnull
   private static String generateUUIDString()
   {
     char[] uuid = new char[ 36 ];
@@ -70,7 +75,7 @@ public class UUID
    * @see java.lang.Comparable#compareTo(java.lang.Object)
    */
   @Override
-  public int compareTo( UUID arg0 )
+  public int compareTo( @Nonnull UUID arg0 )
   {
     return value.compareTo( arg0.value );
   }
@@ -91,7 +96,7 @@ public class UUID
    * @see java.lang.Object#equals(java.lang.Object)
    */
   @Override
-  public boolean equals( Object obj )
+  public boolean equals( @Nullable Object obj )
   {
 		if ( this == obj )
 		{

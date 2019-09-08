@@ -7,6 +7,8 @@ import com.artemis.World;
 import com.artemis.utils.reflect.Field;
 import java.util.IdentityHashMap;
 import java.util.Map;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * Can resolve {@link World}, {@link ComponentMapper}, {@link BaseSystem} and
@@ -27,7 +29,7 @@ public class ArtemisFieldResolver
   }
 
   @Override
-  public void initialize( World world )
+  public void initialize( @Nonnull World world )
   {
     this.world = world;
 
@@ -42,9 +44,10 @@ public class ArtemisFieldResolver
     }
   }
 
+  @Nullable
   @Override
   @SuppressWarnings( "unchecked" )
-  public Object resolve( Object target, Class<?> fieldType, Field field )
+  public Object resolve( Object target, Class<?> fieldType, @Nonnull Field field )
   {
     ClassType injectionType = cache.getFieldClassType( fieldType );
     switch ( injectionType )
@@ -62,7 +65,7 @@ public class ArtemisFieldResolver
   }
 
   @SuppressWarnings( "unchecked" )
-  private ComponentMapper<?> getComponentMapper( Field field )
+  private ComponentMapper<?> getComponentMapper( @Nonnull Field field )
   {
     Class<?> mapperType = cache.getGenericType( field );
     return world.getMapper( (Class<? extends Component>) mapperType );

@@ -4,15 +4,18 @@ import com.artemis.ComponentType;
 import com.artemis.World;
 import com.artemis.annotations.LinkPolicy;
 import com.artemis.utils.reflect.Field;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 class MultiLinkSite
   extends LinkSite
 {
+  @Nullable
   MultiFieldMutator fieldMutator;
 
-  protected MultiLinkSite( World world,
-                           ComponentType type,
-                           Field field )
+  protected MultiLinkSite( @Nonnull World world,
+                           @Nonnull ComponentType type,
+                           @Nonnull Field field )
   {
 
     super( world, type, field, LinkPolicy.Policy.CHECK_SOURCE );

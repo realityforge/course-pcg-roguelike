@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
+import javax.annotation.Nonnull;
 import static com.artemis.WorldConfiguration.*;
 
 /**
@@ -27,14 +28,17 @@ public class World
   /**
    * Manages all entities for the world.
    */
+  @Nonnull
   private final EntityManager em;
   /**
    * Manages all component-entity associations for the world.
    */
+  @Nonnull
   private final ComponentManager cm;
   /**
    * Pool of entity edits.
    */
+  @Nonnull
   final BatchChangeProcessor batchProcessor;
   /**
    * Contains all systems unordered.
@@ -43,11 +47,13 @@ public class World
   /**
    * Manages all aspect based entity subscriptions for the world.
    */
+  @Nonnull
   final AspectSubscriptionManager asm;
   /**
    * Contains strategy for invoking systems upon process.
    */
   SystemInvocationStrategy invocationStrategy;
+  @Nonnull
   final WorldSegment partition;
   /**
    * The time passed since the last update.
@@ -78,7 +84,7 @@ public class World
    * @see WorldConfigurationBuilder
    * @see WorldConfiguration
    */
-  public World( WorldConfiguration configuration )
+  public World( @Nonnull WorldConfiguration configuration )
   {
     partition = new WorldSegment( configuration );
     systemsBag = configuration.systems;
@@ -115,7 +121,7 @@ public class World
    * @see com.artemis.annotations.Wire for more details about dependency injection.
    * @see #inject(Object, boolean)
    */
-  public void inject( Object target )
+  public void inject( @Nonnull Object target )
   {
     inject( target, true );
   }
@@ -136,7 +142,7 @@ public class World
    * @see com.artemis.annotations.Wire for more details about dependency injection.
    * @see #inject(Object)
    */
-  public void inject( Object target, boolean failIfNotInjectable )
+  public void inject( @Nonnull Object target, boolean failIfNotInjectable )
   {
     boolean injectable = partition.injector.isInjectable( target );
 		if ( !injectable && failIfNotInjectable )
@@ -223,6 +229,7 @@ public class World
    *
    * @return entity manager
    */
+  @Nonnull
   public EntityManager getEntityManager()
   {
     return em;
@@ -233,6 +240,7 @@ public class World
    *
    * @return component manager
    */
+  @Nonnull
   public ComponentManager getComponentManager()
   {
     return cm;
@@ -244,6 +252,7 @@ public class World
    *
    * @return aspect subscription manager
    */
+  @Nonnull
   public AspectSubscriptionManager getAspectSubscriptionManager()
   {
     return asm;
@@ -275,7 +284,7 @@ public class World
    * @param e the entity to delete
    * @see #delete(int) recommended alternative.
    */
-  public void deleteEntity( Entity e )
+  public void deleteEntity( @Nonnull Entity e )
   {
     delete( e.id );
   }
@@ -338,7 +347,7 @@ public class World
    * @return entity
    * @see #create() recommended alternative.
    */
-  public Entity createEntity( Archetype archetype )
+  public Entity createEntity( @Nonnull Archetype archetype )
   {
     Entity e = em.createEntityInstance();
 
@@ -363,7 +372,7 @@ public class World
    *
    * @return assigned entity id
    */
-  public int create( Archetype archetype )
+  public int create( @Nonnull Archetype archetype )
   {
     int entityId = em.create();
 
@@ -407,6 +416,7 @@ public class World
    * @param type type of system
    * @return instance of the system in this world
    */
+  @Nonnull
   @SuppressWarnings( "unchecked" )
   public <T extends BaseSystem> T getSystem( Class<T> type )
   {
@@ -416,7 +426,7 @@ public class World
   /**
    * Set strategy for invoking systems on {@link #process()}.
    */
-  protected void setInvocationStrategy( SystemInvocationStrategy invocationStrategy )
+  protected void setInvocationStrategy( @Nonnull SystemInvocationStrategy invocationStrategy )
   {
     this.invocationStrategy = invocationStrategy;
     invocationStrategy.setWorld( this );
@@ -462,6 +472,7 @@ public class World
   /**
    * @return Injector responsible for dependency injection.
    */
+  @Nonnull
   public Injector getInjector()
   {
     return partition.injector;
@@ -470,6 +481,7 @@ public class World
   /**
    * @return Strategy used for invoking systems during {@link World#process()}.
    */
+  @Nonnull
   public <T extends SystemInvocationStrategy> T getInvocationStrategy()
   {
     return (T) invocationStrategy;
@@ -480,13 +492,15 @@ public class World
     /**
      * Contains all systems and systems classes mapped.
      */
+    @Nonnull
     final Map<Class<?>, BaseSystem> systems;
     /**
      * Responsible for dependency injection.
      */
+    @Nonnull
     final Injector injector;
 
-    WorldSegment( WorldConfiguration configuration )
+    WorldSegment( @Nonnull WorldConfiguration configuration )
     {
       systems = new IdentityHashMap<Class<?>, BaseSystem>();
       injector = ( configuration.injector != null )

@@ -16,6 +16,8 @@
 package com.artemis.utils.reflect;
 
 import com.artemis.gwtref.client.Parameter;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * Provides information about, and access to, a single method on a class or interface.
@@ -50,6 +52,7 @@ public final class Method
   /**
    * Returns an array of Class objects that represent the formal parameter types, in declaration order, of the method.
    */
+  @Nonnull
   public Class[] getParameterTypes()
   {
     Parameter[] parameters = method.getParameters();
@@ -170,6 +173,7 @@ public final class Method
   /**
    * Returns this element's annotation for the specified type if such an annotation is present, else null.
    */
+  @Nullable
   public <T extends java.lang.annotation.Annotation> T getAnnotation( Class<T> annotationClass )
   {
     final Annotation declaredAnnotation = getDeclaredAnnotation( annotationClass );
@@ -196,6 +200,7 @@ public final class Method
    * Returns an array of {@link Annotation} objects reflecting all annotations declared by this field,
    * or an empty array if there are none. Does not include inherited annotations.
    */
+  @Nonnull
   public Annotation[] getDeclaredAnnotations()
   {
     java.lang.annotation.Annotation[] annotations = method.getDeclaredAnnotations();
@@ -212,6 +217,7 @@ public final class Method
    * have such an annotation. This is a convenience function if the caller knows already which annotation
    * type he's looking for.
    */
+  @Nullable
   public Annotation getDeclaredAnnotation( Class<? extends java.lang.annotation.Annotation> annotationType )
   {
     java.lang.annotation.Annotation[] annotations = method.getDeclaredAnnotations();

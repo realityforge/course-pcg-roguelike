@@ -12,6 +12,7 @@ import com.artemis.utils.reflect.ReflectionException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import javax.annotation.Nonnull;
 
 /**
  * By default, injects {@link ComponentMapper}, {@link BaseSystem} and {@link Manager} types into systems and
@@ -35,6 +36,7 @@ public final class CachedInjector
   private FieldHandler fieldHandler;
   private Map<String, Object> injectables;
 
+  @Nonnull
   @Override
   public Injector setFieldHandler( FieldHandler fieldHandler )
   {
@@ -42,14 +44,16 @@ public final class CachedInjector
     return this;
   }
 
+  @Nonnull
   @Override
   public <T> T getRegistered( String id )
   {
     return (T) injectables.get( id );
   }
 
+  @Nonnull
   @Override
-  public <T> T getRegistered( Class<T> id )
+  public <T> T getRegistered( @Nonnull Class<T> id )
   {
     return getRegistered( id.getName() );
   }
@@ -67,7 +71,7 @@ public final class CachedInjector
   }
 
   @Override
-  public boolean isInjectable( Object target )
+  public boolean isInjectable( @Nonnull Object target )
   {
     try
     {
@@ -81,7 +85,7 @@ public final class CachedInjector
   }
 
   @Override
-  public void inject( Object target )
+  public void inject( @Nonnull Object target )
     throws RuntimeException
   {
     try
@@ -108,7 +112,7 @@ public final class CachedInjector
     }
   }
 
-  private void injectValidFields( Object target, CachedClass cachedClass )
+  private void injectValidFields( Object target, @Nonnull CachedClass cachedClass )
     throws ReflectionException
   {
     Field[] declaredFields = getAllInjectableFields( cachedClass );
@@ -118,7 +122,7 @@ public final class CachedInjector
     }
   }
 
-  private Field[] getAllInjectableFields( CachedClass cachedClass )
+  private Field[] getAllInjectableFields( @Nonnull CachedClass cachedClass )
   {
     Field[] declaredFields = cachedClass.allFields;
     if ( declaredFields == null )
@@ -136,7 +140,7 @@ public final class CachedInjector
     return declaredFields;
   }
 
-  private void collectDeclaredInjectableFields( List<Field> fieldList, Class<?> clazz )
+  private void collectDeclaredInjectableFields( @Nonnull List<Field> fieldList, Class<?> clazz )
   {
     try
     {
@@ -163,14 +167,14 @@ public final class CachedInjector
     return cache.getCachedField( field ).wireType != WireType.SKIPWIRE;
   }
 
-  private void injectAnnotatedFields( Object target, CachedClass cachedClass )
+  private void injectAnnotatedFields( Object target, @Nonnull CachedClass cachedClass )
     throws ReflectionException
   {
     injectClass( target, cachedClass );
   }
 
   @SuppressWarnings( "deprecation" )
-  private void injectClass( Object target, CachedClass cachedClass )
+  private void injectClass( Object target, @Nonnull CachedClass cachedClass )
     throws ReflectionException
   {
     Field[] declaredFields = getAllInjectableFields( cachedClass );
@@ -186,7 +190,7 @@ public final class CachedInjector
   }
 
   @SuppressWarnings( "unchecked" )
-  private void injectField( Object target, Field field, boolean failOnNotInjected )
+  private void injectField( Object target, @Nonnull Field field, boolean failOnNotInjected )
     throws ReflectionException
   {
     Class<?> fieldType;
@@ -215,14 +219,15 @@ public final class CachedInjector
     }
   }
 
-  private void setField( Object target, Field field, Object fieldValue )
+  private void setField( Object target, @Nonnull Field field, Object fieldValue )
     throws ReflectionException
   {
     field.setAccessible( true );
     field.set( target, fieldValue );
   }
 
-  private MundaneWireException onFailedInjection( String typeName, Field failedInjection )
+  @Nonnull
+  private MundaneWireException onFailedInjection( String typeName, @Nonnull Field failedInjection )
   {
     String error = "Failed to inject " + failedInjection.getType().getName() +
                    " into " + failedInjection.getDeclaringClass().getName() + ": " +

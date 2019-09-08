@@ -1,6 +1,8 @@
 package com.artemis.utils;
 
 import java.util.NoSuchElementException;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * Base iterator for {@link IntBag}
@@ -29,6 +31,7 @@ public class IntBagIterator
     REMOVE_CALLED,
   }
 
+  @Nullable
   protected final IntBag intBag;
   protected int index;
   protected int indexEnd;
@@ -39,7 +42,7 @@ public class IntBagIterator
    *
    * @return true if the iteration has more elements
    */
-  public IntBagIterator( final IntBag intBag )
+  public IntBagIterator( @Nullable final IntBag intBag )
   {
     this.intBag = intBag;
     index = -1;
@@ -53,7 +56,7 @@ public class IntBagIterator
    *
    * @return true if the iteration has more elements
    */
-  public IntBagIterator( final IntBag intBag, final int indexBegin )
+  public IntBagIterator( @Nullable final IntBag intBag, final int indexBegin )
   {
     this.intBag = intBag;
     assert indexBegin >= 0;
@@ -68,7 +71,7 @@ public class IntBagIterator
    *
    * @return true if the iteration has more elements
    */
-  public IntBagIterator( final IntBag intBag, final int indexBegin, final int size )
+  public IntBagIterator( @Nonnull final IntBag intBag, final int indexBegin, final int size )
   {
     this.intBag = intBag;
     assert indexBegin >= 0;
@@ -152,6 +155,7 @@ public class IntBagIterator
   /**
    * generate error message
    */
+  @Nonnull
   private String getErrorMessage( final int indexVal )
   {
     final String message =

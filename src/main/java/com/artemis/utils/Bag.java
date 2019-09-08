@@ -5,6 +5,8 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import static java.lang.Math.*;
 
 /**
@@ -94,6 +96,7 @@ public class Bag<E>
    *
    * @return the last object in the bag, null if empty
    */
+  @Nullable
   public E removeLast()
   {
     if ( size > 0 )
@@ -117,7 +120,7 @@ public class Bag<E>
    * @param e element to be removed from this list, if present
    * @return {@code true} if this list contained the specified element
    */
-  public boolean remove( E e )
+  public boolean remove( @Nonnull E e )
   {
     for ( int i = 0; i < size; i++ )
     {
@@ -141,7 +144,7 @@ public class Bag<E>
    * @return {@code true} if the bag contains this element
    */
   @Override
-  public boolean contains( E e )
+  public boolean contains( @Nonnull E e )
   {
     for ( int i = 0; size > i; i++ )
     {
@@ -160,7 +163,7 @@ public class Bag<E>
    * @param bag Bag containing elements to be removed from this Bag
    * @return {@code true} if this Bag changed as a result of the call
    */
-  public boolean removeAll( ImmutableBag<E> bag )
+  public boolean removeAll( @Nonnull ImmutableBag<E> bag )
   {
     boolean modified = false;
 
@@ -362,7 +365,7 @@ public class Bag<E>
    *
    * @param items bag with items to add
    */
-  public void addAll( ImmutableBag<E> items )
+  public void addAll( @Nonnull ImmutableBag<E> items )
   {
     for ( int i = 0, s = items.size(); s > i; i++ )
     {
@@ -384,6 +387,7 @@ public class Bag<E>
     return data;
   }
 
+  @Nonnull
   @Override
   public Iterator<E> iterator()
   {
@@ -398,6 +402,7 @@ public class Bag<E>
     return it;
   }
 
+  @Nonnull
   @Override
   public String toString()
   {
@@ -416,7 +421,7 @@ public class Bag<E>
   }
 
   @Override
-  public boolean equals( Object o )
+  public boolean equals( @Nullable Object o )
   {
 		if ( this == o )
 		{

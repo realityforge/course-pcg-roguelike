@@ -4,12 +4,13 @@ import com.artemis.Component;
 import com.artemis.World;
 import com.artemis.utils.reflect.Field;
 import com.artemis.utils.reflect.ReflectionException;
+import javax.annotation.Nonnull;
 
 class IntFieldMutator
   implements UniFieldMutator
 {
   @Override
-  public int read( Component c, Field f )
+  public int read( Component c, @Nonnull Field f )
   {
     try
     {
@@ -22,7 +23,7 @@ class IntFieldMutator
   }
 
   @Override
-  public void write( int value, Component c, Field f )
+  public void write( int value, Component c, @Nonnull Field f )
   {
     try
     {

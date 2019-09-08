@@ -8,6 +8,7 @@ import com.artemis.utils.IntBag;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import javax.annotation.Nonnull;
 import static com.artemis.Aspect.*;
 
 /**
@@ -25,11 +26,14 @@ public class TagManager
   /**
    * Tags mapped to entities.
    */
+  @Nonnull
   private final Map<String, Entity> entitiesByTag;
   /**
    * Tagged entities mapped to tags.
    */
+  @Nonnull
   private final Map<Entity, String> tagsByEntity;
+  @Nonnull
   private final BitVector registered;
 
   /**
@@ -60,14 +64,14 @@ public class TagManager
         }
 
         @Override
-        public void removed( IntBag entities )
+        public void removed( @Nonnull IntBag entities )
         {
           deleted( entities );
         }
       } );
   }
 
-  void deleted( IntBag entities )
+  void deleted( @Nonnull IntBag entities )
   {
     int[] ids = entities.getData();
     for ( int i = 0, s = entities.size(); s > i; i++ )
@@ -91,7 +95,7 @@ public class TagManager
    * @param tag the tag
    * @param e   the entity to get tagged
    */
-  public void register( String tag, Entity e )
+  public void register( String tag, @Nonnull Entity e )
   {
     unregister( tag );
     if ( getTag( e ) != null )
@@ -173,6 +177,7 @@ public class TagManager
    *
    * @return all used tags as collection
    */
+  @Nonnull
   public Collection<String> getRegisteredTags()
   {
     return tagsByEntity.values();

@@ -5,6 +5,7 @@ import com.artemis.BaseSystem;
 import com.artemis.annotations.All;
 import com.artemis.annotations.Exclude;
 import com.artemis.annotations.One;
+import javax.annotation.Nullable;
 
 /**
  * Annotation reader for systems.
@@ -25,6 +26,7 @@ public class SystemMetadata
    *
    * @return {@code Aspect.Builder} as defined in annotations, or {@code null} if none.
    */
+  @Nullable
   public Aspect.Builder getAspect()
   {
     try

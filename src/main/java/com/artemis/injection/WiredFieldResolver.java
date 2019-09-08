@@ -5,6 +5,8 @@ import com.artemis.World;
 import com.artemis.utils.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * Can inject arbitrary fields annotated with {@link com.artemis.annotations.Wire},
@@ -29,8 +31,9 @@ public class WiredFieldResolver
     this.world = world;
   }
 
+  @Nullable
   @Override
-  public Object resolve( Object target, Class<?> fieldType, Field field )
+  public Object resolve( Object target, Class<?> fieldType, @Nonnull Field field )
   {
     ClassType injectionType = cache.getFieldClassType( fieldType );
     CachedField cachedField = cache.getCachedField( field );

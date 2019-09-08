@@ -1,6 +1,7 @@
 package com.artemis;
 
 import com.artemis.utils.reflect.ClassReflection;
+import javax.annotation.Nonnull;
 
 @SuppressWarnings( "serial" )
 public class InvalidComponentException
@@ -8,19 +9,20 @@ public class InvalidComponentException
 {
   private Class<?> componentClass;
 
-  public InvalidComponentException( Class<?> componentClass, String string )
+  public InvalidComponentException( @Nonnull Class<?> componentClass, String string )
   {
     super( message( componentClass, string ) );
     this.componentClass = componentClass;
   }
 
-  public InvalidComponentException( Class<?> componentClass, String string, Exception e )
+  public InvalidComponentException( @Nonnull Class<?> componentClass, String string, Exception e )
   {
     super( message( componentClass, string ), e );
     this.componentClass = componentClass;
   }
 
-  private static String message( Class<?> componentClass, String string )
+  @Nonnull
+  private static String message( @Nonnull Class<?> componentClass, String string )
   {
     return ClassReflection.getSimpleName( componentClass ) + ": " + string;
   }

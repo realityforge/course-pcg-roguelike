@@ -19,6 +19,7 @@ package java.util;
 import com.artemis.utils.reflect.ClassReflection;
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.core.client.JsArrayInteger;
+import javax.annotation.Nonnull;
 
 /**
  * This implementation uses bit groups of size 32 to keep track of when bits are
@@ -103,7 +104,7 @@ public class BitSet
   //
 
   // clears one bit
-  private static void clear( JsArrayInteger array, int bitIndex )
+  private static void clear( @Nonnull JsArrayInteger array, int bitIndex )
   {
     int index = wordIndex( bitIndex );
     int word = getWord( array, index );
@@ -115,12 +116,13 @@ public class BitSet
   }
 
   // clones the JSArrayInteger array
+  @Nonnull
   private static native JsArrayInteger clone( JsArrayInteger array ) /*-{
     return array.slice(0);
   }-*/;
 
   // flips one bit
-  private static void flip( JsArrayInteger array, int bitIndex )
+  private static void flip( @Nonnull JsArrayInteger array, int bitIndex )
   {
     // calculate index and offset
     int index = wordIndex( bitIndex );
@@ -151,14 +153,14 @@ public class BitSet
   }
 
   // sets one bit to true
-  private static void set( JsArrayInteger array, int bitIndex )
+  private static void set( @Nonnull JsArrayInteger array, int bitIndex )
   {
     int index = wordIndex( bitIndex );
     array.set( index, getWord( array, index ) | ( 1 << ( bitOffset( bitIndex ) ) ) );
   }
 
   // sets all bits to true within the given range
-  private static void set( JsArrayInteger array, int fromIndex, int toIndex )
+  private static void set( @Nonnull JsArrayInteger array, int fromIndex, int toIndex )
   {
     int first = wordIndex( fromIndex );
     int last = wordIndex( toIndex );
@@ -196,6 +198,7 @@ public class BitSet
   }
 
   // copies a subset of the array
+  @Nonnull
   private static native JsArrayInteger slice( JsArrayInteger array,
                                               int fromIndex, int toIndex ) /*-{
     return array.slice(fromIndex, toIndex);
@@ -251,7 +254,7 @@ public class BitSet
   }-*/;
 
   // flips all bits stored at a certain index
-  private static void flipWord( JsArrayInteger array, int index )
+  private static void flipWord( @Nonnull JsArrayInteger array, int index )
   {
     int word = getWord( array, index );
     if ( word == 0 )
@@ -266,7 +269,7 @@ public class BitSet
   }
 
   // flips all bits stored at a certain index within the given range
-  private static void flipMaskedWord( JsArrayInteger array, int index,
+  private static void flipMaskedWord( @Nonnull JsArrayInteger array, int index,
                                       int from, int to )
   {
     if ( from == to )
@@ -289,7 +292,7 @@ public class BitSet
   }-*/;
 
   // sets all bits to true at a certain index within the given bit range
-  private static void maskInWord( JsArrayInteger array, int index, int from,
+  private static void maskInWord( @Nonnull JsArrayInteger array, int index, int from,
                                   int to )
   {
     // shifting by 32 is the same as shifting by 0, this check prevents that
@@ -306,7 +309,7 @@ public class BitSet
   }
 
 	// sets all bits to false at a certain index within the given bit range
-  private static void maskOutWord( JsArrayInteger array, int index, int from,
+  private static void maskOutWord( @Nonnull JsArrayInteger array, int index, int from,
                                    int to )
   {
     int word = getWord( array, index );
@@ -367,7 +370,7 @@ public class BitSet
   }-*/;
 
   // sets all bits at a certain index to the given value
-  private static void setWord( JsArrayInteger array, int index, int value )
+  private static void setWord( @Nonnull JsArrayInteger array, int index, int value )
   {
     // keep 0s out of the array
     if ( value == 0 )
@@ -419,7 +422,7 @@ public class BitSet
     this.array = array;
   }
 
-  public void and( BitSet set )
+  public void and( @Nonnull BitSet set )
   {
     // a & a is just a
     if ( this == set )
@@ -455,7 +458,7 @@ public class BitSet
     }
   }
 
-  public void andNot( BitSet set )
+  public void andNot( @Nonnull BitSet set )
   {
     // a & !a is false
     if ( this == set )
@@ -579,13 +582,14 @@ public class BitSet
     }
   }
 
+  @Nonnull
   public Object clone()
   {
     return new BitSet( clone( array ) );
   }
 
   @Override
-  public boolean equals( Object obj )
+  public boolean equals( @Nonnull Object obj )
   {
     if ( this != obj )
     {
@@ -683,6 +687,7 @@ public class BitSet
     return get( array, bitIndex );
   }
 
+  @Nonnull
   public BitSet get( int fromIndex, int toIndex )
   {
     checkRange( fromIndex, toIndex );
@@ -809,7 +814,7 @@ public class BitSet
     return hash;
   }
 
-  public boolean intersects( BitSet set )
+  public boolean intersects( @Nonnull BitSet set )
   {
     int last = trimToSize( array );
 
@@ -927,7 +932,7 @@ public class BitSet
            + Integer.numberOfTrailingZeros( array.get( index ) );
   }
 
-	public void or( BitSet set )
+	public void or( @Nonnull BitSet set )
   {
     // a | a is just a
     if ( this == set )
@@ -995,6 +1000,7 @@ public class BitSet
     return bitIndex( array.length() );
   }
 
+  @Nonnull
   @Override
   public String toString()
   {
@@ -1027,7 +1033,7 @@ public class BitSet
     return sb.toString();
   }
 
-  public void xor( BitSet set )
+  public void xor( @Nonnull BitSet set )
   {
     // a ^ a is false
     if ( this == set )

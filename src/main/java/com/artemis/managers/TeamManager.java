@@ -5,6 +5,7 @@ import com.artemis.utils.Bag;
 import com.artemis.utils.ImmutableBag;
 import java.util.HashMap;
 import java.util.Map;
+import javax.annotation.Nonnull;
 
 /**
  * Use this class together with PlayerManager.
@@ -23,10 +24,12 @@ public class TeamManager
   /**
    * Teams mapped to their players.
    */
+  @Nonnull
   private final Map<String, Bag<String>> playersByTeam;
   /**
    * Players mapped to their teams.
    */
+  @Nonnull
   private final Map<String, String> teamByPlayer;
 
   /**
@@ -63,7 +66,7 @@ public class TeamManager
    * @param player the player
    * @param team   the team to put the player in
    */
-  public void setTeam( String player, String team )
+  public void setTeam( @Nonnull String player, String team )
   {
     removeFromTeam( player );
 
@@ -94,7 +97,7 @@ public class TeamManager
    *
    * @param player the player to remove
    */
-  public void removeFromTeam( String player )
+  public void removeFromTeam( @Nonnull String player )
   {
     String team = teamByPlayer.remove( player );
     if ( team != null )

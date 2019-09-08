@@ -7,6 +7,7 @@ import com.artemis.EntitySystem;
 import com.artemis.Manager;
 import com.artemis.utils.IntBag;
 import java.util.Arrays;
+import javax.annotation.Nonnull;
 import static com.artemis.utils.reflect.ClassReflection.*;
 
 public final class ReflectionUtil
@@ -19,7 +20,7 @@ public final class ReflectionUtil
   {
   }
 
-  public static boolean implementsObserver( BaseSystem owner, String methodName )
+  public static boolean implementsObserver( @Nonnull BaseSystem owner, String methodName )
   {
     try
     {
@@ -33,7 +34,7 @@ public final class ReflectionUtil
     }
   }
 
-  public static boolean implementsAnyObserver( BaseEntitySystem owner )
+  public static boolean implementsAnyObserver( @Nonnull BaseEntitySystem owner )
   {
 		if ( isInstance( Manager.class, owner ) || isInstance( EntitySystem.class, owner ) )
 		{
@@ -59,7 +60,7 @@ public final class ReflectionUtil
     return false;
   }
 
-  private static boolean isObserver( Method m )
+  private static boolean isObserver( @Nonnull Method m )
   {
     String name = m.getName();
     if ( "inserted".equals( name ) || "removed".equals( name ) )
@@ -71,7 +72,7 @@ public final class ReflectionUtil
     return false;
   }
 
-  public static boolean isGenericType( Field f, Class<?> mainType, Class typeParameter )
+  public static boolean isGenericType( @Nonnull Field f, Class<?> mainType, Class typeParameter )
   {
     return mainType == f.getType() && typeParameter == f.getElementType( 0 );
   }

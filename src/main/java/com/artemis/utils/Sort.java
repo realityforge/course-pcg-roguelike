@@ -14,6 +14,7 @@
 package com.artemis.utils;
 
 import java.util.Comparator;
+import javax.annotation.Nonnull;
 
 /**
  * Provides methods to sort arrays of objects. Sorting requires working memory and this class allows that memory to be reused to
@@ -34,7 +35,7 @@ public class Sort
   private TimSort timSort;
   private ComparableTimSort comparableTimSort;
 
-  public <T> void sort( Bag<T> a )
+  public <T> void sort( @Nonnull Bag<T> a )
   {
 		if ( comparableTimSort == null )
 		{
@@ -43,7 +44,7 @@ public class Sort
     comparableTimSort.doSort( a.data, 0, a.size() );
   }
 
-  public <T> void sort( T[] a )
+  public <T> void sort( @Nonnull T[] a )
   {
 		if ( comparableTimSort == null )
 		{
@@ -52,7 +53,7 @@ public class Sort
     comparableTimSort.doSort( a, 0, a.length );
   }
 
-  public <T> void sort( T[] a, int fromIndex, int toIndex )
+  public <T> void sort( @Nonnull T[] a, int fromIndex, int toIndex )
   {
 		if ( comparableTimSort == null )
 		{
@@ -61,7 +62,7 @@ public class Sort
     comparableTimSort.doSort( a, fromIndex, toIndex );
   }
 
-  public <T> void sort( Bag<T> a, Comparator<T> c )
+  public <T> void sort( @Nonnull Bag<T> a, Comparator<T> c )
   {
 		if ( timSort == null )
 		{
@@ -70,7 +71,7 @@ public class Sort
     timSort.doSort( a.data, c, 0, a.size() );
   }
 
-  public <T> void sort( T[] a, Comparator<T> c )
+  public <T> void sort( @Nonnull T[] a, Comparator<T> c )
   {
 		if ( timSort == null )
 		{
@@ -79,7 +80,7 @@ public class Sort
     timSort.doSort( a, c, 0, a.length );
   }
 
-  public <T> void sort( T[] a, Comparator<T> c, int fromIndex, int toIndex )
+  public <T> void sort( @Nonnull T[] a, Comparator<T> c, int fromIndex, int toIndex )
   {
 		if ( timSort == null )
 		{

@@ -3,9 +3,12 @@ package com.artemis;
 import com.artemis.utils.Bag;
 import com.artemis.utils.reflect.ClassReflection;
 import com.artemis.utils.reflect.ReflectionException;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public class ComponentPool<T extends PooledComponent>
 {
+  @Nonnull
   private final Bag<T> cache;
   private Class<T> type;
 
@@ -15,6 +18,7 @@ public class ComponentPool<T extends PooledComponent>
     cache = new Bag<T>( type );
   }
 
+  @Nullable
   @SuppressWarnings( "unchecked" )
   <T extends PooledComponent> T obtain()
   {
@@ -30,7 +34,7 @@ public class ComponentPool<T extends PooledComponent>
     }
   }
 
-  void free( T component )
+  void free( @Nonnull T component )
   {
     component.reset();
     cache.add( component );

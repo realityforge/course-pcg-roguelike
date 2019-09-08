@@ -10,23 +10,28 @@ import com.artemis.annotations.LinkPolicy;
 import com.artemis.utils.BitVector;
 import com.artemis.utils.IntBag;
 import com.artemis.utils.reflect.Field;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import static com.artemis.Aspect.*;
 import static com.artemis.annotations.LinkPolicy.Policy.*;
 
 abstract class LinkSite
   implements EntitySubscription.SubscriptionListener
 {
+  @Nonnull
   protected final ComponentType type;
+  @Nonnull
   protected final Field field;
   protected final ComponentMapper<? extends Component> mapper;
   protected final EntitySubscription subscription;
+  @Nullable
   protected final LinkPolicy.Policy policy;
   protected final BitVector activeEntityIds;
   protected LinkListener listener;
 
-  protected LinkSite( World world,
-                      ComponentType type,
-                      Field field,
+  protected LinkSite( @Nonnull World world,
+                      @Nonnull ComponentType type,
+                      @Nonnull Field field,
                       LinkPolicy.Policy defaultPolicy )
   {
 
@@ -45,7 +50,7 @@ abstract class LinkSite
   }
 
   @Override
-  public boolean equals( Object o )
+  public boolean equals( @Nullable Object o )
   {
 		if ( this == o )
 		{
@@ -68,7 +73,7 @@ abstract class LinkSite
   }
 
   @Override
-  public void inserted( IntBag entities )
+  public void inserted( @Nonnull IntBag entities )
   {
     int[] ids = entities.getData();
     for ( int i = 0, s = entities.size(); s > i; i++ )
@@ -80,7 +85,7 @@ abstract class LinkSite
   protected abstract void insert( int id );
 
   @Override
-  public void removed( IntBag entities )
+  public void removed( @Nonnull IntBag entities )
   {
     int[] ids = entities.getData();
     for ( int i = 0, s = entities.size(); s > i; i++ )

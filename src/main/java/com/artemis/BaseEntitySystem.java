@@ -3,6 +3,8 @@ package com.artemis;
 import com.artemis.annotations.DelayedComponentRemoval;
 import com.artemis.utils.IntBag;
 import com.artemis.utils.reflect.SystemMetadata;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import static com.artemis.utils.reflect.ReflectionUtil.*;
 
 /**
@@ -15,6 +17,7 @@ public abstract class BaseEntitySystem
   extends BaseSystem
   implements EntitySubscription.SubscriptionListener
 {
+  @Nullable
   private final Aspect.Builder aspectConfiguration;
   protected EntitySubscription subscription;
 
@@ -29,7 +32,7 @@ public abstract class BaseEntitySystem
    *
    * @param aspect to match against entities
    */
-  public BaseEntitySystem( Aspect.Builder aspect )
+  public BaseEntitySystem( @Nullable Aspect.Builder aspect )
   {
     if ( aspect == null )
     {
@@ -66,7 +69,7 @@ public abstract class BaseEntitySystem
   }
 
   @Override
-  public void inserted( IntBag entities )
+  public void inserted( @Nonnull IntBag entities )
   {
     int[] ids = entities.getData();
     for ( int i = 0, s = entities.size(); s > i; i++ )
@@ -113,7 +116,7 @@ public abstract class BaseEntitySystem
    * @param entities entities removed from this system.
    */
   @Override
-  public void removed( IntBag entities )
+  public void removed( @Nonnull IntBag entities )
   {
     int[] ids = entities.getData();
     for ( int i = 0, s = entities.size(); s > i; i++ )

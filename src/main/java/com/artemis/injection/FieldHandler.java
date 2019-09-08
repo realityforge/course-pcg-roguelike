@@ -6,6 +6,7 @@ import com.artemis.utils.Bag;
 import com.artemis.utils.reflect.ClassReflection;
 import com.artemis.utils.reflect.Field;
 import java.util.Map;
+import javax.annotation.Nullable;
 
 /**
  * FieldHandler provides dependency-values to an {@link Injector}
@@ -80,7 +81,7 @@ public class FieldHandler
    * @param world the world this FieldHandler is being used for
    * @throws com.artemis.WorldConfigurationException when injector has no way to deal with injectables.
    */
-  public void initialize( World world, Map<String, Object> injectables )
+  public void initialize( World world, @Nullable Map<String, Object> injectables )
   {
 
     boolean fieldResolverFound = false;
@@ -118,6 +119,7 @@ public class FieldHandler
    * @return a non-null value if any {@link FieldResolver} could provide an instance
    * for the {@code field}, null if the {@code field} could not be resolved
    */
+  @Nullable
   public Object resolve( Object target, Class<?> fieldType, Field field )
   {
     for ( int i = 0, s = fieldResolvers.size(); i < s; i++ )

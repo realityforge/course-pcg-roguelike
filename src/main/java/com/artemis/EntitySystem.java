@@ -4,6 +4,7 @@ import com.artemis.annotations.DelayedComponentRemoval;
 import com.artemis.utils.Bag;
 import com.artemis.utils.IntBag;
 import java.util.Arrays;
+import javax.annotation.Nonnull;
 import static com.artemis.utils.reflect.ReflectionUtil.*;
 
 /**
@@ -25,6 +26,7 @@ public abstract class EntitySystem
   static final int FLAG_INSERTED = 1;
   static final int FLAG_REMOVED = 1 << 1;
   private boolean shouldSyncEntities;
+  @Nonnull
   private WildBag<Entity> entities = new WildBag( Entity.class );
   private int methodFlags;
 
@@ -63,7 +65,7 @@ public abstract class EntitySystem
   }
 
   @Override
-  public final void inserted( IntBag entities )
+  public final void inserted( @Nonnull IntBag entities )
   {
     shouldSyncEntities = true;
     // performance hack, skip calls to entities if system lacks implementation of added.
@@ -80,7 +82,7 @@ public abstract class EntitySystem
   }
 
   @Override
-  public final void removed( IntBag entities )
+  public final void removed( @Nonnull IntBag entities )
   {
     shouldSyncEntities = true;
     // performance hack, skip calls to entities if system lacks implementation of deleted.
@@ -130,6 +132,7 @@ public abstract class EntitySystem
    *
    * @return System's entity bag, as matched by aspect.
    */
+  @Nonnull
   public Bag<Entity> getEntities()
   {
     if ( shouldSyncEntities )

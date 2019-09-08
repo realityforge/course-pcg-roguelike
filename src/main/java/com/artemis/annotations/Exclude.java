@@ -11,6 +11,7 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+import javax.annotation.Nonnull;
 
 /**
  * <p>Auto-configures fields or systems pertaining to aspects. The annotated field
@@ -45,6 +46,6 @@ public @interface Exclude
   /**
    * @return excluding types
    */
-  Class<? extends Component>[] value() default {};
+  @Nonnull Class<? extends Component>[] value() default {};
 
 }

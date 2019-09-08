@@ -16,6 +16,7 @@
 package com.artemis.gwtref.client;
 
 import com.google.gwt.core.client.EntryPoint;
+import javax.annotation.Nonnull;
 
 public class Test
   implements EntryPoint
@@ -70,6 +71,7 @@ public class Test
   public static class B
     extends A
   {
+    @Nonnull
     String text = "This is a string";
 
     public void testWithPackagePrivate( C c, int a )

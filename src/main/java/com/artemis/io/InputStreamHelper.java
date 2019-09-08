@@ -3,6 +3,7 @@ package com.artemis.io;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import javax.annotation.Nonnull;
 
 /**
  * InputStream bridge helper.
@@ -20,7 +21,7 @@ public class InputStreamHelper
    * is 0 unless another position was marked or an offset was specified
    * in the constructor.
    */
-  public static void reset( InputStream is )
+  public static void reset( @Nonnull InputStream is )
     throws IOException
   {
     ensureIsByteArrayInputStream( is );
@@ -39,13 +40,13 @@ public class InputStreamHelper
    * @see InputStream#mark(int)
    * @see InputStream#reset()
    */
-  public static boolean isMarkSupported( InputStream is )
+  public static boolean isMarkSupported( @Nonnull InputStream is )
   {
     ensureIsByteArrayInputStream( is );
     return is.markSupported();
   }
 
-  private static void ensureIsByteArrayInputStream( InputStream is )
+  private static void ensureIsByteArrayInputStream( @Nonnull InputStream is )
   {
 		if ( !isByteArrayInputStream( is ) )
 		{
@@ -53,7 +54,7 @@ public class InputStreamHelper
 		}
   }
 
-  private static boolean isByteArrayInputStream( InputStream is )
+  private static boolean isByteArrayInputStream( @Nonnull InputStream is )
   {
     return ByteArrayInputStream.class.equals( is.getClass() );
   }

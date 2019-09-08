@@ -6,6 +6,7 @@ import com.artemis.utils.reflect.Constructor;
 import com.artemis.utils.reflect.ReflectionException;
 import java.lang.reflect.Modifier;
 import java.util.IdentityHashMap;
+import javax.annotation.Nonnull;
 
 /**
  * Tracks all component types in a single world.
@@ -45,7 +46,7 @@ public class ComponentTypeFactory
    * @param c the component's class to get the type for
    * @return the component's {@link ComponentType}
    */
-  public ComponentType getTypeFor( Class<? extends Component> c )
+  public ComponentType getTypeFor( @Nonnull Class<? extends Component> c )
   {
     ComponentType type = componentTypes.get( c );
 
@@ -57,7 +58,8 @@ public class ComponentTypeFactory
     return type;
   }
 
-  private ComponentType createComponentType( Class<? extends Component> c )
+  @Nonnull
+  private ComponentType createComponentType( @Nonnull Class<? extends Component> c )
   {
     try
     {
@@ -104,12 +106,12 @@ public class ComponentTypeFactory
    * @param c the component class to get the type index for
    * @return the component type's index
    */
-  public int getIndexFor( Class<? extends Component> c )
+  public int getIndexFor( @Nonnull Class<? extends Component> c )
   {
     return getTypeFor( c ).getIndex();
   }
 
-  public void register( ComponentTypeListener listener )
+  public void register( @Nonnull ComponentTypeListener listener )
   {
     listeners.add( listener );
     listener.initialize( types );

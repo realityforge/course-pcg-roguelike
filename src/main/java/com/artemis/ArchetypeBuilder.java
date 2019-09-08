@@ -3,6 +3,8 @@ package com.artemis;
 import com.artemis.EntityTransmuter.TransmuteOperation;
 import com.artemis.utils.Bag;
 import com.artemis.utils.BitVector;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * Builder for basic Archetype instances. To reap the maximum benefit of Archetypes,
@@ -18,6 +20,7 @@ import com.artemis.utils.BitVector;
  */
 public class ArchetypeBuilder
 {
+  @Nonnull
   private final Bag<Class<? extends Component>> classes;
 
   /**
@@ -25,7 +28,7 @@ public class ArchetypeBuilder
    *
    * @param parent archetype composition to copy.
    */
-  public ArchetypeBuilder( Archetype parent )
+  public ArchetypeBuilder( @Nullable Archetype parent )
   {
     classes = new Bag<Class<? extends Component>>();
 		if ( parent == null )
@@ -49,7 +52,8 @@ public class ArchetypeBuilder
    *
    * @return This instance for chaining.
    */
-  public ArchetypeBuilder add( Class<? extends Component> type )
+  @Nonnull
+  public ArchetypeBuilder add( @Nonnull Class<? extends Component> type )
   {
 		if ( !classes.contains( type ) )
 		{
@@ -64,7 +68,8 @@ public class ArchetypeBuilder
    *
    * @return This instance for chaining.
    */
-  public ArchetypeBuilder add( Class<? extends Component>... types )
+  @Nonnull
+  public ArchetypeBuilder add( @Nonnull Class<? extends Component>... types )
   {
     for ( int i = 0; types.length > i; i++ )
     {
@@ -84,7 +89,8 @@ public class ArchetypeBuilder
    *
    * @return This instance for chaining.
    */
-  public ArchetypeBuilder remove( Class<? extends Component> type )
+  @Nonnull
+  public ArchetypeBuilder remove( @Nonnull Class<? extends Component> type )
   {
     classes.remove( type );
     return this;
@@ -95,7 +101,8 @@ public class ArchetypeBuilder
    *
    * @return This instance for chaining.
    */
-  public ArchetypeBuilder remove( Class<? extends Component>... types )
+  @Nonnull
+  public ArchetypeBuilder remove( @Nonnull Class<? extends Component>... types )
   {
     for ( int i = 0; types.length > i; i++ )
     {
@@ -111,7 +118,8 @@ public class ArchetypeBuilder
    * @param world applicable domain of the Archetype.
    * @return new Archetype based on current state
    */
-  public Archetype build( World world )
+  @Nonnull
+  public Archetype build( @Nonnull World world )
   {
     ComponentType[] types = resolveTypes( world );
 
@@ -132,7 +140,8 @@ public class ArchetypeBuilder
   /**
    * generate bitset mask of types.
    */
-  private static BitVector bitset( ComponentType[] types )
+  @Nonnull
+  private static BitVector bitset( @Nonnull ComponentType[] types )
   {
     BitVector bs = new BitVector();
 		for ( int i = 0; types.length > i; i++ )
@@ -146,7 +155,8 @@ public class ArchetypeBuilder
   /**
    * Converts java classes to component types.
    */
-  private ComponentType[] resolveTypes( World world )
+  @Nonnull
+  private ComponentType[] resolveTypes( @Nonnull World world )
   {
     ComponentTypeFactory tf = world.getComponentManager().typeFactory;
     ComponentType[] types = new ComponentType[ classes.size() ];

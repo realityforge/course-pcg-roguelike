@@ -9,6 +9,8 @@ import com.artemis.utils.ImmutableIntBag;
 import com.artemis.utils.IntBag;
 import java.util.HashMap;
 import java.util.Map;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import static com.artemis.Aspect.*;
 
 /**
@@ -30,11 +32,14 @@ public class GroupManager
   /**
    * All entities and groups mapped with group names as key.
    */
+  @Nonnull
   private final Map<String, Bag<Entity>> entitiesByGroup;
+  @Nonnull
   private final Map<String, IntBag> identitiesByGroup;
   /**
    * All entities and groups mapped with entities as key.
    */
+  @Nonnull
   private final Map<Entity, Bag<String>> groupsByEntity;
 
   /**
@@ -64,7 +69,7 @@ public class GroupManager
         }
 
         @Override
-        public void removed( IntBag entities )
+        public void removed( @Nonnull IntBag entities )
         {
           deleted( entities );
         }
@@ -77,7 +82,7 @@ public class GroupManager
    * @param group group to add the entity into
    * @param e     entity to add into the group
    */
-  public void add( Entity e, String group )
+  public void add( @Nonnull Entity e, @Nonnull String group )
   {
     Bag<Entity> entities = entitiesByGroup.get( group );
     if ( entities == null )
@@ -109,7 +114,7 @@ public class GroupManager
     }
   }
 
-  public void add( final int entityId, String group )
+  public void add( final int entityId, @Nonnull String group )
   {
     final Entity e = world.getEntity( entityId );
     add( e, group );
@@ -122,13 +127,13 @@ public class GroupManager
    * @param g2 group to add the entity into
    * @param e  entity to add into the group
    */
-  public void add( Entity e, String g1, String g2 )
+  public void add( @Nonnull Entity e, @Nonnull String g1, @Nonnull String g2 )
   {
     add( e, g1 );
     add( e, g2 );
   }
 
-  public void add( final int entityId, String g1, String g2 )
+  public void add( final int entityId, @Nonnull String g1, @Nonnull String g2 )
   {
     final Entity e = world.getEntity( entityId );
     add( e, g1, g2 );
@@ -142,14 +147,14 @@ public class GroupManager
    * @param g3 group to add the entity into
    * @param e  entity to add into the group
    */
-  public void add( Entity e, String g1, String g2, String g3 )
+  public void add( @Nonnull Entity e, @Nonnull String g1, @Nonnull String g2, @Nonnull String g3 )
   {
     add( e, g1 );
     add( e, g2 );
     add( e, g3 );
   }
 
-  public void add( final int entityId, String g1, String g2, String g3 )
+  public void add( final int entityId, @Nonnull String g1, @Nonnull String g2, @Nonnull String g3 )
   {
     final Entity e = world.getEntity( entityId );
     add( e, g1, g2, g3 );
@@ -161,7 +166,7 @@ public class GroupManager
    * @param groups groups to add the entity into
    * @param e      entity to add into the group
    */
-  public void add( Entity e, String... groups )
+  public void add( @Nonnull Entity e, @Nonnull String... groups )
   {
     for ( String group : groups )
     {
@@ -181,7 +186,7 @@ public class GroupManager
    * @param e     entity to remove from group
    * @param group group to remove the entity from
    */
-  public void remove( Entity e, String group )
+  public void remove( @Nonnull Entity e, @Nonnull String group )
   {
     final Bag<Entity> entities = entitiesByGroup.get( group );
     if ( entities != null )
@@ -205,7 +210,7 @@ public class GroupManager
     }
   }
 
-  public void remove( final int entityId, String group )
+  public void remove( final int entityId, @Nonnull String group )
   {
     remove( world.getEntity( entityId ), group );
   }
@@ -217,13 +222,13 @@ public class GroupManager
    * @param g1 group to remove the entity from
    * @param g2 group to remove the entity from
    */
-  public void remove( Entity e, String g1, String g2 )
+  public void remove( @Nonnull Entity e, @Nonnull String g1, @Nonnull String g2 )
   {
     remove( e, g1 );
     remove( e, g2 );
   }
 
-  public void remove( final int entityId, String g1, String g2 )
+  public void remove( final int entityId, @Nonnull String g1, @Nonnull String g2 )
   {
     remove( world.getEntity( entityId ), g1, g2 );
   }
@@ -236,14 +241,14 @@ public class GroupManager
    * @param g2 group to remove the entity from
    * @param g3 group to remove the entity from
    */
-  public void remove( Entity e, String g1, String g2, String g3 )
+  public void remove( @Nonnull Entity e, @Nonnull String g1, @Nonnull String g2, @Nonnull String g3 )
   {
     remove( e, g1 );
     remove( e, g2 );
     remove( e, g3 );
   }
 
-  public void remove( final int entityId, String g1, String g2, String g3 )
+  public void remove( final int entityId, @Nonnull String g1, @Nonnull String g2, @Nonnull String g3 )
   {
     remove( world.getEntity( entityId ), g1, g2, g3 );
   }
@@ -254,7 +259,7 @@ public class GroupManager
    * @param e      entity to remove from group
    * @param groups groups to remove the entity from
    */
-  public void remove( Entity e, String... groups )
+  public void remove( @Nonnull Entity e, @Nonnull String... groups )
   {
     for ( String group : groups )
     {
@@ -272,7 +277,7 @@ public class GroupManager
    *
    * @param e the entity to remove
    */
-  public void removeFromAllGroups( Entity e )
+  public void removeFromAllGroups( @Nonnull Entity e )
   {
     Bag<String> groups = groupsByEntity.get( e );
       if ( groups == null )
@@ -336,12 +341,14 @@ public class GroupManager
    * @param e the entity
    * @return the groups the entity belongs to.
    */
+  @Nonnull
   public ImmutableBag<String> getGroups( Entity e )
   {
     Bag<String> groups = groupsByEntity.get( e );
     return groups != null ? groups : EMPTY_BAG;
   }
 
+  @Nonnull
   public ImmutableBag<String> getGroups( final int entityId )
   {
     final Entity e = world.getEntity( entityId );
@@ -372,7 +379,7 @@ public class GroupManager
    * @param e     the entity to check for
    * @return true if the entity is in the supplied group, false if not
    */
-  public boolean isInGroup( Entity e, String group )
+  public boolean isInGroup( Entity e, @Nullable String group )
   {
     if ( group != null )
     {
@@ -399,7 +406,7 @@ public class GroupManager
     return isInGroup( e, group );
   }
 
-  void deleted( IntBag entities )
+  void deleted( @Nonnull IntBag entities )
   {
     int[] ids = entities.getData();
     for ( int i = 0, s = entities.size(); s > i; i++ )

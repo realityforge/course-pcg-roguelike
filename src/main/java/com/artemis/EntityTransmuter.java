@@ -3,6 +3,7 @@ package com.artemis;
 import com.artemis.utils.Bag;
 import com.artemis.utils.BitVector;
 import com.artemis.utils.ShortBag;
+import javax.annotation.Nonnull;
 
 /**
  * Fastest way of changing entity component compositions. Primarily useful when
@@ -19,23 +20,28 @@ import com.artemis.utils.ShortBag;
  */
 public final class EntityTransmuter
 {
+  @Nonnull
   private final Factory factory;
+  @Nonnull
   private final EntityManager em;
+  @Nonnull
   private final BatchChangeProcessor batchProcessor;
+  @Nonnull
   private final Bag<TransmuteOperation> operations;
+  @Nonnull
   private final ShortBag entityToIdentity;
 
-  public EntityTransmuter( World world, Aspect.Builder aspect )
+  public EntityTransmuter( @Nonnull World world, Aspect.Builder aspect )
   {
     this( world, world.getAspectSubscriptionManager().get( aspect ).getAspect() );
   }
 
-  EntityTransmuter( World world, Aspect aspect )
+  EntityTransmuter( @Nonnull World world, @Nonnull Aspect aspect )
   {
     this( world, new BitVector( aspect.allSet ), new BitVector( aspect.exclusionSet ) );
   }
 
-  EntityTransmuter( World world, BitVector additions, BitVector removals )
+  EntityTransmuter( @Nonnull World world, BitVector additions, BitVector removals )
   {
     em = world.getEntityManager();
     entityToIdentity = world.getComponentManager().entityToIdentity;
@@ -100,7 +106,7 @@ public final class EntityTransmuter
    *
    * @param e target entity.
    */
-  public void transmute( Entity e )
+  public void transmute( @Nonnull Entity e )
   {
     transmute( e.id );
   }
@@ -121,6 +127,7 @@ public final class EntityTransmuter
     return operation;
   }
 
+  @Nonnull
   @Override
   public String toString()
   {
@@ -129,12 +136,14 @@ public final class EntityTransmuter
 
   static class Factory
   {
+    @Nonnull
     private final ComponentManager cm;
     private final BitVector additions;
     private final BitVector removals;
+    @Nonnull
     private final BitVector bs;
 
-    Factory( World world, BitVector additions, BitVector removals )
+    Factory( @Nonnull World world, BitVector additions, BitVector removals )
     {
       this.cm = world.getComponentManager();
       this.additions = additions;
@@ -142,6 +151,7 @@ public final class EntityTransmuter
       this.bs = new BitVector();
     }
 
+    @Nonnull
     TransmuteOperation createOperation( int entityId )
     {
       BitVector componentBits = cm.componentBits( entityId );
@@ -155,7 +165,8 @@ public final class EntityTransmuter
                                      getAdditions( componentBits ), getRemovals( componentBits ) );
     }
 
-    private Bag<ComponentMapper> getAdditions( BitVector origin )
+    @Nonnull
+    private Bag<ComponentMapper> getAdditions( @Nonnull BitVector origin )
     {
       ComponentTypeFactory tf = cm.typeFactory;
       Bag<ComponentMapper> types = new Bag( ComponentMapper.class );
@@ -170,7 +181,8 @@ public final class EntityTransmuter
       return types;
     }
 
-    private Bag<ComponentMapper> getRemovals( BitVector origin )
+    @Nonnull
+    private Bag<ComponentMapper> getRemovals( @Nonnull BitVector origin )
     {
       ComponentTypeFactory tf = cm.typeFactory;
       Bag<ComponentMapper> types = new Bag( ComponentMapper.class );
@@ -203,8 +215,8 @@ public final class EntityTransmuter
     }
 
     public TransmuteOperation( int compositionId,
-                               Bag<ComponentMapper> additions,
-                               Bag<ComponentMapper> removals )
+                               @Nonnull Bag<ComponentMapper> additions,
+                               @Nonnull Bag<ComponentMapper> removals )
     {
 
       this.compositionId = (short) compositionId;
@@ -235,7 +247,8 @@ public final class EntityTransmuter
       }
     }
 
-    Bag<Class<? extends Component>> getAdditions( Bag<Class<? extends Component>> out )
+    @Nonnull
+    Bag<Class<? extends Component>> getAdditions( @Nonnull Bag<Class<? extends Component>> out )
     {
       for ( int i = 0, s = additions.length; s > i; i++ )
       {
@@ -245,6 +258,7 @@ public final class EntityTransmuter
       return out;
     }
 
+    @Nonnull
     @Override
     public String toString()
     {

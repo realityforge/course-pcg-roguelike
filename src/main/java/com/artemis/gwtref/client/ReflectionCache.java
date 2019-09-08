@@ -17,12 +17,14 @@ package com.artemis.gwtref.client;
 
 import com.google.gwt.core.client.GWT;
 import java.util.Collection;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public class ReflectionCache
 {
   public static IReflectionCache instance = GWT.create( IReflectionCache.class );
 
-  public static Type forName( String name )
+  public static Type forName( @Nonnull String name )
     throws ClassNotFoundException
   {
     Type type = instance.forName( convert( name ) );
@@ -33,7 +35,8 @@ public class ReflectionCache
     return type;
   }
 
-  public static Type getType( Class clazz )
+  @Nullable
+  public static Type getType( @Nullable Class clazz )
   {
 		if ( clazz == null )
 		{
@@ -47,7 +50,8 @@ public class ReflectionCache
     return type;
   }
 
-  private static String convert( String className )
+  @Nonnull
+  private static String convert( @Nonnull String className )
   {
     if ( className.startsWith( "[" ) )
     {

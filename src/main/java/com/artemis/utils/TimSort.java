@@ -15,6 +15,8 @@ package com.artemis.utils;
 
 import java.util.Arrays;
 import java.util.Comparator;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * A stable, adaptive, iterative mergesort that requires far fewer than n lg(n) comparisons when running on partially sorted
@@ -58,10 +60,12 @@ class TimSort<T>
   /**
    * The array being sorted.
    */
+  @Nullable
   private T[] a;
   /**
    * The comparator for this sort.
    */
+  @Nullable
   private Comparator<? super T> c;
   /**
    * When we get into galloping mode, we stay there until both runs win less often than MIN_GALLOP consecutive times.
@@ -93,7 +97,9 @@ class TimSort<T>
    * so we could cut the storage for this, but it's a minor amount, and keeping all the info explicit simplifies the code.
    */
   private int stackSize = 0; // Number of pending runs on stack
+  @Nonnull
   private final int[] runBase;
+  @Nonnull
   private final int[] runLen;
   /**
    * Asserts have been placed in if-statements for performace. To enable them, set this field to true and enable them in VM with
@@ -108,7 +114,7 @@ class TimSort<T>
     runLen = new int[ 40 ];
   }
 
-  public void doSort( T[] a, Comparator<T> c, int lo, int hi )
+  public void doSort( @Nonnull T[] a, @Nonnull Comparator<T> c, int lo, int hi )
   {
     stackSize = 0;
     rangeCheck( a.length, lo, hi );
@@ -175,7 +181,7 @@ class TimSort<T>
    * @param a the array to be sorted
    * @param c the comparator to determine the order of the sort
    */
-  private TimSort( T[] a, Comparator<? super T> c )
+  private TimSort( @Nonnull T[] a, Comparator<? super T> c )
   {
     this.a = a;
     this.c = c;
@@ -202,12 +208,12 @@ class TimSort<T>
    * obeys the contract of the public method with the same signature in java.util.Arrays.
    */
 
-  static <T> void sort( T[] a, Comparator<? super T> c )
+  static <T> void sort( @Nonnull T[] a, Comparator<? super T> c )
   {
     sort( a, 0, a.length, c );
   }
 
-  static <T> void sort( T[] a, int lo, int hi, Comparator<? super T> c )
+  static <T> void sort( @Nonnull T[] a, int lo, int hi, @Nullable Comparator<? super T> c )
   {
     if ( c == null )
     {
@@ -276,7 +282,7 @@ class TimSort<T>
    * @param c     comparator to used for the sort
    */
   @SuppressWarnings( "fallthrough" )
-  private static <T> void binarySort( T[] a, int lo, int hi, int start, Comparator<? super T> c )
+  private static <T> void binarySort( @Nonnull T[] a, int lo, int hi, int start, @Nonnull Comparator<? super T> c )
   {
 		assert !DEBUG || lo <= start && start <= hi;
 		if ( start == lo )
@@ -350,7 +356,7 @@ class TimSort<T>
    * @param c  the comparator to used for the sort
    * @return the length of the run beginning at the specified position in the specified array
    */
-  private static <T> int countRunAndMakeAscending( T[] a, int lo, int hi, Comparator<? super T> c )
+  private static <T> int countRunAndMakeAscending( T[] a, int lo, int hi, @Nonnull Comparator<? super T> c )
   {
 		assert !DEBUG || lo < hi;
     int runHi = lo + 1;
@@ -566,7 +572,7 @@ class TimSort<T>
    * + n] is infinity. In other words, key belongs at index b + k; or in other words, the first k elements of a should
    * precede key, and the last n - k should follow it.
    */
-  private static <T> int gallopLeft( T key, T[] a, int base, int len, int hint, Comparator<? super T> c )
+  private static <T> int gallopLeft( T key, T[] a, int base, int len, int hint, @Nonnull Comparator<? super T> c )
   {
 		assert !DEBUG || len > 0 && hint >= 0 && hint < len;
     int lastOfs = 0;
@@ -653,7 +659,7 @@ class TimSort<T>
    * @param c    the comparator used to order the range, and to search
    * @return the int k, 0 <= k <= n such that a[b + k - 1] <= key < a[b + k]
    */
-  private static <T> int gallopRight( T key, T[] a, int base, int len, int hint, Comparator<? super T> c )
+  private static <T> int gallopRight( T key, T[] a, int base, int len, int hint, @Nonnull Comparator<? super T> c )
   {
 		assert !DEBUG || len > 0 && hint >= 0 && hint < len;
 

@@ -6,11 +6,14 @@ import com.artemis.utils.Bag;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import javax.annotation.Nonnull;
 
 public class UuidEntityManager
   extends Manager
 {
+  @Nonnull
   private final Map<UUID, Entity> uuidToEntity;
+  @Nonnull
   private final Bag<UUID> entityToUuid;
 
   public UuidEntityManager()
@@ -20,7 +23,7 @@ public class UuidEntityManager
   }
 
   @Override
-  public void deleted( Entity e )
+  public void deleted( @Nonnull Entity e )
   {
     UUID uuid = entityToUuid.safeGet( e.getId() );
 		if ( uuid == null )
@@ -37,7 +40,7 @@ public class UuidEntityManager
     entityToUuid.set( e.getId(), null );
   }
 
-  public void updatedUuid( Entity e, UUID newUuid )
+  public void updatedUuid( @Nonnull Entity e, UUID newUuid )
   {
     setUuid( e, newUuid );
   }
@@ -47,7 +50,7 @@ public class UuidEntityManager
     return uuidToEntity.get( uuid );
   }
 
-  public UUID getUuid( Entity e )
+  public UUID getUuid( @Nonnull Entity e )
   {
     UUID uuid = entityToUuid.safeGet( e.getId() );
     if ( uuid == null )
@@ -59,7 +62,7 @@ public class UuidEntityManager
     return uuid;
   }
 
-  public void setUuid( Entity e, UUID newUuid )
+  public void setUuid( @Nonnull Entity e, UUID newUuid )
   {
     UUID oldUuid = entityToUuid.safeGet( e.getId() );
 		if ( oldUuid != null )

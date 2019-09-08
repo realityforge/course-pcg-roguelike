@@ -16,6 +16,7 @@
 package com.artemis.utils.reflect;
 
 import java.lang.reflect.Modifier;
+import javax.annotation.Nullable;
 
 /**
  * Provides information about, and access to, a single constructor for a Class.
@@ -34,6 +35,7 @@ public final class Constructor
   /**
    * Returns an array of Class objects that represent the formal parameter types, in declaration order, of the constructor.
    */
+  @Nullable
   public Class[] getParameterTypes()
   {
     return null;

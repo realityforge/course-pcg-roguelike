@@ -13,6 +13,8 @@
 
 package com.artemis.utils;
 
+import javax.annotation.Nonnull;
+
 /**
  * This is a near duplicate of {@link TimSort}, modified for use with arrays of objects that implement {@link Comparable}, instead
  * of using explicit comparators.
@@ -70,7 +72,9 @@ class ComparableTimSort
    * so we could cut the storage for this, but it's a minor amount, and keeping all the info explicit simplifies the code.
    */
   private int stackSize = 0; // Number of pending runs on stack
+  @Nonnull
   private final int[] runBase;
+  @Nonnull
   private final int[] runLen;
   /**
    * Asserts have been placed in if-statements for performace. To enable them, set this field to true and enable them in VM with
@@ -85,7 +89,7 @@ class ComparableTimSort
     runLen = new int[ 40 ];
   }
 
-  public void doSort( Object[] a, int lo, int hi )
+  public void doSort( @Nonnull Object[] a, int lo, int hi )
   {
     stackSize = 0;
     rangeCheck( a.length, lo, hi );
@@ -141,7 +145,7 @@ class ComparableTimSort
    *
    * @param a the array to be sorted
    */
-  private ComparableTimSort( Object[] a )
+  private ComparableTimSort( @Nonnull Object[] a )
   {
     this.a = a;
 
@@ -167,12 +171,12 @@ class ComparableTimSort
    * obeys the contract of the public method with the same signature in java.util.Arrays.
    */
 
-  static void sort( Object[] a )
+  static void sort( @Nonnull Object[] a )
   {
     sort( a, 0, a.length );
   }
 
-  static void sort( Object[] a, int lo, int hi )
+  static void sort( @Nonnull Object[] a, int lo, int hi )
   {
     rangeCheck( a.length, lo, hi );
     int nRemaining = hi - lo;
@@ -234,7 +238,7 @@ class ComparableTimSort
    * @param start the index of the first element in the range that is not already known to be sorted (@code lo <= start <= hi}
    */
   @SuppressWarnings( { "fallthrough", "rawtypes" } )
-  private static void binarySort( Object[] a, int lo, int hi, int start )
+  private static void binarySort( @Nonnull Object[] a, int lo, int hi, int start )
   {
 		assert !DEBUG || lo <= start && start <= hi;
 		if ( start == lo )
@@ -525,7 +529,7 @@ class ComparableTimSort
    * + n] is infinity. In other words, key belongs at index b + k; or in other words, the first k elements of a should
    * precede key, and the last n - k should follow it.
    */
-  private static int gallopLeft( Comparable<Object> key, Object[] a, int base, int len, int hint )
+  private static int gallopLeft( @Nonnull Comparable<Object> key, Object[] a, int base, int len, int hint )
   {
 		assert !DEBUG || len > 0 && hint >= 0 && hint < len;
 
@@ -612,7 +616,7 @@ class ComparableTimSort
    *             will run.
    * @return the int k, 0 <= k <= n such that a[b + k - 1] <= key < a[b + k]
    */
-  private static int gallopRight( Comparable<Object> key, Object[] a, int base, int len, int hint )
+  private static int gallopRight( @Nonnull Comparable<Object> key, Object[] a, int base, int len, int hint )
   {
 		assert !DEBUG || len > 0 && hint >= 0 && hint < len;
 

@@ -5,6 +5,7 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+import javax.annotation.Nonnull;
 
 /**
  * Customize how the fluid generator processes your class.
@@ -25,7 +26,7 @@ public @interface Fluid
    * If left empty artemis will use the default: classname starting
    * with lowercase character. MyPos.class: "myPos"
    */
-  String name() default "";
+  @Nonnull String name() default "";
 
   /**
    * If you are using getters with parameters, but you prefer the fluid

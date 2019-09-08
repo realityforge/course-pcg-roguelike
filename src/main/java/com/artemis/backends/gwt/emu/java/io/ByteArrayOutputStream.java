@@ -21,6 +21,7 @@ package java.io;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
+import javax.annotation.Nonnull;
 
 /**
  * A specialized {@link OutputStream} for class for writing content to an
@@ -128,6 +129,7 @@ public class ByteArrayOutputStream
    *
    * @return this stream's current contents as a byte array.
    */
+  @Nonnull
   public byte[] toByteArray()
   {
     byte[] newArray = new byte[ count ];
@@ -142,6 +144,7 @@ public class ByteArrayOutputStream
    *
    * @return this stream's current contents as a string.
    */
+  @Nonnull
   @Override
   public String toString()
   {
@@ -161,6 +164,7 @@ public class ByteArrayOutputStream
    * to {@code hibyte}.
    * @deprecated Use {@link #toString()} instead.
    */
+  @Nonnull
   @Deprecated
   public String toString( int hibyte )
   {
@@ -181,7 +185,8 @@ public class ByteArrayOutputStream
    * @return this stream's current contents as an encoded string.
    * @throws UnsupportedEncodingException if the provided encoding is not supported.
    */
-  public String toString( String charsetName )
+  @Nonnull
+  public String toString( @Nonnull String charsetName )
     throws UnsupportedEncodingException
   {
     return new String( buf, 0, count, charsetName );
@@ -200,7 +205,7 @@ public class ByteArrayOutputStream
    *                                   {@code buffer}.
    */
   @Override
-  public void write( byte[] buffer, int offset, int len )
+  public void write( @Nonnull byte[] buffer, int offset, int len )
   {
     checkOffsetAndCount( buffer.length, offset, len );
     if ( len == 0 )
@@ -235,7 +240,7 @@ public class ByteArrayOutputStream
    * @param out an OutputStream on which to write the contents of this stream.
    * @throws IOException if an error occurs while writing to {@code out}.
    */
-  public void writeTo( OutputStream out )
+  public void writeTo( @Nonnull OutputStream out )
     throws IOException
   {
     out.write( buf, 0, count );

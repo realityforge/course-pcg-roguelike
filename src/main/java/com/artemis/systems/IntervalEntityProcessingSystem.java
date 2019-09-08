@@ -3,6 +3,7 @@ package com.artemis.systems;
 import com.artemis.Aspect;
 import com.artemis.Entity;
 import com.artemis.utils.Bag;
+import javax.annotation.Nonnull;
 
 /**
  * Process a subset of entities every x ticks.
@@ -41,7 +42,7 @@ public abstract class IntervalEntityProcessingSystem
     processEntities( getEntities() );
   }
 
-  protected void processEntities( Bag<Entity> entities )
+  protected void processEntities( @Nonnull Bag<Entity> entities )
   {
     Object[] ids = entities.getData();
     for ( int i = 0, s = entities.size(); s > i; i++ )

@@ -2,6 +2,7 @@ package com.artemis;
 
 import java.util.ArrayList;
 import java.util.List;
+import javax.annotation.Nonnull;
 
 @SuppressWarnings( "serial" )
 public class ArtemisMultiException
@@ -16,17 +17,19 @@ public class ArtemisMultiException
   {
   }
 
-  public ArtemisMultiException( List<Throwable> exceptions )
+  public ArtemisMultiException( @Nonnull List<Throwable> exceptions )
   {
     super();
     this.exceptions.addAll( exceptions );
   }
 
+  @Nonnull
   public List<Throwable> getExceptions()
   {
     return exceptions;
   }
 
+  @Nonnull
   @Override
   public String toString()
   {

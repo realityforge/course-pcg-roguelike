@@ -16,6 +16,7 @@
 package com.artemis.utils.reflect;
 
 import com.artemis.gwtref.client.ReflectionCache;
+import javax.annotation.Nonnull;
 
 /**
  * Utilities for Array reflection.
@@ -35,7 +36,7 @@ public final class ArrayReflection
   /**
    * Returns the length of the supplied array.
    */
-  static public int getLength( Object array )
+  static public int getLength( @Nonnull Object array )
   {
     return ReflectionCache.instance.getArrayLength( ReflectionCache.getType( array.getClass() ), array );
   }
@@ -43,7 +44,7 @@ public final class ArrayReflection
   /**
    * Returns the value of the indexed component in the supplied array.
    */
-  static public Object get( Object array, int index )
+  static public Object get( @Nonnull Object array, int index )
   {
     return ReflectionCache.instance.getArrayElement( ReflectionCache.getType( array.getClass() ), array, index );
   }
@@ -51,7 +52,7 @@ public final class ArrayReflection
   /**
    * Sets the value of the indexed component in the supplied array to the supplied value.
    */
-  static public void set( Object array, int index, Object value )
+  static public void set( @Nonnull Object array, int index, Object value )
   {
     ReflectionCache.instance.setArrayElement( ReflectionCache.getType( array.getClass() ), array, index, value );
   }

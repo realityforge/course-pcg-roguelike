@@ -51,6 +51,8 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public class ReflectionCacheSourceCreator
 {
@@ -63,15 +65,22 @@ public class ReflectionCacheSourceCreator
 																								 "float",
 																								 "double",
 																								 "boolean" ) );
+  @Nonnull
   final TreeLogger logger;
   final GeneratorContext context;
+  @Nonnull
   final JClassType type;
+  @Nonnull
   final String simpleName;
   final String packageName;
   SourceWriter sw;
+  @Nonnull
   StringBuffer source = new StringBuffer();
+  @Nonnull
   List<JType> types = new ArrayList<JType>();
+  @Nonnull
   List<SetterGetterStub> setterGetterStubs = new ArrayList<SetterGetterStub>();
+  @Nonnull
   List<MethodStub> methodStubs = new ArrayList<MethodStub>();
   int nextId = 0;
 
@@ -80,7 +89,9 @@ public class ReflectionCacheSourceCreator
     int getter;
     int setter;
     String name;
+    @Nullable
     String enclosingType;
+    @Nullable
     String type;
     boolean isStatic;
     boolean isFinal;
@@ -89,8 +100,11 @@ public class ReflectionCacheSourceCreator
 
   class MethodStub
   {
+    @Nullable
     String enclosingType;
+    @Nullable
     String returnType;
+    @Nonnull
     List<String> parameterTypes = new ArrayList<String>();
     String jnsi;
     int methodId;
@@ -105,7 +119,7 @@ public class ReflectionCacheSourceCreator
     boolean unused;
   }
 
-  public ReflectionCacheSourceCreator( TreeLogger logger, GeneratorContext context, JClassType type )
+  public ReflectionCacheSourceCreator( @Nonnull TreeLogger logger, GeneratorContext context, @Nonnull JClassType type )
   {
     this.logger = logger;
     this.context = context;
@@ -120,6 +134,7 @@ public class ReflectionCacheSourceCreator
     return nextId++;
   }
 
+  @Nonnull
   public String create()
   {
     ClassSourceFileComposerFactory composer = new ClassSourceFileComposerFactory( packageName, simpleName );
@@ -152,7 +167,7 @@ public class ReflectionCacheSourceCreator
     return packageName + "." + simpleName;
   }
 
-  private void createProxy( JClassType type )
+  private void createProxy( @Nonnull JClassType type )
   {
     ClassSourceFileComposerFactory composer = new ClassSourceFileComposerFactory( type.getPackage().getName(),
                                                                                   type.getSimpleSourceName() +
@@ -201,7 +216,7 @@ public class ReflectionCacheSourceCreator
     // sort the types so the generated output will be stable between runs
     Collections.sort( types, new Comparator<JType>()
     {
-      public int compare( JType o1, JType o2 )
+      public int compare( @Nonnull JType o1, @Nonnull JType o2 )
       {
         return o1.getQualifiedSourceName().compareTo( o2.getQualifiedSourceName() );
       }
@@ -230,7 +245,7 @@ public class ReflectionCacheSourceCreator
     Collections.sort( setterGetterStubs, new Comparator<SetterGetterStub>()
     {
       @Override
-      public int compare( SetterGetterStub o1, SetterGetterStub o2 )
+      public int compare( @Nonnull SetterGetterStub o1, @Nonnull SetterGetterStub o2 )
       {
         return new Integer( o1.setter ).compareTo( o2.setter );
       }
@@ -251,7 +266,7 @@ public class ReflectionCacheSourceCreator
     Collections.sort( methodStubs, new Comparator<MethodStub>()
     {
       @Override
-      public int compare( MethodStub o1, MethodStub o2 )
+      public int compare( @Nonnull MethodStub o1, @Nonnull MethodStub o2 )
       {
         return new Integer( o1.methodId ).compareTo( o2.methodId );
       }
@@ -282,7 +297,7 @@ public class ReflectionCacheSourceCreator
 
   int nesting = 0;
 
-  private void gatherTypes( JType type, List<JType> types )
+  private void gatherTypes( @Nullable JType type, @Nonnull List<JType> types )
   {
     nesting++;
     // came here from a type that has no super class
@@ -403,7 +418,8 @@ public class ReflectionCacheSourceCreator
     nesting--;
   }
 
-  private String generateMethodStub( MethodStub stub )
+  @Nonnull
+  private String generateMethodStub( @Nonnull MethodStub stub )
   {
     buffer.setLength( 0 );
 
@@ -534,7 +550,8 @@ public class ReflectionCacheSourceCreator
     return buffer.toString();
   }
 
-  private String generateSetterGetterStub( SetterGetterStub stub )
+  @Nonnull
+  private String generateSetterGetterStub( @Nonnull SetterGetterStub stub )
   {
     buffer.setLength( 0 );
     if ( stub.enclosingType == null || stub.type == null )
@@ -590,7 +607,7 @@ public class ReflectionCacheSourceCreator
     return buffer.toString();
   }
 
-  private boolean isVisible( JType type )
+  private boolean isVisible( @Nullable JType type )
   {
 		if ( type == null )
 		{
@@ -619,8 +636,10 @@ public class ReflectionCacheSourceCreator
     return true;
   }
 
+  @Nonnull
   private Map<String, Integer> typeNames2typeIds = new HashMap<String, Integer>();
 
+  @Nonnull
   private String createTypeGenerator( JType t )
   {
     buffer.setLength( 0 );
@@ -754,7 +773,8 @@ public class ReflectionCacheSourceCreator
     return buffer.toString();
   }
 
-  private String getAnnotations( Annotation[] annotations )
+  @Nonnull
+  private String getAnnotations( @Nullable Annotation[] annotations )
   {
     if ( annotations != null && annotations.length > 0 )
     {
@@ -904,7 +924,7 @@ public class ReflectionCacheSourceCreator
     return "null";
   }
 
-  private void printMethods( JClassType c, String varName, String methodType, JAbstractMethod[] methodTypes )
+  private void printMethods( @Nonnull JClassType c, String varName, @Nonnull String methodType, @Nullable JAbstractMethod[] methodTypes )
   {
     if ( methodTypes != null )
     {
@@ -1003,7 +1023,8 @@ public class ReflectionCacheSourceCreator
     }
   }
 
-  private String getElementTypes( JField f )
+  @Nonnull
+  private String getElementTypes( @Nonnull JField f )
   {
     StringBuilder b = new StringBuilder();
     JParameterizedType params = f.getType().isParameterized();
@@ -1041,7 +1062,8 @@ public class ReflectionCacheSourceCreator
     return "null";
   }
 
-  private String getType( JType type )
+  @Nullable
+  private String getType( @Nonnull JType type )
   {
 		if ( !isVisible( type ) )
 		{
@@ -1050,7 +1072,7 @@ public class ReflectionCacheSourceCreator
     return type.getErasedType().getQualifiedSourceName() + ".class";
   }
 
-  private void imports( ClassSourceFileComposerFactory composer )
+  private void imports( @Nonnull ClassSourceFileComposerFactory composer )
   {
     composer.addImport( "java.security.AccessControlException" );
     composer.addImport( "java.util.*" );
@@ -1120,7 +1142,7 @@ public class ReflectionCacheSourceCreator
     p( "}" );
   }
 
-  private void addParameters( MethodStub stub )
+  private void addParameters( @Nonnull MethodStub stub )
   {
 		if ( !stub.isStatic && !stub.isConstructor )
 		{
@@ -1133,7 +1155,8 @@ public class ReflectionCacheSourceCreator
     }
   }
 
-  private String cast( String paramType, String arg )
+  @Nonnull
+  private String cast( @Nonnull String paramType, String arg )
   {
     if ( paramType.equals( "byte" ) ||
          paramType.equals( "short" ) ||
@@ -1195,7 +1218,7 @@ public class ReflectionCacheSourceCreator
     p( "}" );
   }
 
-  private static boolean isInstantiableWithNewOperator( JClassType t )
+  private static boolean isInstantiableWithNewOperator( @Nonnull JClassType t )
   {
 		if ( !t.isDefaultInstantiable() || t instanceof JArrayType || t instanceof JEnumType )
 		{
@@ -1326,6 +1349,7 @@ public class ReflectionCacheSourceCreator
     source.append( line );
   }
 
+  @Nonnull
   StringBuffer buffer = new StringBuffer();
 
   void pb( String line )
@@ -1341,6 +1365,7 @@ public class ReflectionCacheSourceCreator
 
   class SwitchedCodeBlock
   {
+    @Nonnull
     private List<KeyedCodeBlock> blocks = new ArrayList<KeyedCodeBlock>();
     private final String switchStatement;
 
