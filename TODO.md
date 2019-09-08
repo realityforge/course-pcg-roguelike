@@ -19,6 +19,6 @@ complete as there is too much un-said.
 
 * Consider using a deterministic world generated from an initial seed. This means all decisions must occur
   in fixed order and drawing from the same RNG. Have a turn based game with one action per turn.
-  
+
   This means the entire world and gameplay can be recreated by recording the seed and the sequence of
   commands.
