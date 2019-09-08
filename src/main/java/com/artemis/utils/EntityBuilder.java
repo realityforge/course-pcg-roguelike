@@ -94,7 +94,10 @@ public class EntityBuilder
    * Add components to entity.
    */
   @Nonnull
-  public EntityBuilder with( final Component component1, final Component component2, final Component component3, final Component component4 )
+  public EntityBuilder with( final Component component1,
+                             final Component component2,
+                             final Component component3,
+                             final Component component4 )
   {
     edit.add( component1 );
     edit.add( component2 );

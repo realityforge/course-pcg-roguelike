@@ -98,26 +98,28 @@ public class UUID
   @Override
   public boolean equals( @Nullable final Object obj )
   {
-		if ( this == obj )
-		{
-			return true;
-		}
-		if ( obj == null )
-		{
-			return false;
-		}
-		if ( getClass() != obj.getClass() )
-		{
-			return false;
-		}
+    if ( this == obj )
+    {
+      return true;
+    }
+    if ( obj == null )
+    {
+      return false;
+    }
+    if ( getClass() != obj.getClass() )
+    {
+      return false;
+    }
     final UUID other = (UUID) obj;
     if ( value == null )
     {
-			return other.value == null;
+      return other.value == null;
     }
     else
-			return value.equals( other.value );
-	}
+    {
+      return value.equals( other.value );
+    }
+  }
 
   /* (non-Javadoc)
    * @see java.lang.Object#toString()

@@ -54,14 +54,14 @@ public abstract class EntitySystem
   protected void setWorld( final World world )
   {
     super.setWorld( world );
-		if ( implementsObserver( this, "inserted" ) )
-		{
-			methodFlags |= FLAG_INSERTED;
-		}
-		if ( implementsObserver( this, "removed" ) )
-		{
-			methodFlags |= FLAG_REMOVED;
-		}
+    if ( implementsObserver( this, "inserted" ) )
+    {
+      methodFlags |= FLAG_INSERTED;
+    }
+    if ( implementsObserver( this, "removed" ) )
+    {
+      methodFlags |= FLAG_REMOVED;
+    }
   }
 
   @Override
@@ -69,10 +69,10 @@ public abstract class EntitySystem
   {
     shouldSyncEntities = true;
     // performance hack, skip calls to entities if system lacks implementation of added.
-		if ( ( methodFlags & FLAG_INSERTED ) > 0 )
-		{
-			super.inserted( entities );
-		}
+    if ( ( methodFlags & FLAG_INSERTED ) > 0 )
+    {
+      super.inserted( entities );
+    }
   }
 
   @Override
@@ -86,10 +86,10 @@ public abstract class EntitySystem
   {
     shouldSyncEntities = true;
     // performance hack, skip calls to entities if system lacks implementation of deleted.
-		if ( ( methodFlags & FLAG_REMOVED ) > 0 )
-		{
-			super.removed( entities );
-		}
+    if ( ( methodFlags & FLAG_REMOVED ) > 0 )
+    {
+      super.removed( entities );
+    }
   }
 
   @Override

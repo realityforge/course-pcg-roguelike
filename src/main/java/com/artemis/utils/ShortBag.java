@@ -50,10 +50,10 @@ public class ShortBag
     throws ArrayIndexOutOfBoundsException
   {
     final int index = indexOf( value );
-		if ( index > -1 )
-		{
-			remove( index );
-		}
+    if ( index > -1 )
+    {
+      remove( index );
+    }
 
     return index > -1;
   }
@@ -261,10 +261,10 @@ public class ShortBag
    */
   public void clear()
   {
-		for ( int i = 0, s = size; s > i; i++ )
-		{
-			data[ i ] = 0;
-		}
+    for ( int i = 0, s = size; s > i; i++ )
+    {
+      data[ i ] = 0;
+    }
 
     size = 0;
   }
@@ -300,14 +300,14 @@ public class ShortBag
   @Override
   public boolean equals( @Nullable final Object o )
   {
-		if ( this == o )
-		{
-			return true;
-		}
-		if ( o == null || getClass() != o.getClass() )
-		{
-			return false;
-		}
+    if ( this == o )
+    {
+      return true;
+    }
+    if ( o == null || getClass() != o.getClass() )
+    {
+      return false;
+    }
 
     final ShortBag intBag = (ShortBag) o;
     return size == intBag.size() && Arrays.equals( data, intBag.data );
@@ -333,10 +333,10 @@ public class ShortBag
     sb.append( "IntBag(" );
     for ( int i = 0; size > i; i++ )
     {
-			if ( i > 0 )
-			{
-				sb.append( ", " );
-			}
+      if ( i > 0 )
+      {
+        sb.append( ", " );
+      }
       sb.append( data[ i ] );
     }
     sb.append( ')' );

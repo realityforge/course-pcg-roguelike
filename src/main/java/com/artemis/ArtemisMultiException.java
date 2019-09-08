@@ -36,10 +36,10 @@ public class ArtemisMultiException
     final StringBuilder sb = new StringBuilder();
     for ( final Throwable t : exceptions )
     {
-			if ( sb.length() > 0 )
-			{
-				sb.append( "\n" );
-			}
+      if ( sb.length() > 0 )
+      {
+        sb.append( "\n" );
+      }
       sb.append( t.getMessage() );
     }
     return sb.toString();

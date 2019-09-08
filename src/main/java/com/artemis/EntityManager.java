@@ -129,10 +129,10 @@ public class EntityManager
       .getActiveEntityIds()
       .cardinality();
 
-		if ( count > 0 )
-		{
-			return false;
-		}
+    if ( count > 0 )
+    {
+      return false;
+    }
 
     limbo.clear();
     recycled.clear();

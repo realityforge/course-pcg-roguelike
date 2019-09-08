@@ -52,14 +52,14 @@ abstract class LinkSite
   @Override
   public boolean equals( @Nullable final Object o )
   {
-		if ( this == o )
-		{
-			return true;
-		}
-		if ( o == null || getClass() != o.getClass() )
-		{
-			return false;
-		}
+    if ( this == o )
+    {
+      return true;
+    }
+    if ( o == null || getClass() != o.getClass() )
+    {
+      return false;
+    }
 
     final LinkSite that = (LinkSite) o;
 
@@ -100,10 +100,10 @@ abstract class LinkSite
 
   protected void process()
   {
-		if ( CHECK_SOURCE_AND_TARGETS != policy )
-		{
-			return;
-		}
+    if ( CHECK_SOURCE_AND_TARGETS != policy )
+    {
+      return;
+    }
 
     final IntBag entities = subscription.getEntities();
     final int[] ids = entities.getData();

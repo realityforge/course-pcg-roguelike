@@ -211,10 +211,10 @@ public class Bag<E>
    */
   public E safeGet( final int index )
   {
-		if ( index >= data.length )
-		{
-			grow( Math.max( ( 2 * data.length ), ( 3 * index ) / 2 ) );
-		}
+    if ( index >= data.length )
+    {
+      grow( Math.max( ( 2 * data.length ), ( 3 * index ) / 2 ) );
+    }
 
     return data[ index ];
   }
@@ -273,10 +273,10 @@ public class Bag<E>
   public void add( final E e )
   {
     // is size greater than capacity increase capacity
-		if ( size == data.length )
-		{
-			grow( data.length * 2 );
-		}
+    if ( size == data.length )
+    {
+      grow( data.length * 2 );
+    }
 
     data[ size++ ] = e;
   }
@@ -289,10 +289,10 @@ public class Bag<E>
    */
   public void set( final int index, final E e )
   {
-		if ( index >= data.length )
-		{
-			grow( max( ( 2 * data.length ), index + 1 ) );
-		}
+    if ( index >= data.length )
+    {
+      grow( max( ( 2 * data.length ), index + 1 ) );
+    }
 
     size = Math.max( size, index + 1 );
     data[ index ] = e;
@@ -391,10 +391,10 @@ public class Bag<E>
   @Override
   public Iterator<E> iterator()
   {
-		if ( it == null )
-		{
-			it = new BagIterator();
-		}
+    if ( it == null )
+    {
+      it = new BagIterator();
+    }
 
     it.validCursorPos = false;
     it.cursor = 0;
@@ -410,10 +410,10 @@ public class Bag<E>
     sb.append( "Bag(" );
     for ( int i = 0; size > i; i++ )
     {
-			if ( i > 0 )
-			{
-				sb.append( ", " );
-			}
+      if ( i > 0 )
+      {
+        sb.append( ", " );
+      }
       sb.append( data[ i ] );
     }
     sb.append( ')' );
@@ -423,27 +423,27 @@ public class Bag<E>
   @Override
   public boolean equals( @Nullable final Object o )
   {
-		if ( this == o )
-		{
-			return true;
-		}
-		if ( o == null || getClass() != o.getClass() )
-		{
-			return false;
-		}
+    if ( this == o )
+    {
+      return true;
+    }
+    if ( o == null || getClass() != o.getClass() )
+    {
+      return false;
+    }
 
     final Bag bag = (Bag) o;
-		if ( size != bag.size() )
-		{
-			return false;
-		}
+    if ( size != bag.size() )
+    {
+      return false;
+    }
 
     for ( int i = 0; size > i; i++ )
     {
-			if ( data[ i ] != bag.data[ i ] )
-			{
-				return false;
-			}
+      if ( data[ i ] != bag.data[ i ] )
+      {
+        return false;
+      }
     }
 
     return true;

@@ -58,10 +58,10 @@ final class BatchChangeProcessor
   EntityEdit obtainEditor( final int entityId )
   {
     final int size = edited.size();
-		if ( size != 0 && edited.get( size - 1 ).getEntityId() == entityId )
-		{
-			return edited.get( size - 1 );
-		}
+    if ( size != 0 && edited.get( size - 1 ).getEntityId() == entityId )
+    {
+      return edited.get( size - 1 );
+    }
 
     final EntityEdit edit = entityEdit();
     edited.add( edit );
@@ -97,10 +97,10 @@ final class BatchChangeProcessor
 
   void purgeComponents()
   {
-		for ( int i = 0, s = purgatories.size(); s > i; i++ )
-		{
-			purgatories.get( i ).purge();
-		}
+    for ( int i = 0, s = purgatories.size(); s > i; i++ )
+    {
+      purgatories.get( i ).purge();
+    }
 
     purgatories.setSize( 0 );
   }
@@ -115,10 +115,10 @@ final class BatchChangeProcessor
 
   private boolean clean()
   {
-		if ( edited.isEmpty() )
-		{
-			return false;
-		}
+    if ( edited.isEmpty() )
+    {
+      return false;
+    }
 
     final Object[] data = edited.getData();
     for ( int i = 0, s = edited.size(); s > i; i++ )

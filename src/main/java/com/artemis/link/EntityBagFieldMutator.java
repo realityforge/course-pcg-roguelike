@@ -26,10 +26,10 @@ class EntityBagFieldMutator
       if ( !all.getActiveEntityIds().unsafeGet( e.getId() ) )
       {
         entities.remove( i-- );
-				if ( listener != null )
-				{
-					listener.onTargetDead( sourceId, e.getId() );
-				}
+        if ( listener != null )
+        {
+          listener.onTargetDead( sourceId, e.getId() );
+        }
       }
     }
   }

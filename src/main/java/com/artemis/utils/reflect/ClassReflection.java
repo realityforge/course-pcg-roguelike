@@ -17,11 +17,6 @@ package com.artemis.utils.reflect;
 
 import com.artemis.gwtref.client.ReflectionCache;
 import com.artemis.gwtref.client.Type;
-import com.artemis.utils.reflect.Annotation;
-import com.artemis.utils.reflect.Constructor;
-import com.artemis.utils.reflect.Field;
-import com.artemis.utils.reflect.Method;
-import com.artemis.utils.reflect.ReflectionException;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -130,7 +125,8 @@ public final class ClassReflection
   static public com.artemis.utils.reflect.Constructor[] getConstructors( final Class c )
   {
     final com.artemis.gwtref.client.Constructor[] constructors = ReflectionCache.getType( c ).getConstructors();
-    final com.artemis.utils.reflect.Constructor[] result = new com.artemis.utils.reflect.Constructor[ constructors.length ];
+    final com.artemis.utils.reflect.Constructor[] result =
+      new com.artemis.utils.reflect.Constructor[ constructors.length ];
     for ( int i = 0, j = constructors.length; i < j; i++ )
     {
       result[ i ] = new com.artemis.utils.reflect.Constructor( constructors[ i ] );
@@ -143,7 +139,8 @@ public final class ClassReflection
    * parameter types.
    */
   @Nonnull
-  static public com.artemis.utils.reflect.Constructor getConstructor( @Nonnull final Class c, final Class... parameterTypes )
+  static public com.artemis.utils.reflect.Constructor getConstructor( @Nonnull final Class c,
+                                                                      final Class... parameterTypes )
     throws ReflectionException
   {
     try
@@ -165,7 +162,8 @@ public final class ClassReflection
    * types.
    */
   @Nonnull
-  static public com.artemis.utils.reflect.Constructor getDeclaredConstructor( @Nonnull final Class c, final Class... parameterTypes )
+  static public com.artemis.utils.reflect.Constructor getDeclaredConstructor( @Nonnull final Class c,
+                                                                              final Class... parameterTypes )
     throws ReflectionException
   {
     try
@@ -202,7 +200,9 @@ public final class ClassReflection
    * types.
    */
   @Nonnull
-  static public com.artemis.utils.reflect.Method getMethod( @Nonnull final Class c, final String name, final Class... parameterTypes )
+  static public com.artemis.utils.reflect.Method getMethod( @Nonnull final Class c,
+                                                            final String name,
+                                                            final Class... parameterTypes )
     throws ReflectionException
   {
     try
@@ -239,7 +239,9 @@ public final class ClassReflection
    * Returns a {@link com.artemis.utils.reflect.Method} that represents the method declared by the supplied class which takes the supplied parameter types.
    */
   @Nonnull
-  static public com.artemis.utils.reflect.Method getDeclaredMethod( @Nonnull final Class c, final String name, final Class... parameterTypes )
+  static public com.artemis.utils.reflect.Method getDeclaredMethod( @Nonnull final Class c,
+                                                                    final String name,
+                                                                    final Class... parameterTypes )
     throws ReflectionException
   {
     try
@@ -309,7 +311,8 @@ public final class ClassReflection
    * Returns this element's annotation for the specified type if such an annotation is present, else null.
    */
   @Nullable
-  static public <T extends java.lang.annotation.Annotation> T getAnnotation( final Class c, final Class<T> annotationClass )
+  static public <T extends java.lang.annotation.Annotation> T getAnnotation( final Class c,
+                                                                             final Class<T> annotationClass )
     throws ReflectionException
   {
     final com.artemis.utils.reflect.Annotation declaredAnnotation = getDeclaredAnnotation( c, annotationClass );
@@ -337,13 +340,14 @@ public final class ClassReflection
   /**
    * Returns true if the supplied class includes an annotation of the given class type.
    */
-  static public boolean isAnnotationPresent( final Class c, final Class<? extends java.lang.annotation.Annotation> annotationType )
+  static public boolean isAnnotationPresent( final Class c,
+                                             final Class<? extends java.lang.annotation.Annotation> annotationType )
   {
     final java.lang.annotation.Annotation[] annotations = ReflectionCache.getType( c ).getDeclaredAnnotations();
-		if ( annotations == null )
-		{
-			return false;
-		}
+    if ( annotations == null )
+    {
+      return false;
+    }
 
     for ( final java.lang.annotation.Annotation annotation : annotations )
     {
@@ -363,7 +367,8 @@ public final class ClassReflection
   static public com.artemis.utils.reflect.Annotation[] getDeclaredAnnotations( final Class c )
   {
     final java.lang.annotation.Annotation[] annotations = ReflectionCache.getType( c ).getDeclaredAnnotations();
-    final com.artemis.utils.reflect.Annotation[] result = new com.artemis.utils.reflect.Annotation[ annotations.length ];
+    final com.artemis.utils.reflect.Annotation[] result =
+      new com.artemis.utils.reflect.Annotation[ annotations.length ];
     for ( int i = 0; i < annotations.length; i++ )
     {
       result[ i ] = new com.artemis.utils.reflect.Annotation( annotations[ i ] );

@@ -47,14 +47,14 @@ public abstract class Manager
   protected void setWorld( final World world )
   {
     super.setWorld( world );
-		if ( implementsObserver( this, "added" ) )
-		{
-			methodFlags |= FLAG_INSERTED;
-		}
-		if ( implementsObserver( this, "deleted" ) )
-		{
-			methodFlags |= FLAG_REMOVED;
-		}
+    if ( implementsObserver( this, "added" ) )
+    {
+      methodFlags |= FLAG_INSERTED;
+    }
+    if ( implementsObserver( this, "deleted" ) )
+    {
+      methodFlags |= FLAG_REMOVED;
+    }
   }
 
   /**
@@ -83,10 +83,10 @@ public abstract class Manager
   private void added( @Nonnull final IntBag entities )
   {
     // performance hack, skip if manager lacks implementation of inserted.
-		if ( ( methodFlags & FLAG_INSERTED ) == 0 )
-		{
-			return;
-		}
+    if ( ( methodFlags & FLAG_INSERTED ) == 0 )
+    {
+      return;
+    }
 
     final int[] ids = entities.getData();
     for ( int i = 0, s = entities.size(); s > i; i++ )
@@ -98,10 +98,10 @@ public abstract class Manager
   private void deleted( @Nonnull final IntBag entities )
   {
     // performance hack, skip if manager lacks implementation of removed.
-		if ( ( methodFlags & FLAG_REMOVED ) == 0 )
-		{
-			return;
-		}
+    if ( ( methodFlags & FLAG_REMOVED ) == 0 )
+    {
+      return;
+    }
 
     final int[] ids = entities.getData();
     for ( int i = 0, s = entities.size(); s > i; i++ )

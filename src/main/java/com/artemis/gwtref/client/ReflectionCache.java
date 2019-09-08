@@ -37,10 +37,10 @@ public class ReflectionCache
   @Nullable
   public static Type getType( @Nullable final Class clazz )
   {
-		if ( clazz == null )
-		{
-			return null;
-		}
+    if ( clazz == null )
+    {
+      return null;
+    }
     final Type type = instance.forName( convert( clazz.getName() ) );
     if ( type == null )
     {

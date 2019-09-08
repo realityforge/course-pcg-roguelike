@@ -126,10 +126,10 @@ public class Type
       {
         for ( final Field f : declFields )
         {
-					if ( f.isPublic && f.name.equals( name ) )
-					{
-						return f;
-					}
+          if ( f.isPublic && f.name.equals( name ) )
+          {
+            return f;
+          }
         }
       }
       t = t.getSuperclass();
@@ -152,10 +152,10 @@ public class Type
       {
         for ( final Field f : declFields )
         {
-					if ( f.isPublic )
-					{
-						allFields.add( f );
-					}
+          if ( f.isPublic )
+          {
+            allFields.add( f );
+          }
         }
       }
       t = t.getSuperclass();
@@ -190,10 +190,10 @@ public class Type
       {
         for ( final Method m : declMethods )
         {
-					if ( m.isPublic() && m.match( name, parameterTypes ) )
-					{
-						return m;
-					}
+          if ( m.isPublic() && m.match( name, parameterTypes ) )
+          {
+            return m;
+          }
         }
       }
       t = t.getSuperclass();
@@ -216,10 +216,10 @@ public class Type
       {
         for ( final Method m : declMethods )
         {
-					if ( m.isPublic() )
-					{
-						allMethods.add( m );
-					}
+          if ( m.isPublic() )
+          {
+            allMethods.add( m );
+          }
         }
       }
       t = t.getSuperclass();
@@ -258,10 +258,10 @@ public class Type
     {
       for ( final Constructor c : constructors )
       {
-				if ( c.isPublic() && c.match( parameterTypes ) )
-				{
-					return c;
-				}
+        if ( c.isPublic() && c.match( parameterTypes ) )
+        {
+          return c;
+        }
       }
     }
     throw new NoSuchMethodException();

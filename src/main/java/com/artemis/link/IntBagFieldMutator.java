@@ -25,10 +25,10 @@ class IntBagFieldMutator
       if ( !all.getActiveEntityIds().unsafeGet( id ) )
       {
         ids.remove( i-- );
-				if ( listener != null )
-				{
-					listener.onTargetDead( sourceId, id );
-				}
+        if ( listener != null )
+        {
+          listener.onTargetDead( sourceId, id );
+        }
       }
     }
   }

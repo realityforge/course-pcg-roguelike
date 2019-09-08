@@ -37,55 +37,55 @@ public class Sort
 
   public <T> void sort( @Nonnull final Bag<T> a )
   {
-		if ( comparableTimSort == null )
-		{
-			comparableTimSort = new ComparableTimSort();
-		}
+    if ( comparableTimSort == null )
+    {
+      comparableTimSort = new ComparableTimSort();
+    }
     comparableTimSort.doSort( a.data, 0, a.size() );
   }
 
   public <T> void sort( @Nonnull final T[] a )
   {
-		if ( comparableTimSort == null )
-		{
-			comparableTimSort = new ComparableTimSort();
-		}
+    if ( comparableTimSort == null )
+    {
+      comparableTimSort = new ComparableTimSort();
+    }
     comparableTimSort.doSort( a, 0, a.length );
   }
 
   public <T> void sort( @Nonnull final T[] a, final int fromIndex, final int toIndex )
   {
-		if ( comparableTimSort == null )
-		{
-			comparableTimSort = new ComparableTimSort();
-		}
+    if ( comparableTimSort == null )
+    {
+      comparableTimSort = new ComparableTimSort();
+    }
     comparableTimSort.doSort( a, fromIndex, toIndex );
   }
 
   public <T> void sort( @Nonnull final Bag<T> a, final Comparator<T> c )
   {
-		if ( timSort == null )
-		{
-			timSort = new TimSort();
-		}
+    if ( timSort == null )
+    {
+      timSort = new TimSort();
+    }
     timSort.doSort( a.data, c, 0, a.size() );
   }
 
   public <T> void sort( @Nonnull final T[] a, final Comparator<T> c )
   {
-		if ( timSort == null )
-		{
-			timSort = new TimSort();
-		}
+    if ( timSort == null )
+    {
+      timSort = new TimSort();
+    }
     timSort.doSort( a, c, 0, a.length );
   }
 
   public <T> void sort( @Nonnull final T[] a, final Comparator<T> c, final int fromIndex, final int toIndex )
   {
-		if ( timSort == null )
-		{
-			timSort = new TimSort();
-		}
+    if ( timSort == null )
+    {
+      timSort = new TimSort();
+    }
     timSort.doSort( a, c, fromIndex, toIndex );
   }
 
@@ -94,10 +94,10 @@ public class Sort
    */
   static public Sort instance()
   {
-		if ( instance == null )
-		{
-			instance = new Sort();
-		}
+    if ( instance == null )
+    {
+      instance = new Sort();
+    }
     return instance;
   }
 }

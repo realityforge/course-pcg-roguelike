@@ -145,16 +145,16 @@ public class World
   public void inject( @Nonnull final Object target, final boolean failIfNotInjectable )
   {
     final boolean injectable = partition.injector.isInjectable( target );
-		if ( !injectable && failIfNotInjectable )
-		{
-			throw new MundaneWireException( "Attempted injection on " + target.getClass()
-				.getName() + ", which is annotated with @SkipWire" );
-		}
+    if ( !injectable && failIfNotInjectable )
+    {
+      throw new MundaneWireException( "Attempted injection on " + target.getClass()
+        .getName() + ", which is annotated with @SkipWire" );
+    }
 
-		if ( injectable )
-		{
-			partition.injector.inject( target );
-		}
+    if ( injectable )
+    {
+      partition.injector.inject( target );
+    }
   }
 
   public <T> T getRegistered( final String name )
@@ -189,10 +189,10 @@ public class World
       }
     }
 
-		if ( exceptions.size() > 0 )
-		{
-			throw new ArtemisMultiException( exceptions );
-		}
+    if ( exceptions.size() > 0 )
+    {
+      throw new ArtemisMultiException( exceptions );
+    }
   }
 
   /**
@@ -203,10 +203,10 @@ public class World
    */
   public EntityEdit edit( final int entityId )
   {
-		if ( !em.isActive( entityId ) )
-		{
-			throw new RuntimeException( "Issued edit on deleted " + entityId );
-		}
+    if ( !em.isActive( entityId ) )
+    {
+      throw new RuntimeException( "Issued edit on deleted " + entityId );
+    }
 
     return batchProcessor.obtainEditor( entityId );
   }

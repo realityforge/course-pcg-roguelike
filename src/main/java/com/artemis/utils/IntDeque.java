@@ -101,10 +101,10 @@ public class IntDeque
    */
   public void add( final int e )
   {
-		if ( size == elements.length )
-		{
-			grow( ( elements.length * 7 ) / 4 + 1 );
-		}
+    if ( size == elements.length )
+    {
+      grow( ( elements.length * 7 ) / 4 + 1 );
+    }
 
     elements[ index( size++ ) ] = e;
   }
@@ -140,10 +140,10 @@ public class IntDeque
     throws ArrayIndexOutOfBoundsException
   {
     final int[] newElements = new int[ newCapacity ];
-		for ( int i = 0; i < size; i++ )
-		{
-			newElements[ i ] = get( i );
-		}
+    for ( int i = 0; i < size; i++ )
+    {
+      newElements[ i ] = get( i );
+    }
 
     elements = newElements;
     beginIndex = 0;
@@ -213,37 +213,37 @@ public class IntDeque
 
   private void assertNotEmpty()
   {
-		if ( size == 0 )
-		{
-			throw new RuntimeException( "Deque is empty." );
-		}
+    if ( size == 0 )
+    {
+      throw new RuntimeException( "Deque is empty." );
+    }
   }
 
   @Override
   public boolean equals( @Nullable final Object o )
   {
-		if ( this == o )
-		{
-			return true;
-		}
-		if ( o == null || getClass() != o.getClass() )
-		{
-			return false;
-		}
+    if ( this == o )
+    {
+      return true;
+    }
+    if ( o == null || getClass() != o.getClass() )
+    {
+      return false;
+    }
 
     final IntDeque other = (IntDeque) o;
-		if ( size != other.size )
-		{
-			return false;
-		}
+    if ( size != other.size )
+    {
+      return false;
+    }
 
-		for ( int i = 0; size > i; i++ )
-		{
-			if ( get( i ) != other.get( i ) )
-			{
-				return false;
-			}
-		}
+    for ( int i = 0; size > i; i++ )
+    {
+      if ( get( i ) != other.get( i ) )
+      {
+        return false;
+      }
+    }
 
     return true;
   }
@@ -268,10 +268,10 @@ public class IntDeque
     sb.append( "IntDeque(" );
     for ( int i = 0; size > i; i++ )
     {
-			if ( i > 0 )
-			{
-				sb.append( ", " );
-			}
+      if ( i > 0 )
+      {
+        sb.append( ", " );
+      }
       sb.append( elements[ index( i ) ] );
     }
     sb.append( ')' );

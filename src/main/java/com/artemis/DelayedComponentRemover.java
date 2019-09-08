@@ -9,7 +9,9 @@ class DelayedComponentRemover<A extends Component>
   final BitVector idBits = new BitVector();
   final BatchChangeProcessor batchProcessor;
 
-  DelayedComponentRemover( final Bag<A> components, final ComponentPool pool, final BatchChangeProcessor batchProcessor )
+  DelayedComponentRemover( final Bag<A> components,
+                           final ComponentPool pool,
+                           final BatchChangeProcessor batchProcessor )
   {
     super( components, pool );
     this.batchProcessor = batchProcessor;
@@ -18,10 +20,10 @@ class DelayedComponentRemover<A extends Component>
   @Override
   void mark( final int entityId )
   {
-		if ( idBits.isEmpty() ) // see cm#clean
-		{
-			batchProcessor.purgatories.add( this );
-		}
+    if ( idBits.isEmpty() ) // see cm#clean
+    {
+      batchProcessor.purgatories.add( this );
+    }
 
     idBits.set( entityId );
   }
@@ -47,14 +49,14 @@ class DelayedComponentRemover<A extends Component>
   @Override
   void purge()
   {
-		if ( pool != null )
-		{
-			purgeWithPool();
-		}
-		else
-		{
-			purgeNoPool();
-		}
+    if ( pool != null )
+    {
+      purgeWithPool();
+    }
+    else
+    {
+      purgeNoPool();
+    }
 
     idBits.clear();
   }

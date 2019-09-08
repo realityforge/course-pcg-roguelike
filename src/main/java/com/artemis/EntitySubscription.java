@@ -59,10 +59,10 @@ public class EntitySubscription
   @Nonnull
   public IntBag getEntities()
   {
-      if ( entities.isEmpty() && !activeEntityIds.isEmpty() )
-      {
-          rebuildCompressedActives();
-      }
+    if ( entities.isEmpty() && !activeEntityIds.isEmpty() )
+    {
+      rebuildCompressedActives();
+    }
 
     return entities;
   }
@@ -157,10 +157,10 @@ public class EntitySubscription
 
   void informEntityChanges()
   {
-      if ( insertedIds.isEmpty() && removedIds.isEmpty() )
-      {
-          return;
-      }
+    if ( insertedIds.isEmpty() && removedIds.isEmpty() )
+    {
+      return;
+    }
 
     transferBitsToInts( extra.inserted, extra.removed );
     extra.informEntityChanges();
@@ -201,10 +201,10 @@ public class EntitySubscription
     for ( int i = 0, s = entities.size(); s > i; i++ )
     {
       final int id = ids[ i ];
-        if ( activeEntityIds.unsafeGet( id ) )
-        {
-            remove( id );
-        }
+      if ( activeEntityIds.unsafeGet( id ) )
+      {
+        remove( id );
+      }
     }
   }
 
@@ -314,15 +314,15 @@ public class EntitySubscription
       for ( int i = 0, s = listeners.size(); s > i; i++ )
       {
         final SubscriptionListener listener = listeners.get( i );
-          if ( removed.size() > 0 )
-          {
-              listener.removed( removed );
-          }
+        if ( removed.size() > 0 )
+        {
+          listener.removed( removed );
+        }
 
-          if ( inserted.size() > 0 )
-          {
-              listener.inserted( inserted );
-          }
+        if ( inserted.size() > 0 )
+        {
+          listener.inserted( inserted );
+        }
       }
     }
   }

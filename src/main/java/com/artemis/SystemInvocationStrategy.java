@@ -77,10 +77,10 @@ public abstract class SystemInvocationStrategy
     final ImmutableBag<BaseSystem> systems = world.getSystems();
     for ( int i = 0; i < systems.size(); i++ )
     {
-			if ( target == systems.get( i ).getClass() )
-			{
-				return !disabled.get( i );
-			}
+      if ( target == systems.get( i ).getClass() )
+      {
+        return !disabled.get( i );
+      }
     }
 
     throw new RuntimeException( "huh?" );
@@ -92,10 +92,10 @@ public abstract class SystemInvocationStrategy
     final ImmutableBag<BaseSystem> systems = world.getSystems();
     for ( int i = 0; i < systems.size(); i++ )
     {
-			if ( target == systems.get( i ).getClass() )
-			{
-				disabled.set( i, !value );
-			}
+      if ( target == systems.get( i ).getClass() )
+      {
+        disabled.set( i, !value );
+      }
     }
   }
 }

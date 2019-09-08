@@ -147,7 +147,10 @@ public class GroupManager
    * @param g3 group to add the entity into
    * @param e  entity to add into the group
    */
-  public void add( @Nonnull final Entity e, @Nonnull final String g1, @Nonnull final String g2, @Nonnull final String g3 )
+  public void add( @Nonnull final Entity e,
+                   @Nonnull final String g1,
+                   @Nonnull final String g2,
+                   @Nonnull final String g3 )
   {
     add( e, g1 );
     add( e, g2 );
@@ -203,10 +206,10 @@ public class GroupManager
     if ( groups != null )
     {
       groups.remove( group );
-        if ( groups.size() == 0 )
-        {
-            groupsByEntity.remove( e );
-        }
+      if ( groups.size() == 0 )
+      {
+        groupsByEntity.remove( e );
+      }
     }
   }
 
@@ -241,7 +244,10 @@ public class GroupManager
    * @param g2 group to remove the entity from
    * @param g3 group to remove the entity from
    */
-  public void remove( @Nonnull final Entity e, @Nonnull final String g1, @Nonnull final String g2, @Nonnull final String g3 )
+  public void remove( @Nonnull final Entity e,
+                      @Nonnull final String g1,
+                      @Nonnull final String g2,
+                      @Nonnull final String g3 )
   {
     remove( e, g1 );
     remove( e, g2 );
@@ -280,10 +286,10 @@ public class GroupManager
   public void removeFromAllGroups( @Nonnull final Entity e )
   {
     final Bag<String> groups = groupsByEntity.get( e );
-      if ( groups == null )
-      {
-          return;
-      }
+    if ( groups == null )
+    {
+      return;
+    }
     for ( int i = 0, s = groups.size(); s > i; i++ )
     {
       final Bag<Entity> entities = entitiesByGroup.get( groups.get( i ) );

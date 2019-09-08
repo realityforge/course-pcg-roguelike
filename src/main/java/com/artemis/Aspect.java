@@ -113,16 +113,16 @@ public class Aspect
     // If we are STILL interested,
     // Check if the entity possesses ANY of the exclusion components,
     // if it does then the system is not interested.
-		if ( !exclusionSet.isEmpty() && exclusionSet.intersects( componentBits ) )
-		{
-			return false;
-		}
+    if ( !exclusionSet.isEmpty() && exclusionSet.intersects( componentBits ) )
+    {
+      return false;
+    }
 
     // If we are STILL interested,
     // Check if the entity possesses ANY of the components in the oneSet.
     // If so, the system is interested.
-		return oneSet.isEmpty() || oneSet.intersects( componentBits );
-	}
+    return oneSet.isEmpty() || oneSet.intersects( componentBits );
+  }
 
   /**
    * Returns an aspect that matches all entities.
@@ -301,10 +301,10 @@ public class Aspect
     @SafeVarargs
     public final Builder one( @Nonnull final Class<? extends Component>... types )
     {
-			for ( final Class<? extends Component> t : types )
-			{
-				oneTypes.add( t );
-			}
+      for ( final Class<? extends Component> t : types )
+      {
+        oneTypes.add( t );
+      }
 
       return this;
     }
@@ -319,10 +319,10 @@ public class Aspect
     @Nonnull
     public Builder one( @Nonnull final Collection<Class<? extends Component>> types )
     {
-			for ( final Class<? extends Component> t : types )
-			{
-				oneTypes.add( t );
-			}
+      for ( final Class<? extends Component> t : types )
+      {
+        oneTypes.add( t );
+      }
 
       return this;
     }
@@ -341,10 +341,10 @@ public class Aspect
     @SafeVarargs
     public final Builder exclude( @Nonnull final Class<? extends Component>... types )
     {
-			for ( final Class<? extends Component> t : types )
-			{
-				exclusionTypes.add( t );
-			}
+      for ( final Class<? extends Component> t : types )
+      {
+        exclusionTypes.add( t );
+      }
       return this;
     }
 
@@ -361,10 +361,10 @@ public class Aspect
     @Nonnull
     public Builder exclude( @Nonnull final Collection<Class<? extends Component>> types )
     {
-			for ( final Class<? extends Component> t : types )
-			{
-				exclusionTypes.add( t );
-			}
+      for ( final Class<? extends Component> t : types )
+      {
+        exclusionTypes.add( t );
+      }
 
       return this;
     }
@@ -399,27 +399,27 @@ public class Aspect
     @Override
     public boolean equals( @Nullable final Object o )
     {
-			if ( this == o )
-			{
-				return true;
-			}
-			if ( o == null || getClass() != o.getClass() )
-			{
-				return false;
-			}
+      if ( this == o )
+      {
+        return true;
+      }
+      if ( o == null || getClass() != o.getClass() )
+      {
+        return false;
+      }
 
       final Builder builder = (Builder) o;
 
-			if ( !allTypes.equals( builder.allTypes ) )
-			{
-				return false;
-			}
-			if ( !exclusionTypes.equals( builder.exclusionTypes ) )
-			{
-				return false;
-			}
-			return oneTypes.equals( builder.oneTypes );
-		}
+      if ( !allTypes.equals( builder.allTypes ) )
+      {
+        return false;
+      }
+      if ( !exclusionTypes.equals( builder.exclusionTypes ) )
+      {
+        return false;
+      }
+      return oneTypes.equals( builder.oneTypes );
+    }
 
     @Override
     public int hashCode()

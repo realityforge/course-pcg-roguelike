@@ -187,14 +187,14 @@ public final class Entity
   @Override
   public boolean equals( @Nullable final Object o )
   {
-		if ( this == o )
-		{
-			return true;
-		}
-		if ( o == null || getClass() != o.getClass() )
-		{
-			return false;
-		}
+    if ( this == o )
+    {
+      return true;
+    }
+    if ( o == null || getClass() != o.getClass() )
+    {
+      return false;
+    }
 
     final Entity entity = (Entity) o;
 

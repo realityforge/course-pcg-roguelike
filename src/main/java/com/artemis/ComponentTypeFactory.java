@@ -50,10 +50,10 @@ public class ComponentTypeFactory
   {
     ComponentType type = componentTypes.get( c );
 
-		if ( type == null )
-		{
-			type = createComponentType( c );
-		}
+    if ( type == null )
+    {
+      type = createComponentType( c );
+    }
 
     return type;
   }
@@ -64,10 +64,10 @@ public class ComponentTypeFactory
     try
     {
       final Constructor ctor = ClassReflection.getConstructor( c );
-			if ( ( ctor.getModifiers() & Modifier.PUBLIC ) == 0 )
-			{
-				throw new InvalidComponentException( c, "missing public constructor" );
-			}
+      if ( ( ctor.getModifiers() & Modifier.PUBLIC ) == 0 )
+      {
+        throw new InvalidComponentException( c, "missing public constructor" );
+      }
     }
     catch ( final ReflectionException e )
     {

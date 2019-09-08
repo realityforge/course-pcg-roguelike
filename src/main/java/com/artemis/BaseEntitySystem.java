@@ -53,10 +53,10 @@ public abstract class BaseEntitySystem
     super.setWorld( world );
 
     subscription = getSubscription();
-      if ( implementsAnyObserver( this ) )
-      {
-          subscription.addSubscriptionListener( this );
-      }
+    if ( implementsAnyObserver( this ) )
+    {
+      subscription.addSubscriptionListener( this );
+    }
   }
 
   /**

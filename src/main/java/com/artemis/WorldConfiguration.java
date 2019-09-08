@@ -77,10 +77,10 @@ public final class WorldConfiguration
   @Nonnull
   public WorldConfiguration setInjector( @Nullable final Injector injector )
   {
-		if ( injector == null )
-		{
-			throw new NullPointerException( "Injector must not be null" );
-		}
+    if ( injector == null )
+    {
+      throw new NullPointerException( "Injector must not be null" );
+    }
 
     this.injector = injector;
     return this;
@@ -95,10 +95,10 @@ public final class WorldConfiguration
   @Nonnull
   public WorldConfiguration setInvocationStrategy( @Nullable final SystemInvocationStrategy invocationStrategy )
   {
-		if ( invocationStrategy == null )
-		{
-			throw new NullPointerException();
-		}
+    if ( invocationStrategy == null )
+    {
+      throw new NullPointerException();
+    }
     this.invocationStrategy = invocationStrategy;
     return this;
   }
@@ -183,12 +183,14 @@ public final class WorldConfiguration
     return this;
   }
 
-  void initialize( @Nonnull final World world, @Nonnull final Injector injector, @Nonnull final AspectSubscriptionManager asm )
+  void initialize( @Nonnull final World world,
+                   @Nonnull final Injector injector,
+                   @Nonnull final AspectSubscriptionManager asm )
   {
-		if ( invocationStrategy == null )
-		{
-			invocationStrategy = new InvocationStrategy();
-		}
+    if ( invocationStrategy == null )
+    {
+      invocationStrategy = new InvocationStrategy();
+    }
 
     invocationStrategy.setWorld( world );
 

@@ -26,16 +26,16 @@ public class UuidEntityManager
   public void deleted( @Nonnull final Entity e )
   {
     final UUID uuid = entityToUuid.safeGet( e.getId() );
-		if ( uuid == null )
-		{
-			return;
-		}
+    if ( uuid == null )
+    {
+      return;
+    }
 
     final Entity oldEntity = uuidToEntity.get( uuid );
-		if ( oldEntity != null && oldEntity.equals( e ) )
-		{
-			uuidToEntity.remove( uuid );
-		}
+    if ( oldEntity != null && oldEntity.equals( e ) )
+    {
+      uuidToEntity.remove( uuid );
+    }
 
     entityToUuid.set( e.getId(), null );
   }
@@ -65,10 +65,10 @@ public class UuidEntityManager
   public void setUuid( @Nonnull final Entity e, final UUID newUuid )
   {
     final UUID oldUuid = entityToUuid.safeGet( e.getId() );
-		if ( oldUuid != null )
-		{
-			uuidToEntity.remove( oldUuid );
-		}
+    if ( oldUuid != null )
+    {
+      uuidToEntity.remove( oldUuid );
+    }
 
     uuidToEntity.put( newUuid, e );
     entityToUuid.set( e.getId(), newUuid );

@@ -103,14 +103,16 @@ public class EntityLinkManager
    * @param field     target field for listener
    * @param listener  link listener
    */
-  public void register( final Class<? extends Component> component, @Nullable final String field, final LinkListener listener )
+  public void register( final Class<? extends Component> component,
+                        @Nullable final String field,
+                        final LinkListener listener )
   {
     world.inject( listener );
     try
     {
       final Field f = ( field != null )
-                ? ClassReflection.getDeclaredField( component, field )
-                : null;
+                      ? ClassReflection.getDeclaredField( component, field )
+                      : null;
 
       final ComponentType ct = world.getComponentManager().getTypeFactory().getTypeFor( component );
       for ( final LinkSite site : linkSites )
@@ -118,15 +120,15 @@ public class EntityLinkManager
         if ( ct.equals( site.type ) && ( f == null || site.field.equals( f ) ) )
         {
           site.listener = listener;
-					if ( !decoratedLinkSites.contains( site ) )
-					{
-						decoratedLinkSites.add( site );
-					}
+          if ( !decoratedLinkSites.contains( site ) )
+          {
+            decoratedLinkSites.add( site );
+          }
 
-					if ( fireEventsOnRegistration )
-					{
-						site.inserted( site.subscription.getEntities() );
-					}
+          if ( fireEventsOnRegistration )
+          {
+            site.inserted( site.subscription.getEntities() );
+          }
         }
       }
     }
@@ -163,10 +165,10 @@ public class EntityLinkManager
     public void onCreated( @Nonnull final ComponentType type )
     {
       final Bag<LinkSite> links = linkFactory.create( type );
-			if ( links.isEmpty() )
-			{
-				return;
-			}
+      if ( links.isEmpty() )
+      {
+        return;
+      }
 
       for ( int i = 0, s = links.size(); s > i; i++ )
       {

@@ -61,10 +61,10 @@ public final class EntityTransmuter
    */
   public void transmute( final int entityId )
   {
-		if ( !isValid( entityId ) )
-		{
-			return;
-		}
+    if ( !isValid( entityId ) )
+    {
+      return;
+    }
 
     final TransmuteOperation operation = getOperation( entityId );
     operation.perform( entityId );
@@ -73,10 +73,10 @@ public final class EntityTransmuter
 
   void transmuteNoOperation( final int entityId )
   {
-		if ( !isValid( entityId ) )
-		{
-			return;
-		}
+    if ( !isValid( entityId ) )
+    {
+      return;
+    }
 
     final TransmuteOperation operation = getOperation( entityId );
     entityToIdentity.unsafeSet( entityId, operation.compositionId );
@@ -84,15 +84,15 @@ public final class EntityTransmuter
 
   private boolean isValid( final int entityId )
   {
-		if ( !em.isActive( entityId ) )
-		{
-			throw new RuntimeException( "Issued transmute on deleted " + entityId );
-		}
+    if ( !em.isActive( entityId ) )
+    {
+      throw new RuntimeException( "Issued transmute on deleted " + entityId );
+    }
 
-		if ( batchProcessor.isDeleted( entityId ) )
-		{
-			return false;
-		}
+    if ( batchProcessor.isDeleted( entityId ) )
+    {
+      return false;
+    }
 
     batchProcessor.changed.unsafeSet( entityId );
 
@@ -172,10 +172,10 @@ public final class EntityTransmuter
       final Bag<ComponentMapper> types = new Bag( ComponentMapper.class );
       for ( int i = additions.nextSetBit( 0 ); i >= 0; i = additions.nextSetBit( i + 1 ) )
       {
-				if ( !origin.get( i ) )
-				{
-					types.add( cm.getMapper( tf.getTypeFor( i ).getType() ) );
-				}
+        if ( !origin.get( i ) )
+        {
+          types.add( cm.getMapper( tf.getTypeFor( i ).getType() ) );
+        }
       }
 
       return types;
@@ -188,10 +188,10 @@ public final class EntityTransmuter
       final Bag<ComponentMapper> types = new Bag( ComponentMapper.class );
       for ( int i = removals.nextSetBit( 0 ); i >= 0; i = removals.nextSetBit( i + 1 ) )
       {
-				if ( origin.get( i ) )
-				{
-					types.add( cm.getMapper( tf.getTypeFor( i ).getType() ) );
-				}
+        if ( origin.get( i ) )
+        {
+          types.add( cm.getMapper( tf.getTypeFor( i ).getType() ) );
+        }
       }
 
       return types;
@@ -279,10 +279,10 @@ public final class EntityTransmuter
 
       if ( removals.length > 0 )
       {
-				if ( additions.length > 0 )
-				{
-					sb.append( " " );
-				}
+        if ( additions.length > 0 )
+        {
+          sb.append( " " );
+        }
 
         sb.append( "remove={" );
         String delim = "";

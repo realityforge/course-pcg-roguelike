@@ -44,10 +44,10 @@ public abstract class IntervalEntitySystem
   @Override
   protected boolean checkProcessing()
   {
-		if ( intervalDelta > 0 && acc == 0 )
-		{
-			intervalDelta = 0;
-		}
+    if ( intervalDelta > 0 && acc == 0 )
+    {
+      intervalDelta = 0;
+    }
 
     acc += getTimeDelta();
     if ( acc >= interval )

@@ -35,24 +35,24 @@ class LinkFactory
   static int getReferenceTypeId( @Nonnull final Field f )
   {
     final Class type = f.getType();
-		if ( Entity.class == type )
-		{
-			return SINGLE_REFERENCE;
-		}
-		if ( isGenericType( f, Bag.class, Entity.class ) )
-		{
-			return MULTI_REFERENCE;
-		}
+    if ( Entity.class == type )
+    {
+      return SINGLE_REFERENCE;
+    }
+    if ( isGenericType( f, Bag.class, Entity.class ) )
+    {
+      return MULTI_REFERENCE;
+    }
 
     final boolean explicitEntityId = f.getDeclaredAnnotation( EntityId.class ) != null;
-		if ( int.class == type && explicitEntityId )
-		{
-			return SINGLE_REFERENCE;
-		}
-		if ( IntBag.class == type && explicitEntityId )
-		{
-			return MULTI_REFERENCE;
-		}
+    if ( int.class == type && explicitEntityId )
+    {
+      return SINGLE_REFERENCE;
+    }
+    if ( IntBag.class == type && explicitEntityId )
+    {
+      return MULTI_REFERENCE;
+    }
 
     return NULL_REFERENCE;
   }
@@ -167,10 +167,10 @@ class LinkFactory
     @Nonnull
     UniLinkSite withMutator( @Nonnull final UniLinkSite linkSite )
     {
-			if ( linkSite.fieldMutator != null )
-			{
-				return linkSite;
-			}
+      if ( linkSite.fieldMutator != null )
+      {
+        return linkSite;
+      }
 
       final Class type = linkSite.field.getType();
       if ( Entity.class == type )
@@ -192,10 +192,10 @@ class LinkFactory
     @Nonnull
     MultiLinkSite withMutator( @Nonnull final MultiLinkSite linkSite )
     {
-			if ( linkSite.fieldMutator != null )
-			{
-				return linkSite;
-			}
+      if ( linkSite.fieldMutator != null )
+      {
+        return linkSite;
+      }
 
       final Class type = linkSite.field.getType();
       if ( IntBag.class == type )

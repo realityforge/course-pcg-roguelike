@@ -24,7 +24,7 @@ public class Test
   public enum Enu
   {
     Winter, Summer, Bleh
-	}
+  }
 
   public static class A
   {
@@ -103,14 +103,14 @@ public class Test
       final Type ta = ReflectionCache.getType( A.class );
       final Type tb = ReflectionCache.getType( B.class );
       final B b = (B) tb.newInstance();
-			for ( final Field f : tb.getFields() )
-			{
-				System.out.println( f );
-			}
-			for ( final Method m : tb.getMethods() )
-			{
-				System.out.println( m );
-			}
+      for ( final Field f : tb.getFields() )
+      {
+        System.out.println( f );
+      }
+      for ( final Method m : tb.getMethods() )
+      {
+        System.out.println( m );
+      }
 
       tb.getDeclaredFields()[ 0 ].set( b, "Field of B" );
       ta.getDeclaredFields()[ 0 ].set( b, "Field of A" );

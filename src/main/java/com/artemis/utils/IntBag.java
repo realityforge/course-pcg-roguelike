@@ -52,10 +52,10 @@ public class IntBag
     throws ArrayIndexOutOfBoundsException
   {
     final int index = indexOf( value );
-		if ( index > -1 )
-		{
-			remove( index );
-		}
+    if ( index > -1 )
+    {
+      remove( index );
+    }
 
     return index > -1;
   }
@@ -185,10 +185,10 @@ public class IntBag
   public void add( final int value )
   {
     // is size greater than capacity increase capacity
-		if ( size == data.length )
-		{
-			grow( 2 * data.length );
-		}
+    if ( size == data.length )
+    {
+      grow( 2 * data.length );
+    }
 
     data[ size++ ] = value;
   }
@@ -293,27 +293,27 @@ public class IntBag
   @Override
   public boolean equals( @Nullable final Object o )
   {
-		if ( this == o )
-		{
-			return true;
-		}
-		if ( o == null || getClass() != o.getClass() )
-		{
-			return false;
-		}
+    if ( this == o )
+    {
+      return true;
+    }
+    if ( o == null || getClass() != o.getClass() )
+    {
+      return false;
+    }
 
     final IntBag intBag = (IntBag) o;
-		if ( size != intBag.size() )
-		{
-			return false;
-		}
+    if ( size != intBag.size() )
+    {
+      return false;
+    }
 
     for ( int i = 0; size > i; i++ )
     {
-			if ( data[ i ] != intBag.data[ i ] )
-			{
-				return false;
-			}
+      if ( data[ i ] != intBag.data[ i ] )
+      {
+        return false;
+      }
     }
 
     return true;
@@ -339,10 +339,10 @@ public class IntBag
     sb.append( "IntBag(" );
     for ( int i = 0; size > i; i++ )
     {
-			if ( i > 0 )
-			{
-				sb.append( ", " );
-			}
+      if ( i > 0 )
+      {
+        sb.append( ", " );
+      }
       sb.append( data[ i ] );
     }
     sb.append( ')' );

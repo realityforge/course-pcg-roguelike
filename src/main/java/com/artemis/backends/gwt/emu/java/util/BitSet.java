@@ -142,7 +142,7 @@ public class BitSet
     }
   }
 
-	// gets one bit
+  // gets one bit
   private static boolean get( final JsArrayInteger array, final int bitIndex )
   {
     // retrieve the bits for the given index
@@ -282,7 +282,7 @@ public class BitSet
     to = 32 - to;
     // create a mask and XOR it in
     word ^= ( ( ( 0xffffffff >>> from ) << from ) << to ) >>> to;
-		setWord( array, index, word );
+    setWord( array, index, word );
   }
 
   // returns all bits stored at a certain index
@@ -308,7 +308,7 @@ public class BitSet
     }
   }
 
-	// sets all bits to false at a certain index within the given bit range
+  // sets all bits to false at a certain index within the given bit range
   private static void maskOutWord( @Nonnull final JsArrayInteger array, final int index, final int from,
                                    final int to )
   {
@@ -932,7 +932,7 @@ public class BitSet
            + Integer.numberOfTrailingZeros( array.get( index ) );
   }
 
-	public void or( @Nonnull final BitSet set )
+  public void or( @Nonnull final BitSet set )
   {
     // a | a is just a
     if ( this == set )

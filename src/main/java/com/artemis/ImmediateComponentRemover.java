@@ -16,10 +16,10 @@ public class ImmediateComponentRemover<A extends Component>
     if ( pool != null )
     {
       final PooledComponent c = (PooledComponent) components.get( entityId );
-			if ( c != null )
-			{
-				pool.free( c );
-			}
+      if ( c != null )
+      {
+        pool.free( c );
+      }
     }
     components.unsafeSet( entityId, null );
   }

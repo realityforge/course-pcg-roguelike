@@ -31,10 +31,10 @@ public class ArchetypeBuilder
   public ArchetypeBuilder( @Nullable final Archetype parent )
   {
     classes = new Bag<>();
-		if ( parent == null )
-		{
-			return;
-		}
+    if ( parent == null )
+    {
+      return;
+    }
 
     parent.transmuter.getAdditions( classes );
   }
@@ -55,10 +55,10 @@ public class ArchetypeBuilder
   @Nonnull
   public ArchetypeBuilder add( @Nonnull final Class<? extends Component> type )
   {
-		if ( !classes.contains( type ) )
-		{
-			classes.add( type );
-		}
+    if ( !classes.contains( type ) )
+    {
+      classes.add( type );
+    }
 
     return this;
   }
@@ -158,10 +158,10 @@ public class ArchetypeBuilder
   {
     final ComponentTypeFactory tf = world.getComponentManager().typeFactory;
     final ComponentType[] types = new ComponentType[ classes.size() ];
-		for ( int i = 0, s = classes.size(); s > i; i++ )
-		{
-			types[ i ] = tf.getTypeFor( classes.get( i ) );
-		}
+    for ( int i = 0, s = classes.size(); s > i; i++ )
+    {
+      types[ i ] = tf.getTypeFor( classes.get( i ) );
+    }
 
     return types;
   }

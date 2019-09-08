@@ -50,10 +50,10 @@ public class AspectFieldResolver
   public Object resolve( final Object target, final Class<?> fieldType, @Nonnull final Field field )
   {
     final Aspect.Builder aspect = aspect( field );
-		if ( aspect == null )
-		{
-			return null;
-		}
+    if ( aspect == null )
+    {
+      return null;
+    }
 
     final Class type = field.getType();
     if ( Aspect.class == type )

@@ -69,27 +69,27 @@ class UniLinkSite
   {
     final int target = fieldMutator.read( mapper.get( id ), field );
     sourceToTarget.set( id, target );
-		if ( target != -1 && listener != null )
-		{
-			listener.onLinkEstablished( id, target );
-		}
+    if ( target != -1 && listener != null )
+    {
+      listener.onLinkEstablished( id, target );
+    }
   }
 
   @Override
   protected void removed( final int id )
   {
     final int target = sourceToTarget.size() > id
-                 ? sourceToTarget.get( id )
-                 : -1;
+                       ? sourceToTarget.get( id )
+                       : -1;
 
-		if ( target != -1 )
-		{
-			sourceToTarget.set( id, -1 );
-		}
+    if ( target != -1 )
+    {
+      sourceToTarget.set( id, -1 );
+    }
 
-		if ( listener != null )
-		{
-			listener.onLinkKilled( id, target );
-		}
+    if ( listener != null )
+    {
+      listener.onLinkKilled( id, target );
+    }
   }
 }

@@ -36,10 +36,10 @@ public final class ReflectionUtil
 
   public static boolean implementsAnyObserver( @Nonnull final BaseEntitySystem owner )
   {
-		if ( isInstance( Manager.class, owner ) || isInstance( EntitySystem.class, owner ) )
-		{
-			return true; // case handled by implementsObserver(owner, methodName)
-		}
+    if ( isInstance( Manager.class, owner ) || isInstance( EntitySystem.class, owner ) )
+    {
+      return true; // case handled by implementsObserver(owner, methodName)
+    }
 
     // check parent chain for user-supplied implementations of
     // inserted() and removed()
@@ -48,10 +48,10 @@ public final class ReflectionUtil
     {
       for ( final Method m : ClassReflection.getDeclaredMethods( type ) )
       {
-				if ( isObserver( m ) )
-				{
-					return true;
-				}
+        if ( isObserver( m ) )
+        {
+          return true;
+        }
       }
 
       type = type.getSuperclass();
@@ -66,7 +66,7 @@ public final class ReflectionUtil
     if ( "inserted".equals( name ) || "removed".equals( name ) )
     {
       final Class[] types = m.getParameterTypes();
-			return Arrays.equals( PARAM_ID, types ) || Arrays.equals( PARAM_IDS, types );
+      return Arrays.equals( PARAM_ID, types ) || Arrays.equals( PARAM_IDS, types );
     }
 
     return false;

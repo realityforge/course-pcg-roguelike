@@ -28,7 +28,9 @@ public class ReflectionCacheGenerator
   extends Generator
 {
   @Override
-  public String generate( @Nonnull final TreeLogger logger, @Nonnull final GeneratorContext context, final String typeName )
+  public String generate( @Nonnull final TreeLogger logger,
+                          @Nonnull final GeneratorContext context,
+                          final String typeName )
     throws UnableToCompleteException
   {
     final TypeOracle oracle = context.getTypeOracle();

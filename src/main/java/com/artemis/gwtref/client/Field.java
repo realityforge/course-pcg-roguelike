@@ -93,10 +93,10 @@ public class Field
   @Nullable
   public Type getElementType( final int index )
   {
-		if ( elementTypes != null && index < elementTypes.length )
-		{
-			return ReflectionCache.getType( elementTypes[ index ] );
-		}
+    if ( elementTypes != null && index < elementTypes.length )
+    {
+      return ReflectionCache.getType( elementTypes[ index ] );
+    }
     return null;
   }
 
