@@ -45,9 +45,6 @@ public abstract class EntityProcessingSystem
    */
   protected abstract void process( Entity e );
 
-  /**
-   * @inheritDoc
-   */
   @Override
   protected final void processSystem()
   {

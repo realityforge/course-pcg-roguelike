@@ -40,9 +40,6 @@ public abstract class IteratingSystem
    */
   protected abstract void process( int entityId );
 
-  /**
-   * @inheritDoc
-   */
   @Override
   protected final void processSystem()
   {
