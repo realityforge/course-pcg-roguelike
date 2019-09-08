@@ -9,14 +9,14 @@ class DelayedComponentRemover<A extends Component>
   final BitVector idBits = new BitVector();
   final BatchChangeProcessor batchProcessor;
 
-  DelayedComponentRemover( Bag<A> components, ComponentPool pool, BatchChangeProcessor batchProcessor )
+  DelayedComponentRemover( final Bag<A> components, final ComponentPool pool, final BatchChangeProcessor batchProcessor )
   {
     super( components, pool );
     this.batchProcessor = batchProcessor;
   }
 
   @Override
-  void mark( int entityId )
+  void mark( final int entityId )
   {
 		if ( idBits.isEmpty() ) // see cm#clean
 		{
@@ -27,7 +27,7 @@ class DelayedComponentRemover<A extends Component>
   }
 
   @Override
-  boolean unmark( int entityId )
+  boolean unmark( final int entityId )
   {
     if ( idBits.get( entityId ) )
     {
@@ -60,7 +60,7 @@ class DelayedComponentRemover<A extends Component>
   }
 
   @Override
-  boolean has( int entityId )
+  boolean has( final int entityId )
   {
     return idBits.get( entityId );
   }
@@ -69,7 +69,7 @@ class DelayedComponentRemover<A extends Component>
   {
     for ( int id = idBits.nextSetBit( 0 ); id >= 0; id = idBits.nextSetBit( id + 1 ) )
     {
-      A c = components.get( id );
+      final A c = components.get( id );
       pool.free( (PooledComponent) c );
 
       components.unsafeSet( id, null );

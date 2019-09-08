@@ -53,7 +53,7 @@ public class BitVector
   // to (2^32)-1.
 
   // checks the index range
-  private static void checkIndex( int bitIndex )
+  private static void checkIndex( final int bitIndex )
   {
     // we only need to test for negatives, as there is no bit index too
     // high.
@@ -64,7 +64,7 @@ public class BitVector
   }
 
   // checks to ensure indexes are not negative and not in reverse order
-  private static void checkRange( int fromIndex, int toIndex )
+  private static void checkRange( final int fromIndex, final int toIndex )
   {
     if ( fromIndex < 0 )
     {
@@ -82,21 +82,21 @@ public class BitVector
   }
 
   // converts from a bit index to a word index
-  private static int wordIndex( int bitIndex )
+  private static int wordIndex( final int bitIndex )
   {
     // 32 bits per index
     return bitIndex >>> 5;
   }
 
   // converts from a word index to a bit index
-  private static int bitIndex( int wordIndex )
+  private static int bitIndex( final int wordIndex )
   {
     // 1 word index for every 32 bit indexes
     return wordIndex << 5;
   }
 
   // gives the word offset for a bit index
-  private static int bitOffset( int bitIndex )
+  private static int bitOffset( final int bitIndex )
   {
     return bitIndex & 0x1f;
   }
@@ -106,10 +106,10 @@ public class BitVector
   //
 
   // clears one bit
-  private static void clear( @Nonnull JsArrayInteger array, int bitIndex )
+  private static void clear( @Nonnull final JsArrayInteger array, final int bitIndex )
   {
-    int index = wordIndex( bitIndex );
-    int word = getWord( array, index );
+    final int index = wordIndex( bitIndex );
+    final int word = getWord( array, index );
     if ( word != 0 )
     {
       // mask the correct bit out
@@ -124,14 +124,14 @@ public class BitVector
   }-*/;
 
   // flips one bit
-  private static void flip( @Nonnull JsArrayInteger array, int bitIndex )
+  private static void flip( @Nonnull final JsArrayInteger array, final int bitIndex )
   {
     // calculate index and offset
-    int index = wordIndex( bitIndex );
-    int offset = bitOffset( bitIndex );
+    final int index = wordIndex( bitIndex );
+    final int offset = bitOffset( bitIndex );
 
     // figure out if the bit is on or off
-    int word = getWord( array, index );
+    final int word = getWord( array, index );
     if ( ( ( word >>> offset ) & 1 ) == 1 )
     {
       // if on, turn it off
@@ -145,29 +145,29 @@ public class BitVector
   }
 
   // gets one bit
-  private static boolean get( JsArrayInteger array, int bitIndex )
+  private static boolean get( final JsArrayInteger array, final int bitIndex )
   {
     // retrieve the bits for the given index
-    int word = getWord( array, wordIndex( bitIndex ) );
+    final int word = getWord( array, wordIndex( bitIndex ) );
 
     // shift and mask the bit out
     return ( ( word >>> ( bitOffset( bitIndex ) ) ) & 1 ) == 1;
   }
 
   // sets one bit to true
-  private static void set( @Nonnull JsArrayInteger array, int bitIndex )
+  private static void set( @Nonnull final JsArrayInteger array, final int bitIndex )
   {
-    int index = wordIndex( bitIndex );
+    final int index = wordIndex( bitIndex );
     array.set( index, getWord( array, index ) | ( 1 << ( bitOffset( bitIndex ) ) ) );
   }
 
   // sets all bits to true within the given range
-  private static void set( @Nonnull JsArrayInteger array, int fromIndex, int toIndex )
+  private static void set( @Nonnull final JsArrayInteger array, final int fromIndex, final int toIndex )
   {
     int first = wordIndex( fromIndex );
-    int last = wordIndex( toIndex );
-    int startBit = bitOffset( fromIndex );
-    int endBit = bitOffset( toIndex );
+    final int last = wordIndex( toIndex );
+    final int startBit = bitOffset( fromIndex );
+    final int endBit = bitOffset( toIndex );
 
     if ( first == last )
     {
@@ -256,7 +256,7 @@ public class BitVector
   }-*/;
 
   // flips all bits stored at a certain index
-  private static void flipWord( @Nonnull JsArrayInteger array, int index )
+  private static void flipWord( @Nonnull final JsArrayInteger array, final int index )
   {
     int word = getWord( array, index );
     if ( word == 0 )
@@ -271,8 +271,8 @@ public class BitVector
   }
 
   // flips all bits stored at a certain index within the given range
-  private static void flipMaskedWord( @Nonnull JsArrayInteger array, int index,
-                                      int from, int to )
+  private static void flipMaskedWord( @Nonnull final JsArrayInteger array, final int index,
+                                      final int from, int to )
   {
     if ( from == to )
     {
@@ -294,7 +294,7 @@ public class BitVector
   }-*/;
 
   // sets all bits to true at a certain index within the given bit range
-  private static void maskInWord( @Nonnull JsArrayInteger array, int index, int from,
+  private static void maskInWord( @Nonnull final JsArrayInteger array, final int index, final int from,
                                   int to )
   {
     // shifting by 32 is the same as shifting by 0, this check prevents that
@@ -311,8 +311,8 @@ public class BitVector
   }
 
   // sets all bits to false at a certain index within the given bit range
-  private static void maskOutWord( @Nonnull JsArrayInteger array, int index, int from,
-                                   int to )
+  private static void maskOutWord( @Nonnull final JsArrayInteger array, final int index, final int from,
+                                   final int to )
   {
     int word = getWord( array, index );
     // something only happens if word has bits set
@@ -372,7 +372,7 @@ public class BitVector
   }-*/;
 
   // sets all bits at a certain index to the given value
-  private static void setWord( @Nonnull JsArrayInteger array, int index, int value )
+  private static void setWord( @Nonnull final JsArrayInteger array, final int index, final int value )
   {
     // keep 0s out of the array
     if ( value == 0 )
@@ -399,7 +399,7 @@ public class BitVector
     array = JavaScriptObject.createArray().cast();
   }
 
-  public BitVector( int nbits )
+  public BitVector( final int nbits )
   {
     this();
 
@@ -419,7 +419,7 @@ public class BitVector
     setLengthWords( array, wordIndex( nbits + 31 ) );
   }
 
-  public BitVector( @Nonnull BitVector source )
+  public BitVector( @Nonnull final BitVector source )
   {
     this();
     for ( int id = source.nextSetBit( 0 ); id != -1; id = source.nextSetBit( id + 1 ) )
@@ -428,12 +428,12 @@ public class BitVector
     }
   }
 
-  private BitVector( JsArrayInteger array )
+  private BitVector( final JsArrayInteger array )
   {
     this.array = array;
   }
 
-  public void and( @Nonnull BitVector set )
+  public void and( @Nonnull final BitVector set )
   {
     // a & a is just a
     if ( this == set )
@@ -445,7 +445,7 @@ public class BitVector
     trimToSize( set.array );
 
     // check if the length is longer than otherLength
-    int otherLength = set.array.length();
+    final int otherLength = set.array.length();
     if ( array.length() > otherLength )
     {
       // shrink the array, effectively ANDing those bits to false
@@ -469,7 +469,7 @@ public class BitVector
     }
   }
 
-  public void andNot( @Nonnull BitVector set )
+  public void andNot( @Nonnull final BitVector set )
   {
     // a & !a is false
     if ( this == set )
@@ -481,7 +481,7 @@ public class BitVector
 
     // trim the second set to avoid extra work
     trimToSize( array );
-    int length = array.length();
+    final int length = array.length();
 
     // truth table
     //
@@ -524,17 +524,17 @@ public class BitVector
     array = JavaScriptObject.createArray().cast();
   }
 
-  public void clear( int bitIndex )
+  public void clear( final int bitIndex )
   {
     checkIndex( bitIndex );
     clear( array, bitIndex );
   }
 
-  public void clear( int fromIndex, int toIndex )
+  public void clear( final int fromIndex, final int toIndex )
   {
     checkRange( fromIndex, toIndex );
 
-    int length = length();
+    final int length = length();
     if ( fromIndex >= length )
     {
       // nothing to do
@@ -545,7 +545,7 @@ public class BitVector
     if ( toIndex >= length )
     {
       // truncate the array by setting it's length
-      int newLength = wordIndex( fromIndex + 31 );
+      final int newLength = wordIndex( fromIndex + 31 );
       setLengthWords( array, newLength );
 
       // remove the extra bits off the end
@@ -558,9 +558,9 @@ public class BitVector
     else
     {
       int first = wordIndex( fromIndex );
-      int last = wordIndex( toIndex );
-      int startBit = bitOffset( fromIndex );
-      int endBit = bitOffset( toIndex );
+      final int last = wordIndex( toIndex );
+      final int startBit = bitOffset( fromIndex );
+      final int endBit = bitOffset( toIndex );
 
       if ( first == last )
       {
@@ -600,7 +600,7 @@ public class BitVector
   }
 
   @Override
-  public boolean equals( @Nonnull Object obj )
+  public boolean equals( @Nonnull final Object obj )
   {
     if ( this != obj )
     {
@@ -610,9 +610,9 @@ public class BitVector
         return false;
       }
 
-      BitVector other = (BitVector) obj;
+      final BitVector other = (BitVector) obj;
 
-      int last = trimToSize( array );
+      final int last = trimToSize( array );
       if ( last != trimToSize( other.array ) )
       {
         return false;
@@ -632,17 +632,17 @@ public class BitVector
     return true;
   }
 
-  public void flip( int bitIndex )
+  public void flip( final int bitIndex )
   {
     checkIndex( bitIndex );
     flip( array, bitIndex );
   }
 
-  public void flip( int fromIndex, int toIndex )
+  public void flip( final int fromIndex, int toIndex )
   {
     checkRange( fromIndex, toIndex );
 
-    int length = length();
+    final int length = length();
 
     // if we are flipping bits beyond our length, we are setting them to
     // true
@@ -660,9 +660,9 @@ public class BitVector
     }
 
     int first = wordIndex( fromIndex );
-    int last = wordIndex( toIndex );
-    int startBit = bitOffset( fromIndex );
-    int end = bitOffset( toIndex );
+    final int last = wordIndex( toIndex );
+    final int startBit = bitOffset( fromIndex );
+    final int end = bitOffset( toIndex );
 
     if ( first == last )
     {
@@ -692,33 +692,33 @@ public class BitVector
     }
   }
 
-  public boolean get( int bitIndex )
+  public boolean get( final int bitIndex )
   {
     checkIndex( bitIndex );
     return get( array, bitIndex );
   }
 
   @Nonnull
-  public BitVector get( int fromIndex, int toIndex )
+  public BitVector get( final int fromIndex, int toIndex )
   {
     checkRange( fromIndex, toIndex );
 
     // no need to go past our length
-    int length = length();
+    final int length = length();
     if ( toIndex >= length )
     {
       toIndex = length();
     }
 
     // this is the bit shift offset for each group of bits
-    int rightShift = bitOffset( fromIndex );
+    final int rightShift = bitOffset( fromIndex );
 
     if ( rightShift == 0 )
     {
-      int subFrom = wordIndex( fromIndex );
-      int subTo = wordIndex( toIndex + 31 );
-      JsArrayInteger subSet = slice( array, subFrom, subTo );
-      int leftOvers = bitOffset( toIndex );
+      final int subFrom = wordIndex( fromIndex );
+      final int subTo = wordIndex( toIndex + 31 );
+      final JsArrayInteger subSet = slice( array, subFrom, subTo );
+      final int leftOvers = bitOffset( toIndex );
       if ( leftOvers != 0 )
       {
         maskOutWord( subSet, subTo - subFrom - 1, leftOvers, 32 );
@@ -726,15 +726,15 @@ public class BitVector
       return new BitVector( subSet );
     }
 
-    BitVector subSet = new BitVector();
+    final BitVector subSet = new BitVector();
 
     int first = wordIndex( fromIndex );
-    int last = wordIndex( toIndex );
+    final int last = wordIndex( toIndex );
 
     if ( first == last )
     {
       // number of bits to cut from the end
-      int end = 32 - ( bitOffset( toIndex ) );
+      final int end = 32 - ( bitOffset( toIndex ) );
       // raw bits
       int word = getWord( array, first );
       // shift out those bits
@@ -760,7 +760,7 @@ public class BitVector
 
       // a left shift will be used to shift our bits to the top of
       // "current"
-      int leftShift = 32 - rightShift;
+      final int leftShift = 32 - rightShift;
 
       // loop through everything in the middle
       for ( int i = first; i <= last; i++ )
@@ -784,7 +784,7 @@ public class BitVector
       }
 
       // fence post, flush out the extra bits, but don't go past the "end"
-      int end = 32 - ( bitOffset( toIndex ) );
+      final int end = 32 - ( bitOffset( toIndex ) );
       current = ( current << ( rightShift + end ) ) >>> ( rightShift + end );
       if ( current != 0 )
       {
@@ -814,7 +814,7 @@ public class BitVector
     // loop over the data
     for ( int i = 0; i <= last; i++ )
     {
-      int value = getWord( array, i );
+      final int value = getWord( array, i );
       // hash one byte at a time using FNV1
       hash = ( hash * fnvPrime ) ^ ( value & 0xff );
       hash = ( hash * fnvPrime ) ^ ( ( value >>> 8 ) & 0xff );
@@ -825,9 +825,9 @@ public class BitVector
     return hash;
   }
 
-  public boolean intersects( @Nonnull BitVector set )
+  public boolean intersects( @Nonnull final BitVector set )
   {
-    int last = trimToSize( array );
+    final int last = trimToSize( array );
 
     if ( this == set )
     {
@@ -835,7 +835,7 @@ public class BitVector
       return last != -1;
     }
 
-    int length = set.array.length();
+    final int length = set.array.length();
     int index = 0;
     while ( ( index = nextSetWord( array, index ) ) != -1 )
     {
@@ -860,15 +860,15 @@ public class BitVector
 
   public int length()
   {
-    int last = trimToSize( array );
+    final int last = trimToSize( array );
     if ( last == -1 )
     {
       return 0;
     }
 
     // compute the position of the leftmost bit's index
-    int[] offsets = { 16, 8, 4, 2, 1 };
-    int[] bitMasks = { 0xffff0000, 0xff00, 0xf0, 0xc, 0x2 };
+    final int[] offsets = { 16, 8, 4, 2, 1 };
+    final int[] bitMasks = { 0xffff0000, 0xff00, 0xf0, 0xc, 0x2 };
     int position = bitIndex( last ) + 1;
     int word = getWord( array, last );
     for ( int i = 0; i < offsets.length; i++ )
@@ -882,13 +882,13 @@ public class BitVector
     return position;
   }
 
-  public int nextClearBit( int fromIndex )
+  public int nextClearBit( final int fromIndex )
   {
     checkIndex( fromIndex );
     int index = wordIndex( fromIndex );
 
     // special case for first index
-    int fromBit = fromIndex - ( bitIndex( index ) );
+    final int fromBit = fromIndex - ( bitIndex( index ) );
     int word = getWord( array, index );
     for ( int i = fromBit; i < 32; i++ )
     {
@@ -910,14 +910,14 @@ public class BitVector
     }
   }
 
-  public int nextSetBit( int fromIndex )
+  public int nextSetBit( final int fromIndex )
   {
     checkIndex( fromIndex );
 
     int index = wordIndex( fromIndex );
 
     // check the current word
-    int word = getWord( array, index );
+    final int word = getWord( array, index );
     if ( word != 0 )
     {
       for ( int i = bitOffset( fromIndex ); i < 32; i++ )
@@ -943,7 +943,7 @@ public class BitVector
            + Integer.numberOfTrailingZeros( array.get( index ) );
   }
 
-  public void or( @Nonnull BitVector set )
+  public void or( @Nonnull final BitVector set )
   {
     // a | a is just a
     if ( this == set )
@@ -969,13 +969,13 @@ public class BitVector
     }
   }
 
-  public void set( int bitIndex )
+  public void set( final int bitIndex )
   {
     checkIndex( bitIndex );
     set( array, bitIndex );
   }
 
-  public void set( int bitIndex, boolean value )
+  public void set( final int bitIndex, final boolean value )
   {
     if ( value == true )
     {
@@ -987,13 +987,13 @@ public class BitVector
     }
   }
 
-  public void set( int fromIndex, int toIndex )
+  public void set( final int fromIndex, final int toIndex )
   {
     checkRange( fromIndex, toIndex );
     set( array, fromIndex, toIndex );
   }
 
-  public void set( int fromIndex, int toIndex, boolean value )
+  public void set( final int fromIndex, final int toIndex, final boolean value )
   {
     if ( value == true )
     {
@@ -1019,14 +1019,14 @@ public class BitVector
     // are
     // put into an array and sorted
 
-    int length = length();
+    final int length = length();
     if ( length == 0 )
     {
       // a "length" of 0 means there are no bits set to true
       return "{}";
     }
 
-    StringBuilder sb = new StringBuilder( "{" );
+    final StringBuilder sb = new StringBuilder( "{" );
 
     // at this point, there is at least one true bit, nextSetBit can not
     // fail
@@ -1044,7 +1044,7 @@ public class BitVector
     return sb.toString();
   }
 
-  public void xor( @Nonnull BitVector set )
+  public void xor( @Nonnull final BitVector set )
   {
     // a ^ a is false
     if ( this == set )
@@ -1080,7 +1080,7 @@ public class BitVector
    * @return Same as out
    */
   @Nonnull
-  public IntBag toIntBag( @Nonnull IntBag out )
+  public IntBag toIntBag( @Nonnull final IntBag out )
   {
     out.setSize( 0 );
     if ( isEmpty() )
@@ -1106,7 +1106,7 @@ public class BitVector
    * @return Same as out
    */
   @Nonnull
-  public IntBag toIntBagIdCid( @Nonnull ComponentManager cm, @Nonnull IntBag out )
+  public IntBag toIntBagIdCid( @Nonnull final ComponentManager cm, @Nonnull final IntBag out )
   {
     out.setSize( 0 );
     if ( isEmpty() )
@@ -1127,12 +1127,12 @@ public class BitVector
    * @param index the index of the bit to clear
    * @throws ArrayIndexOutOfBoundsException if index < 0 or index >= words.length
    */
-  public void unsafeClear( int index )
+  public void unsafeClear( final int index )
   {
     clear( index );
   }
 
-  public void ensureCapacity( int bits )
+  public void ensureCapacity( final int bits )
   {
   } // no need for it here
 
@@ -1141,7 +1141,7 @@ public class BitVector
    * @return whether the bit is set
    * @throws ArrayIndexOutOfBoundsException if index < 0 or index >= words.length</></>
    */
-  public boolean unsafeGet( int index )
+  public boolean unsafeGet( final int index )
   {
     return get( index );
   }
@@ -1150,7 +1150,7 @@ public class BitVector
    * @param index the index of the bit to set
    * @throws ArrayIndexOutOfBoundsException if index < 0 or index >= words.length
    */
-  public void unsafeSet( int index )
+  public void unsafeSet( final int index )
   {
     set( index );
   }
@@ -1159,7 +1159,7 @@ public class BitVector
    * @param index the index of the bit to set
    * @throws ArrayIndexOutOfBoundsException if index < 0 or index >= words.length
    */
-  public void unsafeSet( int index, boolean value )
+  public void unsafeSet( final int index, final boolean value )
   {
     set( index, value );
   }

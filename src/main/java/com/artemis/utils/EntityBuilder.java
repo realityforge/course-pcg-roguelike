@@ -42,7 +42,7 @@ public class EntityBuilder
   /**
    * Begin building new entity.
    */
-  public EntityBuilder( @Nonnull World world )
+  public EntityBuilder( @Nonnull final World world )
   {
     this.world = world;
     edit = world.createEntity().edit();
@@ -51,7 +51,7 @@ public class EntityBuilder
   /**
    * Begin building new entity based on archetype.
    */
-  public EntityBuilder( @Nonnull World world, @Nonnull Archetype archetype )
+  public EntityBuilder( @Nonnull final World world, @Nonnull final Archetype archetype )
   {
     this.world = world;
     edit = world.createEntity( archetype ).edit();
@@ -61,7 +61,7 @@ public class EntityBuilder
    * Add component to entity.
    */
   @Nonnull
-  public EntityBuilder with( Component component )
+  public EntityBuilder with( final Component component )
   {
     edit.add( component );
     return this;
@@ -71,7 +71,7 @@ public class EntityBuilder
    * Add components to entity.
    */
   @Nonnull
-  public EntityBuilder with( Component component1, Component component2 )
+  public EntityBuilder with( final Component component1, final Component component2 )
   {
     edit.add( component1 );
     edit.add( component2 );
@@ -82,7 +82,7 @@ public class EntityBuilder
    * Add components to entity.
    */
   @Nonnull
-  public EntityBuilder with( Component component1, Component component2, Component component3 )
+  public EntityBuilder with( final Component component1, final Component component2, final Component component3 )
   {
     edit.add( component1 );
     edit.add( component2 );
@@ -94,7 +94,7 @@ public class EntityBuilder
    * Add components to entity.
    */
   @Nonnull
-  public EntityBuilder with( Component component1, Component component2, Component component3, Component component4 )
+  public EntityBuilder with( final Component component1, final Component component2, final Component component3, final Component component4 )
   {
     edit.add( component1 );
     edit.add( component2 );
@@ -107,11 +107,11 @@ public class EntityBuilder
    * Add components to entity.
    */
   @Nonnull
-  public EntityBuilder with( Component component1,
-                             Component component2,
-                             Component component3,
-                             Component component4,
-                             Component component5 )
+  public EntityBuilder with( final Component component1,
+                             final Component component2,
+                             final Component component3,
+                             final Component component4,
+                             final Component component5 )
   {
     edit.add( component1 );
     edit.add( component2 );
@@ -125,7 +125,7 @@ public class EntityBuilder
    * Add components to entity.
    */
   @Nonnull
-  public EntityBuilder with( @Nonnull Component... components )
+  public EntityBuilder with( @Nonnull final Component... components )
   {
     for ( final Component component : components )
     {
@@ -138,7 +138,7 @@ public class EntityBuilder
    * Add artemis managed components to entity.
    */
   @Nonnull
-  public EntityBuilder with( Class<? extends Component> component )
+  public EntityBuilder with( final Class<? extends Component> component )
   {
     edit.create( component );
     return this;
@@ -148,7 +148,7 @@ public class EntityBuilder
    * Add artemis managed components to entity.
    */
   @Nonnull
-  public EntityBuilder with( Class<? extends Component> component1, Class<? extends Component> component2 )
+  public EntityBuilder with( final Class<? extends Component> component1, final Class<? extends Component> component2 )
   {
     edit.create( component1 );
     edit.create( component2 );
@@ -159,9 +159,9 @@ public class EntityBuilder
    * Add artemis managed components to entity.
    */
   @Nonnull
-  public EntityBuilder with( Class<? extends Component> component1,
-                             Class<? extends Component> component2,
-                             Class<? extends Component> component3 )
+  public EntityBuilder with( final Class<? extends Component> component1,
+                             final Class<? extends Component> component2,
+                             final Class<? extends Component> component3 )
   {
     edit.create( component1 );
     edit.create( component2 );
@@ -173,10 +173,10 @@ public class EntityBuilder
    * Add artemis managed components to entity.
    */
   @Nonnull
-  public EntityBuilder with( Class<? extends Component> component1,
-                             Class<? extends Component> component2,
-                             Class<? extends Component> component3,
-                             Class<? extends Component> component4 )
+  public EntityBuilder with( final Class<? extends Component> component1,
+                             final Class<? extends Component> component2,
+                             final Class<? extends Component> component3,
+                             final Class<? extends Component> component4 )
   {
     edit.create( component1 );
     edit.create( component2 );
@@ -189,11 +189,11 @@ public class EntityBuilder
    * Add artemis managed components to entity.
    */
   @Nonnull
-  public EntityBuilder with( Class<? extends Component> component1,
-                             Class<? extends Component> component2,
-                             Class<? extends Component> component3,
-                             Class<? extends Component> component4,
-                             Class<? extends Component> component5 )
+  public EntityBuilder with( final Class<? extends Component> component1,
+                             final Class<? extends Component> component2,
+                             final Class<? extends Component> component3,
+                             final Class<? extends Component> component4,
+                             final Class<? extends Component> component5 )
   {
     edit.create( component1 );
     edit.create( component2 );
@@ -207,7 +207,7 @@ public class EntityBuilder
    * Add artemis managed components to entity.
    */
   @Nonnull
-  public EntityBuilder with( @Nonnull Class<? extends Component>... components )
+  public EntityBuilder with( @Nonnull final Class<? extends Component>... components )
   {
     for ( final Class<? extends Component> component : components )
     {
@@ -220,7 +220,7 @@ public class EntityBuilder
    * Set UUID of entity
    */
   @Nonnull
-  public EntityBuilder UUID( UUID uuid )
+  public EntityBuilder UUID( final UUID uuid )
   {
     resolveManager( UuidEntityManager.class ).setUuid( edit.getEntity(), uuid );
     return this;
@@ -232,7 +232,7 @@ public class EntityBuilder
    * Requires registered PlayerManager.
    */
   @Nonnull
-  public EntityBuilder player( String player )
+  public EntityBuilder player( final String player )
   {
     resolveManager( PlayerManager.class ).setPlayer( edit.getEntity(), player );
     return this;
@@ -242,7 +242,7 @@ public class EntityBuilder
    * Register entity with tag. Requires registered TagManager
    */
   @Nonnull
-  public EntityBuilder tag( String tag )
+  public EntityBuilder tag( final String tag )
   {
     resolveManager( TagManager.class ).register( tag, edit.getEntity() );
     return this;
@@ -252,7 +252,7 @@ public class EntityBuilder
    * Register entity with group. Requires registered TagManager
    */
   @Nonnull
-  public EntityBuilder group( String group )
+  public EntityBuilder group( final String group )
   {
     resolveManager( GroupManager.class ).add( edit.getEntity(), group );
     return this;
@@ -262,7 +262,7 @@ public class EntityBuilder
    * Register entity with multiple groups. Requires registered TagManager
    */
   @Nonnull
-  public EntityBuilder groups( @Nonnull String... groups )
+  public EntityBuilder groups( @Nonnull final String... groups )
   {
     for ( final String group : groups )
     {
@@ -282,7 +282,7 @@ public class EntityBuilder
   /**
    * Fetch manager or throw RuntimeException if not registered.
    */
-  protected <T extends BaseSystem> T resolveManager( @Nonnull Class<T> type )
+  protected <T extends BaseSystem> T resolveManager( @Nonnull final Class<T> type )
   {
     final T teamManager = world.getSystem( type );
     if ( teamManager == null )

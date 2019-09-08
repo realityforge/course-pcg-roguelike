@@ -8,12 +8,12 @@ package com.artemis;
 public class WorldConfigurationException
   extends RuntimeException
 {
-  public WorldConfigurationException( String msg )
+  public WorldConfigurationException( final String msg )
   {
     super( msg );
   }
 
-  public WorldConfigurationException( String msg, Throwable e )
+  public WorldConfigurationException( final String msg, final Throwable e )
   {
     super( msg, e );
   }

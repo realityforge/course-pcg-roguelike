@@ -24,7 +24,7 @@ public abstract class IteratingSystem
    *
    * @param aspect the aspect to match entities
    */
-  public IteratingSystem( Aspect.Builder aspect )
+  public IteratingSystem( final Aspect.Builder aspect )
   {
     super( aspect );
   }
@@ -46,8 +46,8 @@ public abstract class IteratingSystem
   @Override
   protected final void processSystem()
   {
-    IntBag actives = subscription.getEntities();
-    int[] ids = actives.getData();
+    final IntBag actives = subscription.getEntities();
+    final int[] ids = actives.getData();
     for ( int i = 0, s = actives.size(); s > i; i++ )
     {
       process( ids[ i ] );

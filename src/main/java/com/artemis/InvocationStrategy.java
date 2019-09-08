@@ -18,7 +18,7 @@ public class InvocationStrategy
   @Override
   protected void process()
   {
-    Object[] systemsData = systems.getData();
+    final Object[] systemsData = systems.getData();
     for ( int i = 0, s = systems.size(); s > i; i++ )
     {
       if ( disabled.get( i ) )

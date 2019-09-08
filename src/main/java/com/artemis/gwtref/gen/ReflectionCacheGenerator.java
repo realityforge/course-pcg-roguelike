@@ -28,12 +28,12 @@ public class ReflectionCacheGenerator
   extends Generator
 {
   @Override
-  public String generate( @Nonnull TreeLogger logger, @Nonnull GeneratorContext context, String typeName )
+  public String generate( @Nonnull final TreeLogger logger, @Nonnull final GeneratorContext context, final String typeName )
     throws UnableToCompleteException
   {
-    TypeOracle oracle = context.getTypeOracle();
+    final TypeOracle oracle = context.getTypeOracle();
     assert ( oracle != null );
-    JClassType type = oracle.findType( typeName );
+    final JClassType type = oracle.findType( typeName );
     if ( type == null )
     {
       logger.log( ERROR, "Couldn't find type '" + typeName + "'" );
@@ -46,7 +46,7 @@ public class ReflectionCacheGenerator
       throw new UnableToCompleteException();
     }
 
-    ReflectionCacheSourceCreator source = new ReflectionCacheSourceCreator( logger, context, type );
+    final ReflectionCacheSourceCreator source = new ReflectionCacheSourceCreator( logger, context, type );
     return source.create();
   }
 }

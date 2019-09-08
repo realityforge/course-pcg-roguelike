@@ -84,7 +84,7 @@ public class World
    * @see WorldConfigurationBuilder
    * @see WorldConfiguration
    */
-  public World( @Nonnull WorldConfiguration configuration )
+  public World( @Nonnull final WorldConfiguration configuration )
   {
     partition = new WorldSegment( configuration );
     systemsBag = configuration.systems;
@@ -121,7 +121,7 @@ public class World
    * @see com.artemis.annotations.Wire for more details about dependency injection.
    * @see #inject(Object, boolean)
    */
-  public void inject( @Nonnull Object target )
+  public void inject( @Nonnull final Object target )
   {
     inject( target, true );
   }
@@ -142,9 +142,9 @@ public class World
    * @see com.artemis.annotations.Wire for more details about dependency injection.
    * @see #inject(Object)
    */
-  public void inject( @Nonnull Object target, boolean failIfNotInjectable )
+  public void inject( @Nonnull final Object target, final boolean failIfNotInjectable )
   {
-    boolean injectable = partition.injector.isInjectable( target );
+    final boolean injectable = partition.injector.isInjectable( target );
 		if ( !injectable && failIfNotInjectable )
 		{
 			throw new MundaneWireException( "Attempted injection on " + target.getClass()
@@ -157,12 +157,12 @@ public class World
 		}
   }
 
-  public <T> T getRegistered( String name )
+  public <T> T getRegistered( final String name )
   {
     return partition.injector.getRegistered( name );
   }
 
-  public <T> T getRegistered( Class<T> type )
+  public <T> T getRegistered( final Class<T> type )
   {
     return partition.injector.getRegistered( type );
   }
@@ -175,15 +175,15 @@ public class World
    */
   public void dispose()
   {
-    List<Throwable> exceptions = new ArrayList<>();
+    final List<Throwable> exceptions = new ArrayList<>();
 
-    for ( BaseSystem system : systemsBag )
+    for ( final BaseSystem system : systemsBag )
     {
       try
       {
         system.dispose();
       }
-      catch ( Exception e )
+      catch ( final Exception e )
       {
         exceptions.add( e );
       }
@@ -201,7 +201,7 @@ public class World
    * @param entityId entity to fetch editor for.
    * @return a fast albeit verbose editor to perform batch changes to entities.
    */
-  public EntityEdit edit( int entityId )
+  public EntityEdit edit( final int entityId )
   {
 		if ( !em.isActive( entityId ) )
 		{
@@ -219,7 +219,7 @@ public class World
    * @param entityId Entity for which to get the composition id
    * @return composition identity of entity
    */
-  public int compositionId( int entityId )
+  public int compositionId( final int entityId )
   {
     return cm.getIdentity( entityId );
   }
@@ -273,7 +273,7 @@ public class World
    *
    * @param delta time since last game loop
    */
-  public void setDelta( float delta )
+  public void setDelta( final float delta )
   {
     this.delta = delta;
   }
@@ -284,7 +284,7 @@ public class World
    * @param e the entity to delete
    * @see #delete(int) recommended alternative.
    */
-  public void deleteEntity( @Nonnull Entity e )
+  public void deleteEntity( @Nonnull final Entity e )
   {
     delete( e.id );
   }
@@ -298,7 +298,7 @@ public class World
    *
    * @param entityId the entity to delete
    */
-  public void delete( int entityId )
+  public void delete( final int entityId )
   {
     batchProcessor.delete( entityId );
   }
@@ -312,7 +312,7 @@ public class World
    */
   public Entity createEntity()
   {
-    Entity e = em.createEntityInstance();
+    final Entity e = em.createEntityInstance();
     batchProcessor.changed.unsafeSet( e.getId() );
     return e;
   }
@@ -325,7 +325,7 @@ public class World
    */
   public int create()
   {
-    int entityId = em.create();
+    final int entityId = em.create();
     batchProcessor.changed.unsafeSet( entityId );
     return entityId;
   }
@@ -347,11 +347,11 @@ public class World
    * @return entity
    * @see #create() recommended alternative.
    */
-  public Entity createEntity( @Nonnull Archetype archetype )
+  public Entity createEntity( @Nonnull final Archetype archetype )
   {
-    Entity e = em.createEntityInstance();
+    final Entity e = em.createEntityInstance();
 
-    int id = e.getId();
+    final int id = e.getId();
     archetype.transmuter.perform( id );
     cm.setIdentity( e.id, archetype.compositionId );
 
@@ -372,9 +372,9 @@ public class World
    *
    * @return assigned entity id
    */
-  public int create( @Nonnull Archetype archetype )
+  public int create( @Nonnull final Archetype archetype )
   {
-    int entityId = em.create();
+    final int entityId = em.create();
 
     archetype.transmuter.perform( entityId );
     cm.setIdentity( entityId, archetype.compositionId );
@@ -394,7 +394,7 @@ public class World
    * @param entityId the entities id
    * @return the specific entity
    */
-  public Entity getEntity( int entityId )
+  public Entity getEntity( final int entityId )
   {
     return em.getEntity( entityId );
   }
@@ -418,7 +418,7 @@ public class World
    */
   @Nonnull
   @SuppressWarnings( "unchecked" )
-  public <T extends BaseSystem> T getSystem( Class<T> type )
+  public <T extends BaseSystem> T getSystem( final Class<T> type )
   {
     return (T) partition.systems.get( type );
   }
@@ -426,7 +426,7 @@ public class World
   /**
    * Set strategy for invoking systems on {@link #process()}.
    */
-  protected void setInvocationStrategy( @Nonnull SystemInvocationStrategy invocationStrategy )
+  protected void setInvocationStrategy( @Nonnull final SystemInvocationStrategy invocationStrategy )
   {
     this.invocationStrategy = invocationStrategy;
     invocationStrategy.setWorld( this );
@@ -443,7 +443,7 @@ public class World
   {
     invocationStrategy.process();
 
-    IntBag pendingPurge = batchProcessor.getPendingPurge();
+    final IntBag pendingPurge = batchProcessor.getPendingPurge();
     if ( !pendingPurge.isEmpty() )
     {
       cm.clean( pendingPurge );
@@ -464,7 +464,7 @@ public class World
    * @param type type of component to get mapper for
    * @return mapper for specified component type
    */
-  public <T extends Component> ComponentMapper<T> getMapper( Class<T> type )
+  public <T extends Component> ComponentMapper<T> getMapper( final Class<T> type )
   {
     return cm.getMapper( type );
   }
@@ -500,7 +500,7 @@ public class World
     @Nonnull
     final Injector injector;
 
-    WorldSegment( @Nonnull WorldConfiguration configuration )
+    WorldSegment( @Nonnull final WorldConfiguration configuration )
     {
       systems = new IdentityHashMap<>();
       injector = ( configuration.injector != null )

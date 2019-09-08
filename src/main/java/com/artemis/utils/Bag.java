@@ -43,7 +43,7 @@ public class Bag<E>
   /**
    * Constructs an empty Bag with an initial capacity of 64.
    */
-  public Bag( Class<E> type )
+  public Bag( final Class<E> type )
   {
     this( 64 );
   }
@@ -54,12 +54,12 @@ public class Bag<E>
    * @param capacity the initial capacity of Bag
    */
   @SuppressWarnings( "unchecked" )
-  public Bag( int capacity )
+  public Bag( final int capacity )
   {
     data = (E[]) ArrayReflection.newInstance( Object.class, capacity );
   }
 
-  public Bag( Class<E> type, int capacity )
+  public Bag( final Class<E> type, final int capacity )
   {
     this( capacity );
   }
@@ -74,10 +74,10 @@ public class Bag<E>
    * @param index the index of element to be removed
    * @return element that was removed from the Bag
    */
-  public E remove( int index )
+  public E remove( final int index )
     throws ArrayIndexOutOfBoundsException
   {
-    E e = data[ index ]; // make copy of element to remove so it can be returned
+    final E e = data[ index ]; // make copy of element to remove so it can be returned
     data[ index ] = data[ --size ]; // overwrite item to remove with last element
     data[ size ] = null; // null last element, so gc can do its work
     return e;
@@ -86,7 +86,7 @@ public class Bag<E>
   /**
    * Sorts the bag using the {@code comparator}.
    */
-  public void sort( Comparator<E> comparator )
+  public void sort( final Comparator<E> comparator )
   {
     Sort.instance().sort( this, comparator );
   }
@@ -101,7 +101,7 @@ public class Bag<E>
   {
     if ( size > 0 )
     {
-      E e = data[ --size ];
+      final E e = data[ --size ];
       data[ size ] = null;
       return e;
     }
@@ -120,11 +120,11 @@ public class Bag<E>
    * @param e element to be removed from this list, if present
    * @return {@code true} if this list contained the specified element
    */
-  public boolean remove( @Nonnull E e )
+  public boolean remove( @Nonnull final E e )
   {
     for ( int i = 0; i < size; i++ )
     {
-      E e2 = data[ i ];
+      final E e2 = data[ i ];
 
       if ( e.equals( e2 ) )
       {
@@ -144,7 +144,7 @@ public class Bag<E>
    * @return {@code true} if the bag contains this element
    */
   @Override
-  public boolean contains( @Nonnull E e )
+  public boolean contains( @Nonnull final E e )
   {
     for ( int i = 0; size > i; i++ )
     {
@@ -163,17 +163,17 @@ public class Bag<E>
    * @param bag Bag containing elements to be removed from this Bag
    * @return {@code true} if this Bag changed as a result of the call
    */
-  public boolean removeAll( @Nonnull ImmutableBag<E> bag )
+  public boolean removeAll( @Nonnull final ImmutableBag<E> bag )
   {
     boolean modified = false;
 
     for ( int i = 0, s = bag.size(); s > i; i++ )
     {
-      E e1 = bag.get( i );
+      final E e1 = bag.get( i );
 
       for ( int j = 0; j < size; j++ )
       {
-        E e2 = data[ j ];
+        final E e2 = data[ j ];
 
         if ( e1.equals( e2 ) )
         {
@@ -195,7 +195,7 @@ public class Bag<E>
    * @return the element at the specified position in bag
    */
   @Override
-  public E get( int index )
+  public E get( final int index )
     throws ArrayIndexOutOfBoundsException
   {
     return data[ index ];
@@ -209,7 +209,7 @@ public class Bag<E>
    * @param index index of the element to return
    * @return the element at the specified position in bag
    */
-  public E safeGet( int index )
+  public E safeGet( final int index )
   {
 		if ( index >= data.length )
 		{
@@ -246,7 +246,7 @@ public class Bag<E>
    * @param index index to check
    * @return {@code true} if the index is within bounds
    */
-  public boolean isIndexWithinBounds( int index )
+  public boolean isIndexWithinBounds( final int index )
   {
     return index < getCapacity();
   }
@@ -270,7 +270,7 @@ public class Bag<E>
    *
    * @param e element to be added to this list
    */
-  public void add( E e )
+  public void add( final E e )
   {
     // is size greater than capacity increase capacity
 		if ( size == data.length )
@@ -287,7 +287,7 @@ public class Bag<E>
    * @param index position of element
    * @param e     the element
    */
-  public void set( int index, E e )
+  public void set( final int index, final E e )
   {
 		if ( index >= data.length )
 		{
@@ -306,7 +306,7 @@ public class Bag<E>
    * @param index position of element
    * @param e     the element
    */
-  public void unsafeSet( int index, E e )
+  public void unsafeSet( final int index, final E e )
   {
     data[ index ] = e;
   }
@@ -322,10 +322,10 @@ public class Bag<E>
     grow( data.length * 2 );
   }
 
-  private void grow( int newCapacity )
+  private void grow( final int newCapacity )
     throws ArrayIndexOutOfBoundsException
   {
-    E[] oldData = data;
+    final E[] oldData = data;
     data = (E[]) new Object[ newCapacity ];
     System.arraycopy( oldData, 0, data, 0, oldData.length );
   }
@@ -340,7 +340,7 @@ public class Bag<E>
    *
    * @param index index to check
    */
-  public void ensureCapacity( int index )
+  public void ensureCapacity( final int index )
   {
     if ( index >= data.length )
     {
@@ -365,7 +365,7 @@ public class Bag<E>
    *
    * @param items bag with items to add
    */
-  public void addAll( @Nonnull ImmutableBag<E> items )
+  public void addAll( @Nonnull final ImmutableBag<E> items )
   {
     for ( int i = 0, s = items.size(); s > i; i++ )
     {
@@ -406,7 +406,7 @@ public class Bag<E>
   @Override
   public String toString()
   {
-    StringBuilder sb = new StringBuilder();
+    final StringBuilder sb = new StringBuilder();
     sb.append( "Bag(" );
     for ( int i = 0; size > i; i++ )
     {
@@ -421,7 +421,7 @@ public class Bag<E>
   }
 
   @Override
-  public boolean equals( @Nullable Object o )
+  public boolean equals( @Nullable final Object o )
   {
 		if ( this == o )
 		{
@@ -432,7 +432,7 @@ public class Bag<E>
 			return false;
 		}
 
-    Bag bag = (Bag) o;
+    final Bag bag = (Bag) o;
 		if ( size != bag.size() )
 		{
 			return false;
@@ -493,7 +493,7 @@ public class Bag<E>
         throw new NoSuchElementException( "Iterated past last element" );
       }
 
-      E e = data[ cursor++ ];
+      final E e = data[ cursor++ ];
       validCursorPos = true;
       return e;
     }

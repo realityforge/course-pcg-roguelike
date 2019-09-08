@@ -10,22 +10,22 @@ public class LinkAdapter
   implements LinkListener
 {
   @Override
-  public void onLinkEstablished( int sourceId, int targetId )
+  public void onLinkEstablished( final int sourceId, final int targetId )
   {
   }
 
   @Override
-  public void onLinkKilled( int sourceId, int targetId )
+  public void onLinkKilled( final int sourceId, final int targetId )
   {
   }
 
   @Override
-  public void onTargetDead( int sourceId, int deadTargetId )
+  public void onTargetDead( final int sourceId, final int deadTargetId )
   {
   }
 
   @Override
-  public void onTargetChanged( int sourceId, int targetId, int oldTargetId )
+  public void onTargetChanged( final int sourceId, final int targetId, final int oldTargetId )
   {
   }
 }

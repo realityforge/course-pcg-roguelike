@@ -31,17 +31,17 @@ public final class EntityTransmuter
   @Nonnull
   private final ShortBag entityToIdentity;
 
-  public EntityTransmuter( @Nonnull World world, Aspect.Builder aspect )
+  public EntityTransmuter( @Nonnull final World world, final Aspect.Builder aspect )
   {
     this( world, world.getAspectSubscriptionManager().get( aspect ).getAspect() );
   }
 
-  EntityTransmuter( @Nonnull World world, @Nonnull Aspect aspect )
+  EntityTransmuter( @Nonnull final World world, @Nonnull final Aspect aspect )
   {
     this( world, new BitVector( aspect.allSet ), new BitVector( aspect.exclusionSet ) );
   }
 
-  EntityTransmuter( @Nonnull World world, BitVector additions, BitVector removals )
+  EntityTransmuter( @Nonnull final World world, final BitVector additions, final BitVector removals )
   {
     em = world.getEntityManager();
     entityToIdentity = world.getComponentManager().entityToIdentity;
@@ -59,30 +59,30 @@ public final class EntityTransmuter
    *
    * @param entityId target entity id
    */
-  public void transmute( int entityId )
+  public void transmute( final int entityId )
   {
 		if ( !isValid( entityId ) )
 		{
 			return;
 		}
 
-    TransmuteOperation operation = getOperation( entityId );
+    final TransmuteOperation operation = getOperation( entityId );
     operation.perform( entityId );
     entityToIdentity.unsafeSet( entityId, operation.compositionId );
   }
 
-  void transmuteNoOperation( int entityId )
+  void transmuteNoOperation( final int entityId )
   {
 		if ( !isValid( entityId ) )
 		{
 			return;
 		}
 
-    TransmuteOperation operation = getOperation( entityId );
+    final TransmuteOperation operation = getOperation( entityId );
     entityToIdentity.unsafeSet( entityId, operation.compositionId );
   }
 
-  private boolean isValid( int entityId )
+  private boolean isValid( final int entityId )
   {
 		if ( !em.isActive( entityId ) )
 		{
@@ -106,17 +106,17 @@ public final class EntityTransmuter
    *
    * @param e target entity.
    */
-  public void transmute( @Nonnull Entity e )
+  public void transmute( @Nonnull final Entity e )
   {
     transmute( e.id );
   }
 
-  TransmuteOperation getOperation( int entityId )
+  TransmuteOperation getOperation( final int entityId )
   {
     return operation( entityId, entityToIdentity.get( entityId ) );
   }
 
-  private TransmuteOperation operation( int entityId, int compositionId )
+  private TransmuteOperation operation( final int entityId, final int compositionId )
   {
     TransmuteOperation operation = operations.safeGet( compositionId );
     if ( operation == null )
@@ -143,7 +143,7 @@ public final class EntityTransmuter
     @Nonnull
     private final BitVector bs;
 
-    Factory( @Nonnull World world, BitVector additions, BitVector removals )
+    Factory( @Nonnull final World world, final BitVector additions, final BitVector removals )
     {
       this.cm = world.getComponentManager();
       this.additions = additions;
@@ -152,24 +152,24 @@ public final class EntityTransmuter
     }
 
     @Nonnull
-    TransmuteOperation createOperation( int entityId )
+    TransmuteOperation createOperation( final int entityId )
     {
-      BitVector componentBits = cm.componentBits( entityId );
+      final BitVector componentBits = cm.componentBits( entityId );
 
       bs.clear();
       bs.or( componentBits );
       bs.or( additions );
       bs.andNot( removals );
-      int compositionId = cm.compositionIdentity( bs );
+      final int compositionId = cm.compositionIdentity( bs );
       return new TransmuteOperation( compositionId,
                                      getAdditions( componentBits ), getRemovals( componentBits ) );
     }
 
     @Nonnull
-    private Bag<ComponentMapper> getAdditions( @Nonnull BitVector origin )
+    private Bag<ComponentMapper> getAdditions( @Nonnull final BitVector origin )
     {
-      ComponentTypeFactory tf = cm.typeFactory;
-      Bag<ComponentMapper> types = new Bag( ComponentMapper.class );
+      final ComponentTypeFactory tf = cm.typeFactory;
+      final Bag<ComponentMapper> types = new Bag( ComponentMapper.class );
       for ( int i = additions.nextSetBit( 0 ); i >= 0; i = additions.nextSetBit( i + 1 ) )
       {
 				if ( !origin.get( i ) )
@@ -182,10 +182,10 @@ public final class EntityTransmuter
     }
 
     @Nonnull
-    private Bag<ComponentMapper> getRemovals( @Nonnull BitVector origin )
+    private Bag<ComponentMapper> getRemovals( @Nonnull final BitVector origin )
     {
-      ComponentTypeFactory tf = cm.typeFactory;
-      Bag<ComponentMapper> types = new Bag( ComponentMapper.class );
+      final ComponentTypeFactory tf = cm.typeFactory;
+      final Bag<ComponentMapper> types = new Bag( ComponentMapper.class );
       for ( int i = removals.nextSetBit( 0 ); i >= 0; i = removals.nextSetBit( i + 1 ) )
       {
 				if ( origin.get( i ) )
@@ -204,9 +204,9 @@ public final class EntityTransmuter
     private final ComponentMapper[] removals;
     public final short compositionId;
 
-    public TransmuteOperation( int compositionId,
-                               ComponentMapper[] additions,
-                               ComponentMapper[] removals )
+    public TransmuteOperation( final int compositionId,
+                               final ComponentMapper[] additions,
+                               final ComponentMapper[] removals )
     {
 
       this.compositionId = (short) compositionId;
@@ -214,9 +214,9 @@ public final class EntityTransmuter
       this.removals = removals;
     }
 
-    public TransmuteOperation( int compositionId,
-                               @Nonnull Bag<ComponentMapper> additions,
-                               @Nonnull Bag<ComponentMapper> removals )
+    public TransmuteOperation( final int compositionId,
+                               @Nonnull final Bag<ComponentMapper> additions,
+                               @Nonnull final Bag<ComponentMapper> removals )
     {
 
       this.compositionId = (short) compositionId;
@@ -234,7 +234,7 @@ public final class EntityTransmuter
       }
     }
 
-    public void perform( int entityId )
+    public void perform( final int entityId )
     {
       for ( final ComponentMapper addition : additions )
       {
@@ -248,7 +248,7 @@ public final class EntityTransmuter
     }
 
     @Nonnull
-    Bag<Class<? extends Component>> getAdditions( @Nonnull Bag<Class<? extends Component>> out )
+    Bag<Class<? extends Component>> getAdditions( @Nonnull final Bag<Class<? extends Component>> out )
     {
       for ( final ComponentMapper addition : additions )
       {
@@ -262,14 +262,14 @@ public final class EntityTransmuter
     @Override
     public String toString()
     {
-      StringBuilder sb = new StringBuilder();
+      final StringBuilder sb = new StringBuilder();
       sb.append( "TransmuteOperation(" );
 
       if ( additions.length > 0 )
       {
         sb.append( "add={" );
         String delim = "";
-        for ( ComponentMapper mapper : additions )
+        for ( final ComponentMapper mapper : additions )
         {
           sb.append( delim ).append( mapper.getType().getType().getSimpleName() );
           delim = ", ";
@@ -286,7 +286,7 @@ public final class EntityTransmuter
 
         sb.append( "remove={" );
         String delim = "";
-        for ( ComponentMapper mapper : removals )
+        for ( final ComponentMapper mapper : removals )
         {
           sb.append( delim ).append( mapper.getType().getType().getSimpleName() );
           delim = ", ";

@@ -25,7 +25,7 @@ public abstract class Manager
   /**
    * Called when entity gets added to world.
    */
-  public void added( Entity e )
+  public void added( final Entity e )
   {
     throw new RuntimeException( "I shouldn't be here..." );
   }
@@ -33,7 +33,7 @@ public abstract class Manager
   /**
    * Called when entity gets deleted from world.
    */
-  public void deleted( Entity e )
+  public void deleted( final Entity e )
   {
     throw new RuntimeException( "... if it weren't for the tests." );
   }
@@ -44,7 +44,7 @@ public abstract class Manager
    * @param world the world to set
    */
   @Override
-  protected void setWorld( World world )
+  protected void setWorld( final World world )
   {
     super.setWorld( world );
 		if ( implementsObserver( this, "added" ) )
@@ -67,20 +67,20 @@ public abstract class Manager
       .addSubscriptionListener( new EntitySubscription.SubscriptionListener()
       {
         @Override
-        public void inserted( @Nonnull IntBag entities )
+        public void inserted( @Nonnull final IntBag entities )
         {
           added( entities );
         }
 
         @Override
-        public void removed( @Nonnull IntBag entities )
+        public void removed( @Nonnull final IntBag entities )
         {
           deleted( entities );
         }
       } );
   }
 
-  private void added( @Nonnull IntBag entities )
+  private void added( @Nonnull final IntBag entities )
   {
     // performance hack, skip if manager lacks implementation of inserted.
 		if ( ( methodFlags & FLAG_INSERTED ) == 0 )
@@ -88,14 +88,14 @@ public abstract class Manager
 			return;
 		}
 
-    int[] ids = entities.getData();
+    final int[] ids = entities.getData();
     for ( int i = 0, s = entities.size(); s > i; i++ )
     {
       added( world.getEntity( ids[ i ] ) );
     }
   }
 
-  private void deleted( @Nonnull IntBag entities )
+  private void deleted( @Nonnull final IntBag entities )
   {
     // performance hack, skip if manager lacks implementation of removed.
 		if ( ( methodFlags & FLAG_REMOVED ) == 0 )
@@ -103,7 +103,7 @@ public abstract class Manager
 			return;
 		}
 
-    int[] ids = entities.getData();
+    final int[] ids = entities.getData();
     for ( int i = 0, s = entities.size(); s > i; i++ )
     {
       deleted( world.getEntity( ids[ i ] ) );

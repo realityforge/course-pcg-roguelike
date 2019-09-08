@@ -20,21 +20,21 @@ public final class ReflectionUtil
   {
   }
 
-  public static boolean implementsObserver( @Nonnull BaseSystem owner, String methodName )
+  public static boolean implementsObserver( @Nonnull final BaseSystem owner, final String methodName )
   {
     try
     {
-      Method method = getMethod( owner.getClass(), methodName, PARAM_ENTITY );
-      Class declarer = method.getDeclaringClass();
+      final Method method = getMethod( owner.getClass(), methodName, PARAM_ENTITY );
+      final Class declarer = method.getDeclaringClass();
       return !( Manager.class.equals( declarer ) || EntitySystem.class.equals( declarer ) );
     }
-    catch ( ReflectionException e )
+    catch ( final ReflectionException e )
     {
       throw new RuntimeException( e );
     }
   }
 
-  public static boolean implementsAnyObserver( @Nonnull BaseEntitySystem owner )
+  public static boolean implementsAnyObserver( @Nonnull final BaseEntitySystem owner )
   {
 		if ( isInstance( Manager.class, owner ) || isInstance( EntitySystem.class, owner ) )
 		{
@@ -46,7 +46,7 @@ public final class ReflectionUtil
     Class type = owner.getClass();
     while ( type != BaseEntitySystem.class )
     {
-      for ( Method m : ClassReflection.getDeclaredMethods( type ) )
+      for ( final Method m : ClassReflection.getDeclaredMethods( type ) )
       {
 				if ( isObserver( m ) )
 				{
@@ -60,19 +60,19 @@ public final class ReflectionUtil
     return false;
   }
 
-  private static boolean isObserver( @Nonnull Method m )
+  private static boolean isObserver( @Nonnull final Method m )
   {
-    String name = m.getName();
+    final String name = m.getName();
     if ( "inserted".equals( name ) || "removed".equals( name ) )
     {
-      Class[] types = m.getParameterTypes();
+      final Class[] types = m.getParameterTypes();
 			return Arrays.equals( PARAM_ID, types ) || Arrays.equals( PARAM_IDS, types );
     }
 
     return false;
   }
 
-  public static boolean isGenericType( @Nonnull Field f, Class<?> mainType, Class typeParameter )
+  public static boolean isGenericType( @Nonnull final Field f, final Class<?> mainType, final Class typeParameter )
   {
     return mainType == f.getType() && typeParameter == f.getElementType( 0 );
   }

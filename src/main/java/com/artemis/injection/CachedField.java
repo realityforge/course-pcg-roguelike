@@ -15,7 +15,7 @@ import com.artemis.utils.reflect.Field;
  */
 public class CachedField
 {
-  public CachedField( Field field, WireType wireType, String name, boolean failOnNull )
+  public CachedField( final Field field, final WireType wireType, final String name, final boolean failOnNull )
   {
     this.field = field;
     this.wireType = wireType;

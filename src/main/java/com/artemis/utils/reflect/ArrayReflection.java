@@ -28,7 +28,7 @@ public final class ArrayReflection
   /**
    * Creates a new array with the specified component type and length.
    */
-  static public Object newInstance( Class c, int size )
+  static public Object newInstance( final Class c, final int size )
   {
     return ReflectionCache.instance.newArray( c, size );
   }
@@ -36,7 +36,7 @@ public final class ArrayReflection
   /**
    * Returns the length of the supplied array.
    */
-  static public int getLength( @Nonnull Object array )
+  static public int getLength( @Nonnull final Object array )
   {
     return ReflectionCache.instance.getArrayLength( ReflectionCache.getType( array.getClass() ), array );
   }
@@ -44,7 +44,7 @@ public final class ArrayReflection
   /**
    * Returns the value of the indexed component in the supplied array.
    */
-  static public Object get( @Nonnull Object array, int index )
+  static public Object get( @Nonnull final Object array, final int index )
   {
     return ReflectionCache.instance.getArrayElement( ReflectionCache.getType( array.getClass() ), array, index );
   }
@@ -52,7 +52,7 @@ public final class ArrayReflection
   /**
    * Sets the value of the indexed component in the supplied array to the supplied value.
    */
-  static public void set( @Nonnull Object array, int index, Object value )
+  static public void set( @Nonnull final Object array, final int index, final Object value )
   {
     ReflectionCache.instance.setArrayElement( ReflectionCache.getType( array.getClass() ), array, index, value );
   }

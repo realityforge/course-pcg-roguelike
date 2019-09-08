@@ -10,9 +10,9 @@ public class ComponentPool<T extends PooledComponent>
 {
   @Nonnull
   private final Bag<T> cache;
-  private Class<T> type;
+  private final Class<T> type;
 
-  ComponentPool( Class<T> type )
+  ComponentPool( final Class<T> type )
   {
     this.type = type;
     cache = new Bag<>( type );
@@ -28,13 +28,13 @@ public class ComponentPool<T extends PooledComponent>
                    ? cache.removeLast()
                    : ClassReflection.newInstance( type ) );
     }
-    catch ( ReflectionException e )
+    catch ( final ReflectionException e )
     {
       throw new InvalidComponentException( type, e.getMessage(), e );
     }
   }
 
-  void free( @Nonnull T component )
+  void free( @Nonnull final T component )
   {
     component.reset();
     cache.add( component );

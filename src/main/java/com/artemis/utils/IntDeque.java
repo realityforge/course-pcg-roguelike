@@ -26,7 +26,7 @@ public class IntDeque
    *
    * @param capacity the initial capacity of Bag
    */
-  public IntDeque( int capacity )
+  public IntDeque( final int capacity )
   {
     elements = new int[ capacity ];
   }
@@ -37,7 +37,7 @@ public class IntDeque
    * @param e element to check
    * @return {@code true} if the bag contains this element
    */
-  public boolean contains( int e )
+  public boolean contains( final int e )
   {
     for ( int i = 0; size > i; i++ )
     {
@@ -55,7 +55,7 @@ public class IntDeque
    * @param index index of the element to return
    * @return the element at the specified position in bag
    */
-  public int get( int index )
+  public int get( final int index )
     throws ArrayIndexOutOfBoundsException
   {
     return elements[ index( index ) ];
@@ -99,7 +99,7 @@ public class IntDeque
    *
    * @param e element to be added to this list
    */
-  public void add( int e )
+  public void add( final int e )
   {
 		if ( size == elements.length )
 		{
@@ -109,7 +109,7 @@ public class IntDeque
     elements[ index( size++ ) ] = e;
   }
 
-  private int index( int relativeIndex )
+  private int index( final int relativeIndex )
   {
     return ( beginIndex + relativeIndex ) % elements.length;
   }
@@ -120,7 +120,7 @@ public class IntDeque
    * @param index position of element
    * @param e     the element
    */
-  public void set( int index, int e )
+  public void set( final int index, final int e )
   {
     if ( index >= elements.length )
     {
@@ -136,10 +136,10 @@ public class IntDeque
    * @param newCapacity new capacity to grow to
    * @throws ArrayIndexOutOfBoundsException if new capacity is smaller than old
    */
-  private void grow( int newCapacity )
+  private void grow( final int newCapacity )
     throws ArrayIndexOutOfBoundsException
   {
-    int[] newElements = new int[ newCapacity ];
+    final int[] newElements = new int[ newCapacity ];
 		for ( int i = 0; i < size; i++ )
 		{
 			newElements[ i ] = get( i );
@@ -157,7 +157,7 @@ public class IntDeque
    *
    * @param index index to check
    */
-  public void ensureCapacity( int index )
+  public void ensureCapacity( final int index )
   {
     if ( index >= elements.length )
     {
@@ -187,7 +187,7 @@ public class IntDeque
    *
    * @param size the size to set
    */
-  public void setSize( int size )
+  public void setSize( final int size )
   {
     this.size = size;
   }
@@ -196,8 +196,8 @@ public class IntDeque
   {
     assertNotEmpty();
 
-    int index = index( --size );
-    int value = elements[ index ];
+    final int index = index( --size );
+    final int value = elements[ index ];
     return value;
   }
 
@@ -205,7 +205,7 @@ public class IntDeque
   {
     assertNotEmpty();
 
-    int value = elements[ beginIndex ];
+    final int value = elements[ beginIndex ];
     beginIndex = ( beginIndex + 1 ) % elements.length;
     size--;
     return value;
@@ -220,7 +220,7 @@ public class IntDeque
   }
 
   @Override
-  public boolean equals( @Nullable Object o )
+  public boolean equals( @Nullable final Object o )
   {
 		if ( this == o )
 		{
@@ -231,7 +231,7 @@ public class IntDeque
 			return false;
 		}
 
-    IntDeque other = (IntDeque) o;
+    final IntDeque other = (IntDeque) o;
 		if ( size != other.size )
 		{
 			return false;
@@ -264,7 +264,7 @@ public class IntDeque
   @Override
   public String toString()
   {
-    StringBuilder sb = new StringBuilder();
+    final StringBuilder sb = new StringBuilder();
     sb.append( "IntDeque(" );
     for ( int i = 0; size > i; i++ )
     {

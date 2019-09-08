@@ -17,11 +17,11 @@ class IntBagFieldMutator
   private EntitySubscription all;
 
   @Override
-  public void validate( int sourceId, @Nonnull IntBag ids, @Nullable LinkListener listener )
+  public void validate( final int sourceId, @Nonnull final IntBag ids, @Nullable final LinkListener listener )
   {
     for ( int i = 0; ids.size() > i; i++ )
     {
-      int id = ids.get( i );
+      final int id = ids.get( i );
       if ( !all.getActiveEntityIds().unsafeGet( id ) )
       {
         ids.remove( i-- );
@@ -35,7 +35,7 @@ class IntBagFieldMutator
 
   @Nonnull
   @Override
-  public IntBag read( Component c, @Nonnull Field f )
+  public IntBag read( final Component c, @Nonnull final Field f )
   {
     try
     {
@@ -44,21 +44,21 @@ class IntBagFieldMutator
       {
         f.setAccessible( true );
       }
-      IntBag e = (IntBag) f.get( c );
+      final IntBag e = (IntBag) f.get( c );
       if ( isNotAccessible )
       {
         f.setAccessible( false );
       }
       return ( e != null ) ? e : empty;
     }
-    catch ( ReflectionException exc )
+    catch ( final ReflectionException exc )
     {
       throw new RuntimeException( exc );
     }
   }
 
   @Override
-  public void setWorld( @Nonnull World world )
+  public void setWorld( @Nonnull final World world )
   {
     all = world.getAspectSubscriptionManager().get( all() );
   }

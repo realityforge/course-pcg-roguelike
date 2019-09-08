@@ -30,7 +30,7 @@ public class ComponentTypeFactory
   int initialMapperCapacity;
   private final ComponentManager cm;
 
-  public ComponentTypeFactory( ComponentManager cm, int entityContainerSize )
+  public ComponentTypeFactory( final ComponentManager cm, final int entityContainerSize )
   {
     this.cm = cm;
     initialMapperCapacity = entityContainerSize;
@@ -46,7 +46,7 @@ public class ComponentTypeFactory
    * @param c the component's class to get the type for
    * @return the component's {@link ComponentType}
    */
-  public ComponentType getTypeFor( @Nonnull Class<? extends Component> c )
+  public ComponentType getTypeFor( @Nonnull final Class<? extends Component> c )
   {
     ComponentType type = componentTypes.get( c );
 
@@ -59,22 +59,22 @@ public class ComponentTypeFactory
   }
 
   @Nonnull
-  private ComponentType createComponentType( @Nonnull Class<? extends Component> c )
+  private ComponentType createComponentType( @Nonnull final Class<? extends Component> c )
   {
     try
     {
-      Constructor ctor = ClassReflection.getConstructor( c );
+      final Constructor ctor = ClassReflection.getConstructor( c );
 			if ( ( ctor.getModifiers() & Modifier.PUBLIC ) == 0 )
 			{
 				throw new InvalidComponentException( c, "missing public constructor" );
 			}
     }
-    catch ( ReflectionException e )
+    catch ( final ReflectionException e )
     {
       throw new InvalidComponentException( c, "missing public constructor", e );
     }
 
-    ComponentType type = new ComponentType( c, types.size() );
+    final ComponentType type = new ComponentType( c, types.size() );
     componentTypes.put( c, type );
     types.add( type );
 
@@ -95,7 +95,7 @@ public class ComponentTypeFactory
    * @param index maps to {@link ComponentType}
    * @return the component's {@link ComponentType}
    */
-  public ComponentType getTypeFor( int index )
+  public ComponentType getTypeFor( final int index )
   {
     return types.get( index );
   }
@@ -106,12 +106,12 @@ public class ComponentTypeFactory
    * @param c the component class to get the type index for
    * @return the component type's index
    */
-  public int getIndexFor( @Nonnull Class<? extends Component> c )
+  public int getIndexFor( @Nonnull final Class<? extends Component> c )
   {
     return getTypeFor( c ).getIndex();
   }
 
-  public void register( @Nonnull ComponentTypeListener listener )
+  public void register( @Nonnull final ComponentTypeListener listener )
   {
     listeners.add( listener );
     listener.initialize( types );

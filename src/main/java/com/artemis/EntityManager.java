@@ -27,12 +27,12 @@ public class EntityManager
   private final IntDeque limbo = new IntDeque();
   private int nextId;
   @Nonnull
-  private Bag<BitVector> entityBitVectors = new Bag<>( BitVector.class );
+  private final Bag<BitVector> entityBitVectors = new Bag<>( BitVector.class );
 
   /**
    * Creates a new EntityManager Instance.
    */
-  protected EntityManager( int initialContainerSize )
+  protected EntityManager( final int initialContainerSize )
   {
     entities = new Bag<>( initialContainerSize );
     registerEntityStore( recycled );
@@ -63,12 +63,12 @@ public class EntityManager
     return obtain().id;
   }
 
-  void clean( @Nonnull IntBag pendingDeletion )
+  void clean( @Nonnull final IntBag pendingDeletion )
   {
-    int[] ids = pendingDeletion.getData();
+    final int[] ids = pendingDeletion.getData();
     for ( int i = 0, s = pendingDeletion.size(); s > i; i++ )
     {
-      int id = ids[ i ];
+      final int id = ids[ i ];
       // usually never happens but:
       // this happens when an entity is deleted before
       // it is added to the world, ie; created and deleted
@@ -89,12 +89,12 @@ public class EntityManager
    * @param entityId the entities id
    * @return true if active, false if not
    */
-  public boolean isActive( int entityId )
+  public boolean isActive( final int entityId )
   {
     return !recycled.unsafeGet( entityId );
   }
 
-  public void registerEntityStore( @Nonnull BitVector bv )
+  public void registerEntityStore( @Nonnull final BitVector bv )
   {
     bv.ensureCapacity( entities.getCapacity() );
     entityBitVectors.add( bv );
@@ -108,7 +108,7 @@ public class EntityManager
    * @param entityId the entities id
    * @return the entity
    */
-  protected Entity getEntity( int entityId )
+  protected Entity getEntity( final int entityId )
   {
     return entities.get( entityId );
   }
@@ -124,7 +124,7 @@ public class EntityManager
    */
   public boolean reset()
   {
-    int count = world.getAspectSubscriptionManager()
+    final int count = world.getAspectSubscriptionManager()
       .get( all() )
       .getActiveEntityIds()
       .cardinality();
@@ -149,9 +149,9 @@ public class EntityManager
    * @param id The ID to be set on the Entity
    */
   @Nonnull
-  private Entity createEntity( int id )
+  private Entity createEntity( final int id )
   {
-    Entity e = new Entity( world, id );
+    final Entity e = new Entity( world, id );
     if ( e.id >= entities.getCapacity() )
     {
       growEntityStores();
@@ -167,9 +167,9 @@ public class EntityManager
 
   private void growEntityStores()
   {
-    int newSize = 2 * entities.getCapacity();
+    final int newSize = 2 * entities.getCapacity();
     entities.ensureCapacity( newSize );
-    ComponentManager cm = world.getComponentManager();
+    final ComponentManager cm = world.getComponentManager();
     cm.ensureCapacity( newSize );
 
     for ( int i = 0, s = entityBitVectors.size(); s > i; i++ )
@@ -186,13 +186,13 @@ public class EntityManager
     }
     else
     {
-      int id = limbo.popFirst();
+      final int id = limbo.popFirst();
       recycled.unsafeClear( id );
       return entities.get( id );
     }
   }
 
-  private void free( int entityId )
+  private void free( final int entityId )
   {
     limbo.add( entityId );
     recycled.unsafeSet( entityId );

@@ -30,13 +30,13 @@ public abstract class IntervalEntitySystem
    * @param aspect   the aspect to match entities
    * @param interval the interval at which the system processes
    */
-  public IntervalEntitySystem( Aspect.Builder aspect, float interval )
+  public IntervalEntitySystem( final Aspect.Builder aspect, final float interval )
   {
     super( aspect );
     this.interval = interval;
   }
 
-  public IntervalEntitySystem( float interval )
+  public IntervalEntitySystem( final float interval )
   {
     this.interval = interval;
   }

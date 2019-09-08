@@ -17,7 +17,7 @@ public class ArtemisMultiException
   {
   }
 
-  public ArtemisMultiException( @Nonnull List<Throwable> exceptions )
+  public ArtemisMultiException( @Nonnull final List<Throwable> exceptions )
   {
     super();
     this.exceptions.addAll( exceptions );
@@ -33,8 +33,8 @@ public class ArtemisMultiException
   @Override
   public String toString()
   {
-    StringBuilder sb = new StringBuilder();
-    for ( Throwable t : exceptions )
+    final StringBuilder sb = new StringBuilder();
+    for ( final Throwable t : exceptions )
     {
 			if ( sb.length() > 0 )
 			{

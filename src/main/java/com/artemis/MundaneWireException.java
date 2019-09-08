@@ -7,17 +7,17 @@ import javax.annotation.Nonnull;
 public class MundaneWireException
   extends RuntimeException
 {
-  public MundaneWireException( @Nonnull Class<? extends BaseSystem> klazz )
+  public MundaneWireException( @Nonnull final Class<? extends BaseSystem> klazz )
   {
     super( "Not added to world: " + ClassReflection.getSimpleName( klazz ) );
   }
 
-  public MundaneWireException( String message, Throwable cause )
+  public MundaneWireException( final String message, final Throwable cause )
   {
     super( message, cause );
   }
 
-  public MundaneWireException( String message )
+  public MundaneWireException( final String message )
   {
     super( message );
   }

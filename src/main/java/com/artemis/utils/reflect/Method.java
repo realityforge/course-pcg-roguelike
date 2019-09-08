@@ -28,7 +28,7 @@ public final class Method
 {
   private final com.artemis.gwtref.client.Method method;
 
-  Method( com.artemis.gwtref.client.Method method )
+  Method( final com.artemis.gwtref.client.Method method )
   {
     this.method = method;
   }
@@ -55,8 +55,8 @@ public final class Method
   @Nonnull
   public Class[] getParameterTypes()
   {
-    Parameter[] parameters = method.getParameters();
-    Class[] parameterTypes = new Class[ parameters.length ];
+    final Parameter[] parameters = method.getParameters();
+    final Class[] parameterTypes = new Class[ parameters.length ];
     for ( int i = 0, j = parameters.length; i < j; i++ )
     {
       parameterTypes[ i ] = parameters[ i ].getType();
@@ -77,7 +77,7 @@ public final class Method
     return method.isPublic();
   }
 
-  public void setAccessible( boolean accessible )
+  public void setAccessible( final boolean accessible )
   {
     // NOOP in GWT
   }
@@ -157,14 +157,14 @@ public final class Method
   /**
    * Invokes the underlying method on the supplied object with the supplied parameters.
    */
-  public Object invoke( Object obj, Object... args )
+  public Object invoke( final Object obj, final Object... args )
     throws ReflectionException
   {
     try
     {
       return method.invoke( obj, args );
     }
-    catch ( IllegalArgumentException e )
+    catch ( final IllegalArgumentException e )
     {
       throw new ReflectionException( "Illegal argument(s) supplied to method: " + getName(), e );
     }
@@ -174,7 +174,7 @@ public final class Method
    * Returns this element's annotation for the specified type if such an annotation is present, else null.
    */
   @Nullable
-  public <T extends java.lang.annotation.Annotation> T getAnnotation( Class<T> annotationClass )
+  public <T extends java.lang.annotation.Annotation> T getAnnotation( final Class<T> annotationClass )
   {
     final Annotation declaredAnnotation = getDeclaredAnnotation( annotationClass );
     return declaredAnnotation != null ? declaredAnnotation.getAnnotation( annotationClass ) : null;
@@ -183,10 +183,10 @@ public final class Method
   /**
    * Returns true if the field includes an annotation of the provided class type.
    */
-  public boolean isAnnotationPresent( Class<? extends java.lang.annotation.Annotation> annotationType )
+  public boolean isAnnotationPresent( final Class<? extends java.lang.annotation.Annotation> annotationType )
   {
-    java.lang.annotation.Annotation[] annotations = method.getDeclaredAnnotations();
-    for ( java.lang.annotation.Annotation annotation : annotations )
+    final java.lang.annotation.Annotation[] annotations = method.getDeclaredAnnotations();
+    for ( final java.lang.annotation.Annotation annotation : annotations )
     {
       if ( annotation.annotationType().equals( annotationType ) )
       {
@@ -203,8 +203,8 @@ public final class Method
   @Nonnull
   public Annotation[] getDeclaredAnnotations()
   {
-    java.lang.annotation.Annotation[] annotations = method.getDeclaredAnnotations();
-    Annotation[] result = new Annotation[ annotations.length ];
+    final java.lang.annotation.Annotation[] annotations = method.getDeclaredAnnotations();
+    final Annotation[] result = new Annotation[ annotations.length ];
     for ( int i = 0; i < annotations.length; i++ )
     {
       result[ i ] = new Annotation( annotations[ i ] );
@@ -218,10 +218,10 @@ public final class Method
    * type he's looking for.
    */
   @Nullable
-  public Annotation getDeclaredAnnotation( Class<? extends java.lang.annotation.Annotation> annotationType )
+  public Annotation getDeclaredAnnotation( final Class<? extends java.lang.annotation.Annotation> annotationType )
   {
-    java.lang.annotation.Annotation[] annotations = method.getDeclaredAnnotations();
-    for ( java.lang.annotation.Annotation annotation : annotations )
+    final java.lang.annotation.Annotation[] annotations = method.getDeclaredAnnotations();
+    for ( final java.lang.annotation.Annotation annotation : annotations )
     {
       if ( annotation.annotationType().equals( annotationType ) )
       {

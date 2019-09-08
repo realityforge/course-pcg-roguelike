@@ -95,7 +95,7 @@ public class Type
     {
       return superClass == null ? null : ReflectionCache.forName( superClass.getName() );
     }
-    catch ( ClassNotFoundException e )
+    catch ( final ClassNotFoundException e )
     {
       return null;
     }
@@ -105,7 +105,7 @@ public class Type
    * @param otherType the other type
    * @return whether this type is assignable to the other type.
    */
-  public boolean isAssignableFrom( @Nonnull Type otherType )
+  public boolean isAssignableFrom( @Nonnull final Type otherType )
   {
     return otherType.assignables.contains( getClassOfType() );
   }
@@ -116,15 +116,15 @@ public class Type
    * {@link Class#getField(String)}.
    */
   @Nullable
-  public Field getField( String name )
+  public Field getField( final String name )
   {
     Type t = this;
     while ( t != null )
     {
-      Field[] declFields = t.getDeclaredFields();
+      final Field[] declFields = t.getDeclaredFields();
       if ( declFields != null )
       {
-        for ( Field f : declFields )
+        for ( final Field f : declFields )
         {
 					if ( f.isPublic && f.name.equals( name ) )
 					{
@@ -143,14 +143,14 @@ public class Type
   @Nonnull
   public Field[] getFields()
   {
-    ArrayList<Field> allFields = new ArrayList<>();
+    final ArrayList<Field> allFields = new ArrayList<>();
     Type t = this;
     while ( t != null )
     {
-      Field[] declFields = t.getDeclaredFields();
+      final Field[] declFields = t.getDeclaredFields();
       if ( declFields != null )
       {
-        for ( Field f : declFields )
+        for ( final Field f : declFields )
         {
 					if ( f.isPublic )
 					{
@@ -179,16 +179,16 @@ public class Type
    * @return the public method that matches the name and parameter types of this type or one of its super interfaces.
    */
   @Nonnull
-  public Method getMethod( String name, Class... parameterTypes )
+  public Method getMethod( final String name, final Class... parameterTypes )
     throws NoSuchMethodException
   {
     Type t = this;
     while ( t != null )
     {
-      Method[] declMethods = t.getDeclaredMethods();
+      final Method[] declMethods = t.getDeclaredMethods();
       if ( declMethods != null )
       {
-        for ( Method m : declMethods )
+        for ( final Method m : declMethods )
         {
 					if ( m.isPublic() && m.match( name, parameterTypes ) )
 					{
@@ -207,14 +207,14 @@ public class Type
   @Nonnull
   public Method[] getMethods()
   {
-    ArrayList<Method> allMethods = new ArrayList<>();
+    final ArrayList<Method> allMethods = new ArrayList<>();
     Type t = this;
     while ( t != null )
     {
-      Method[] declMethods = t.getDeclaredMethods();
+      final Method[] declMethods = t.getDeclaredMethods();
       if ( declMethods != null )
       {
-        for ( Method m : declMethods )
+        for ( final Method m : declMethods )
         {
 					if ( m.isPublic() )
 					{
@@ -244,19 +244,19 @@ public class Type
   }
 
   @Nonnull
-  public Constructor getDeclaredConstructor( Class... parameterTypes )
+  public Constructor getDeclaredConstructor( final Class... parameterTypes )
     throws NoSuchMethodException
   {
     return getConstructor( parameterTypes );
   }
 
   @Nonnull
-  public Constructor getConstructor( Class... parameterTypes )
+  public Constructor getConstructor( final Class... parameterTypes )
     throws NoSuchMethodException
   {
     if ( constructors != null )
     {
-      for ( Constructor c : constructors )
+      for ( final Constructor c : constructors )
       {
 				if ( c.isPublic() && c.match( parameterTypes ) )
 				{
@@ -319,7 +319,7 @@ public class Type
    * @param obj an array object of this type.
    * @return the length of the given array object.
    */
-  public int getArrayLength( Object obj )
+  public int getArrayLength( final Object obj )
   {
     return ReflectionCache.instance.getArrayLength( this, obj );
   }
@@ -329,7 +329,7 @@ public class Type
    * @param i   the index of the element to retrieve.
    * @return the element at position i in the array.
    */
-  public Object getArrayElement( Object obj, int i )
+  public Object getArrayElement( final Object obj, final int i )
   {
     return ReflectionCache.instance.getArrayElement( this, obj, i );
   }
@@ -341,7 +341,7 @@ public class Type
    * @param i     the index of the element to set.
    * @param value the element value.
    */
-  public void setArrayElement( Object obj, int i, Object value )
+  public void setArrayElement( final Object obj, final int i, final Object value )
   {
     ReflectionCache.instance.setArrayElement( this, obj, i, value );
   }

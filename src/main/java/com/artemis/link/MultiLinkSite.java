@@ -13,23 +13,23 @@ class MultiLinkSite
   @Nullable
   MultiFieldMutator fieldMutator;
 
-  protected MultiLinkSite( @Nonnull World world,
-                           @Nonnull ComponentType type,
-                           @Nonnull Field field )
+  protected MultiLinkSite( @Nonnull final World world,
+                           @Nonnull final ComponentType type,
+                           @Nonnull final Field field )
   {
 
     super( world, type, field, LinkPolicy.Policy.CHECK_SOURCE );
   }
 
   @Override
-  protected void check( int id )
+  protected void check( final int id )
   {
-    Object collection = fieldMutator.read( mapper.get( id ), field );
+    final Object collection = fieldMutator.read( mapper.get( id ), field );
     fieldMutator.validate( id, collection, listener );
   }
 
   @Override
-  protected void insert( int id )
+  protected void insert( final int id )
   {
 		if ( listener != null )
 		{
@@ -38,7 +38,7 @@ class MultiLinkSite
   }
 
   @Override
-  protected void removed( int id )
+  protected void removed( final int id )
   {
 		if ( listener != null )
 		{

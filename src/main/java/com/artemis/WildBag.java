@@ -15,7 +15,7 @@ import com.artemis.utils.Bag;
 class WildBag<T>
   extends Bag<T>
 {
-  public WildBag( Class<T> type )
+  public WildBag( final Class<T> type )
   {
     super( type );
   }
@@ -29,7 +29,7 @@ class WildBag<T>
    *
    * @param size the size to set
    */
-  void setSize( int size )
+  void setSize( final int size )
   {
     this.size = size;
   }

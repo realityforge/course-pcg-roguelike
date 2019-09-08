@@ -28,7 +28,7 @@ public class ArchetypeBuilder
    *
    * @param parent archetype composition to copy.
    */
-  public ArchetypeBuilder( @Nullable Archetype parent )
+  public ArchetypeBuilder( @Nullable final Archetype parent )
   {
     classes = new Bag<>();
 		if ( parent == null )
@@ -53,7 +53,7 @@ public class ArchetypeBuilder
    * @return This instance for chaining.
    */
   @Nonnull
-  public ArchetypeBuilder add( @Nonnull Class<? extends Component> type )
+  public ArchetypeBuilder add( @Nonnull final Class<? extends Component> type )
   {
 		if ( !classes.contains( type ) )
 		{
@@ -69,9 +69,9 @@ public class ArchetypeBuilder
    * @return This instance for chaining.
    */
   @Nonnull
-  public ArchetypeBuilder add( @Nonnull Class<? extends Component>... types )
+  public ArchetypeBuilder add( @Nonnull final Class<? extends Component>... types )
   {
-    for ( Class<? extends Component> type : types )
+    for ( final Class<? extends Component> type : types )
     {
       if ( !classes.contains( type ) )
       {
@@ -88,7 +88,7 @@ public class ArchetypeBuilder
    * @return This instance for chaining.
    */
   @Nonnull
-  public ArchetypeBuilder remove( @Nonnull Class<? extends Component> type )
+  public ArchetypeBuilder remove( @Nonnull final Class<? extends Component> type )
   {
     classes.remove( type );
     return this;
@@ -100,7 +100,7 @@ public class ArchetypeBuilder
    * @return This instance for chaining.
    */
   @Nonnull
-  public ArchetypeBuilder remove( @Nonnull Class<? extends Component>... types )
+  public ArchetypeBuilder remove( @Nonnull final Class<? extends Component>... types )
   {
     for ( final Class<? extends Component> type : types )
     {
@@ -117,19 +117,19 @@ public class ArchetypeBuilder
    * @return new Archetype based on current state
    */
   @Nonnull
-  public Archetype build( @Nonnull World world )
+  public Archetype build( @Nonnull final World world )
   {
-    ComponentType[] types = resolveTypes( world );
+    final ComponentType[] types = resolveTypes( world );
 
-    ComponentManager cm = world.getComponentManager();
-    ComponentMapper[] mappers = new ComponentMapper[ types.length ];
+    final ComponentManager cm = world.getComponentManager();
+    final ComponentMapper[] mappers = new ComponentMapper[ types.length ];
     for ( int i = 0, s = mappers.length; s > i; i++ )
     {
       mappers[ i ] = cm.getMapper( types[ i ].getType() );
     }
 
-    int compositionId = cm.compositionIdentity( bitset( types ) );
-    TransmuteOperation operation =
+    final int compositionId = cm.compositionIdentity( bitset( types ) );
+    final TransmuteOperation operation =
       new TransmuteOperation( compositionId, mappers, new ComponentMapper[ 0 ] );
 
     return new Archetype( operation, compositionId );
@@ -139,9 +139,9 @@ public class ArchetypeBuilder
    * generate bitset mask of types.
    */
   @Nonnull
-  private static BitVector bitset( @Nonnull ComponentType[] types )
+  private static BitVector bitset( @Nonnull final ComponentType[] types )
   {
-    BitVector bs = new BitVector();
+    final BitVector bs = new BitVector();
     for ( final ComponentType type : types )
     {
       bs.set( type.getIndex() );
@@ -154,10 +154,10 @@ public class ArchetypeBuilder
    * Converts java classes to component types.
    */
   @Nonnull
-  private ComponentType[] resolveTypes( @Nonnull World world )
+  private ComponentType[] resolveTypes( @Nonnull final World world )
   {
-    ComponentTypeFactory tf = world.getComponentManager().typeFactory;
-    ComponentType[] types = new ComponentType[ classes.size() ];
+    final ComponentTypeFactory tf = world.getComponentManager().typeFactory;
+    final ComponentType[] types = new ComponentType[ classes.size() ];
 		for ( int i = 0, s = classes.size(); s > i; i++ )
 		{
 			types[ i ] = tf.getTypeFor( classes.get( i ) );

@@ -40,7 +40,7 @@ public class AspectSubscriptionManager
   }
 
   @Override
-  protected void setWorld( World world )
+  protected void setWorld( final World world )
   {
     super.setWorld( world );
 
@@ -64,16 +64,16 @@ public class AspectSubscriptionManager
    * @return {@link EntitySubscription} for aspect.
    */
   @Nonnull
-  public EntitySubscription get( @Nonnull Aspect.Builder builder )
+  public EntitySubscription get( @Nonnull final Aspect.Builder builder )
   {
-    EntitySubscription subscription = subscriptionMap.get( builder );
+    final EntitySubscription subscription = subscriptionMap.get( builder );
     return ( subscription != null ) ? subscription : createSubscription( builder );
   }
 
   @Nonnull
-  private EntitySubscription createSubscription( @Nonnull Aspect.Builder builder )
+  private EntitySubscription createSubscription( @Nonnull final Aspect.Builder builder )
   {
-    EntitySubscription entitySubscription = new EntitySubscription( world, builder );
+    final EntitySubscription entitySubscription = new EntitySubscription( world, builder );
     subscriptionMap.put( builder, entitySubscription );
     subscriptions.add( entitySubscription );
 
@@ -94,7 +94,7 @@ public class AspectSubscriptionManager
    * @param changedBits Entities with changedBits composition or state.
    * @param deletedBits Entities removed from world.
    */
-  void process( @Nonnull BitVector changedBits, @Nonnull BitVector deletedBits )
+  void process( @Nonnull final BitVector changedBits, @Nonnull final BitVector deletedBits )
   {
     toEntityIntBags( changedBits, deletedBits );
 
@@ -107,7 +107,7 @@ public class AspectSubscriptionManager
     }
   }
 
-  private void toEntityIntBags( @Nonnull BitVector changed, @Nonnull BitVector deleted )
+  private void toEntityIntBags( @Nonnull final BitVector changed, @Nonnull final BitVector deleted )
   {
     changed.toIntBagIdCid( world.getComponentManager(), this.changed );
     deleted.toIntBag( this.deleted );
@@ -116,7 +116,7 @@ public class AspectSubscriptionManager
     deleted.clear();
   }
 
-  void processComponentIdentity( int id, @Nonnull BitVector componentBits )
+  void processComponentIdentity( final int id, @Nonnull final BitVector componentBits )
   {
     for ( int i = 0, s = subscriptions.size(); s > i; i++ )
     {

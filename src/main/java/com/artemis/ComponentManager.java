@@ -32,7 +32,7 @@ public class ComponentManager
    * Collects all Entites marked for deletion from this ComponentManager.
    */
   @Nonnull
-  private Bag<ComponentMapper> mappers = new Bag( ComponentMapper.class );
+  private final Bag<ComponentMapper> mappers = new Bag( ComponentMapper.class );
   private final ComponentIdentityResolver identityResolver = new ComponentIdentityResolver();
   @Nonnull
   final ShortBag entityToIdentity;
@@ -42,7 +42,7 @@ public class ComponentManager
   /**
    * Creates a new instance of {@link ComponentManager}.
    */
-  protected ComponentManager( int entityContainerSize )
+  protected ComponentManager( final int entityContainerSize )
   {
     entityToIdentity = new ShortBag( entityContainerSize );
     typeFactory = new ComponentTypeFactory( this, entityContainerSize );
@@ -61,34 +61,34 @@ public class ComponentManager
    * @return Newly created packed, pooled or basic component.
    */
   @Nullable
-  protected <T extends Component> T create( int owner, Class<T> componentClass )
+  protected <T extends Component> T create( final int owner, final Class<T> componentClass )
   {
     return getMapper( componentClass ).create( owner );
   }
 
-  protected <T extends Component> ComponentMapper<T> getMapper( Class<T> mapper )
+  protected <T extends Component> ComponentMapper<T> getMapper( final Class<T> mapper )
   {
-    ComponentType type = typeFactory.getTypeFor( mapper );
+    final ComponentType type = typeFactory.getTypeFor( mapper );
     return mappers.get( type.getIndex() );
   }
 
-  void registerComponentType( @Nonnull ComponentType ct, int capacity )
+  void registerComponentType( @Nonnull final ComponentType ct, final int capacity )
   {
-    int index = ct.getIndex();
-    ComponentMapper mapper = new ComponentMapper( ct.getType(), world );
+    final int index = ct.getIndex();
+    final ComponentMapper mapper = new ComponentMapper( ct.getType(), world );
     mapper.components.ensureCapacity( capacity );
     mappers.set( index, mapper );
   }
 
   @Nonnull
   @SuppressWarnings( "unchecked" )
-  static <T extends Component> T newInstance( @Nonnull Class<T> componentClass )
+  static <T extends Component> T newInstance( @Nonnull final Class<T> componentClass )
   {
     try
     {
       return ClassReflection.newInstance( componentClass );
     }
-    catch ( ReflectionException e )
+    catch ( final ReflectionException e )
     {
       throw new InvalidComponentException( componentClass, "Unable to instantiate component.", e );
     }
@@ -99,18 +99,18 @@ public class ComponentManager
    *
    * @param pendingPurge the entities to remove components from
    */
-  void clean( @Nonnull IntBag pendingPurge )
+  void clean( @Nonnull final IntBag pendingPurge )
   {
-    int[] ids = pendingPurge.getData();
+    final int[] ids = pendingPurge.getData();
     for ( int i = 0, s = pendingPurge.size(); s > i; i++ )
     {
       removeComponents( ids[ i ] );
     }
   }
 
-  private void removeComponents( int entityId )
+  private void removeComponents( final int entityId )
   {
-    Bag<ComponentMapper> mappers = componentMappers( entityId );
+    final Bag<ComponentMapper> mappers = componentMappers( entityId );
     for ( int i = 0, s = mappers.size(); s > i; i++ )
     {
       mappers.get( i ).internalRemove( entityId );
@@ -126,7 +126,7 @@ public class ComponentManager
    * @return a bag containing all components of the given type
    */
   @Nonnull
-  protected Bag<Component> getComponentsByType( @Nonnull ComponentType type )
+  protected Bag<Component> getComponentsByType( @Nonnull final ComponentType type )
   {
     return mappers.get( type.getIndex() ).components;
   }
@@ -146,9 +146,9 @@ public class ComponentManager
    * @param type     the type of component to get
    * @return the component of given type
    */
-  protected Component getComponent( int entityId, @Nonnull ComponentType type )
+  protected Component getComponent( final int entityId, @Nonnull final ComponentType type )
   {
-    ComponentMapper mapper = mappers.get( type.getIndex() );
+    final ComponentMapper mapper = mappers.get( type.getIndex() );
     return mapper.get( entityId );
   }
 
@@ -160,9 +160,9 @@ public class ComponentManager
    * @return the {@code fillBag}, filled with the entities components
    */
   @Nonnull
-  public Bag<Component> getComponentsFor( int entityId, @Nonnull Bag<Component> fillBag )
+  public Bag<Component> getComponentsFor( final int entityId, @Nonnull final Bag<Component> fillBag )
   {
-    Bag<ComponentMapper> mappers = componentMappers( entityId );
+    final Bag<ComponentMapper> mappers = componentMappers( entityId );
 
     for ( int i = 0, s = mappers.size(); s > i; i++ )
     {
@@ -175,18 +175,18 @@ public class ComponentManager
   /**
    * Get component composition of entity.
    */
-  BitVector componentBits( int entityId )
+  BitVector componentBits( final int entityId )
   {
-    int identityIndex = entityToIdentity.get( entityId );
+    final int identityIndex = entityToIdentity.get( entityId );
     return identityResolver.compositionBits.get( identityIndex );
   }
 
   /**
    * Get component composition of entity.
    */
-  private Bag<ComponentMapper> componentMappers( int entityId )
+  private Bag<ComponentMapper> componentMappers( final int entityId )
   {
-    int identityIndex = entityToIdentity.get( entityId );
+    final int identityIndex = entityToIdentity.get( entityId );
     return identityResolver.compositionMappers.get( identityIndex );
   }
 
@@ -196,7 +196,7 @@ public class ComponentManager
    * @param componentBits composition to fetch unique identifier for.
    * @return Unique identifier for passed composition.
    */
-  public int compositionIdentity( @Nonnull BitVector componentBits )
+  public int compositionIdentity( @Nonnull final BitVector componentBits )
   {
     int identity = identityResolver.getIdentity( componentBits );
     if ( identity == -1 )
@@ -217,7 +217,7 @@ public class ComponentManager
    *
    * @return composition identity.
    */
-  public int getIdentity( int entityId )
+  public int getIdentity( final int entityId )
   {
     return entityToIdentity.get( entityId );
   }
@@ -227,16 +227,16 @@ public class ComponentManager
    *
    * @param es entity subscription to update.
    */
-  void synchronize( @Nonnull EntitySubscription es )
+  void synchronize( @Nonnull final EntitySubscription es )
   {
-    Bag<BitVector> compositionBits = identityResolver.compositionBits;
+    final Bag<BitVector> compositionBits = identityResolver.compositionBits;
     for ( int i = 1, s = compositionBits.size(); s > i; i++ )
     {
-      BitVector componentBits = compositionBits.get( i );
+      final BitVector componentBits = compositionBits.get( i );
       es.processComponentIdentity( i, componentBits );
     }
 
-    for ( Entity e : world.getEntityManager().entities )
+    for ( final Entity e : world.getEntityManager().entities )
     {
       if ( e != null )
       {
@@ -254,7 +254,7 @@ public class ComponentManager
    * @param entityId      entity id
    * @param compositionId composition id
    */
-  void setIdentity( int entityId, int compositionId )
+  void setIdentity( final int entityId, final int compositionId )
   {
     entityToIdentity.unsafeSet( entityId, (short) compositionId );
   }
@@ -268,11 +268,11 @@ public class ComponentManager
     return typeFactory;
   }
 
-  public void ensureCapacity( int newSize )
+  public void ensureCapacity( final int newSize )
   {
     typeFactory.initialMapperCapacity = newSize;
     entityToIdentity.ensureCapacity( newSize );
-    for ( ComponentMapper mapper : mappers )
+    for ( final ComponentMapper mapper : mappers )
     {
       mapper.components.ensureCapacity( newSize );
     }
@@ -299,10 +299,10 @@ public class ComponentManager
     /**
      * Fetch unique identity for passed composition.
      */
-    int getIdentity( @Nonnull BitVector components )
+    int getIdentity( @Nonnull final BitVector components )
     {
-      Object[] bitsets = compositionBits.getData();
-      int size = compositionBits.size();
+      final Object[] bitsets = compositionBits.getData();
+      final int size = compositionBits.size();
       for ( int i = NO_COMPONENTS; size > i; i++ )
       { // want to start from 1 so that 0 can mean null
         if ( components.equals( bitsets[ i ] ) )
@@ -314,12 +314,12 @@ public class ComponentManager
       return -1;
     }
 
-    int allocateIdentity( @Nonnull BitVector componentBits, @Nonnull ComponentManager cm )
+    int allocateIdentity( @Nonnull final BitVector componentBits, @Nonnull final ComponentManager cm )
     {
-      Bag<ComponentMapper> mappers =
+      final Bag<ComponentMapper> mappers =
         new Bag<>( ComponentMapper.class, componentBits.cardinality() );
 
-      ComponentTypeFactory tf = cm.getTypeFactory();
+      final ComponentTypeFactory tf = cm.getTypeFactory();
       for ( int i = componentBits.nextSetBit( 0 ); i >= 0; i = componentBits.nextSetBit( i + 1 ) )
       {
         mappers.add( cm.getMapper( tf.getTypeFor( i ).getType() ) );

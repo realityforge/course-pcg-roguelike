@@ -25,7 +25,7 @@ public class UUID
    *
    */
   @Nonnull
-  public static UUID fromString( String uuidString )
+  public static UUID fromString( final String uuidString )
   {
     //TODO: Validation
 
@@ -51,7 +51,7 @@ public class UUID
   @Nonnull
   private static String generateUUIDString()
   {
-    char[] uuid = new char[ 36 ];
+    final char[] uuid = new char[ 36 ];
     int r;
 
     // rfc4122 requires these characters
@@ -75,7 +75,7 @@ public class UUID
    * @see java.lang.Comparable#compareTo(java.lang.Object)
    */
   @Override
-  public int compareTo( @Nonnull UUID arg0 )
+  public int compareTo( @Nonnull final UUID arg0 )
   {
     return value.compareTo( arg0.value );
   }
@@ -96,7 +96,7 @@ public class UUID
    * @see java.lang.Object#equals(java.lang.Object)
    */
   @Override
-  public boolean equals( @Nullable Object obj )
+  public boolean equals( @Nullable final Object obj )
   {
 		if ( this == obj )
 		{
@@ -110,7 +110,7 @@ public class UUID
 		{
 			return false;
 		}
-    UUID other = (UUID) obj;
+    final UUID other = (UUID) obj;
     if ( value == null )
     {
 			return other.value == null;

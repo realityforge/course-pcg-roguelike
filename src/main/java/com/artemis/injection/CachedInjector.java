@@ -32,13 +32,13 @@ import javax.annotation.Nonnull;
 public final class CachedInjector
   implements Injector
 {
-  private InjectionCache cache = InjectionCache.sharedCache.get();
+  private final InjectionCache cache = InjectionCache.sharedCache.get();
   private FieldHandler fieldHandler;
   private Map<String, Object> injectables;
 
   @Nonnull
   @Override
-  public Injector setFieldHandler( FieldHandler fieldHandler )
+  public Injector setFieldHandler( final FieldHandler fieldHandler )
   {
     this.fieldHandler = fieldHandler;
     return this;
@@ -46,20 +46,20 @@ public final class CachedInjector
 
   @Nonnull
   @Override
-  public <T> T getRegistered( String id )
+  public <T> T getRegistered( final String id )
   {
     return (T) injectables.get( id );
   }
 
   @Nonnull
   @Override
-  public <T> T getRegistered( @Nonnull Class<T> id )
+  public <T> T getRegistered( @Nonnull final Class<T> id )
   {
     return getRegistered( id.getName() );
   }
 
   @Override
-  public void initialize( World world, Map<String, Object> injectables )
+  public void initialize( final World world, final Map<String, Object> injectables )
   {
     this.injectables = injectables;
     if ( fieldHandler == null )
@@ -71,27 +71,27 @@ public final class CachedInjector
   }
 
   @Override
-  public boolean isInjectable( @Nonnull Object target )
+  public boolean isInjectable( @Nonnull final Object target )
   {
     try
     {
-      CachedClass cachedClass = cache.getCachedClass( target.getClass() );
+      final CachedClass cachedClass = cache.getCachedClass( target.getClass() );
       return cachedClass.wireType == WireType.WIRE;
     }
-    catch ( ReflectionException e )
+    catch ( final ReflectionException e )
     {
       throw new MundaneWireException( "Error while wiring", e );
     }
   }
 
   @Override
-  public void inject( @Nonnull Object target )
+  public void inject( @Nonnull final Object target )
     throws RuntimeException
   {
     try
     {
-      Class<?> clazz = target.getClass();
-      CachedClass cachedClass = cache.getCachedClass( clazz );
+      final Class<?> clazz = target.getClass();
+      final CachedClass cachedClass = cache.getCachedClass( clazz );
 
       if ( cachedClass.wireType == WireType.WIRE )
       {
@@ -102,32 +102,32 @@ public final class CachedInjector
         injectAnnotatedFields( target, cachedClass );
       }
     }
-    catch ( RuntimeException e )
+    catch ( final RuntimeException e )
     {
       throw new MundaneWireException( "Error while wiring " + target.getClass().getName(), e );
     }
-    catch ( ReflectionException e )
+    catch ( final ReflectionException e )
     {
       throw new MundaneWireException( "Error while wiring " + target.getClass().getName(), e );
     }
   }
 
-  private void injectValidFields( Object target, @Nonnull CachedClass cachedClass )
+  private void injectValidFields( final Object target, @Nonnull final CachedClass cachedClass )
     throws ReflectionException
   {
-    Field[] declaredFields = getAllInjectableFields( cachedClass );
+    final Field[] declaredFields = getAllInjectableFields( cachedClass );
     for ( final Field declaredField : declaredFields )
     {
       injectField( target, declaredField, cachedClass.failOnNull );
     }
   }
 
-  private Field[] getAllInjectableFields( @Nonnull CachedClass cachedClass )
+  private Field[] getAllInjectableFields( @Nonnull final CachedClass cachedClass )
   {
     Field[] declaredFields = cachedClass.allFields;
     if ( declaredFields == null )
     {
-      List<Field> fieldList = new ArrayList<>();
+      final List<Field> fieldList = new ArrayList<>();
       Class<?> clazz = cachedClass.clazz;
       collectDeclaredInjectableFields( fieldList, clazz );
 
@@ -140,13 +140,13 @@ public final class CachedInjector
     return declaredFields;
   }
 
-  private void collectDeclaredInjectableFields( @Nonnull List<Field> fieldList, Class<?> clazz )
+  private void collectDeclaredInjectableFields( @Nonnull final List<Field> fieldList, final Class<?> clazz )
   {
     try
     {
       if ( cache.getCachedClass( clazz ).wireType != WireType.SKIPWIRE )
       {
-        Field[] classFields = ClassReflection.getDeclaredFields( clazz );
+        final Field[] classFields = ClassReflection.getDeclaredFields( clazz );
         for ( final Field classField : classFields )
         {
           if ( isWireable( classField ) )
@@ -156,31 +156,31 @@ public final class CachedInjector
         }
       }
     }
-    catch ( ReflectionException e )
+    catch ( final ReflectionException e )
     {
       throw new MundaneWireException( "Error while wiring", e );
     }
   }
 
-  private boolean isWireable( Field field )
+  private boolean isWireable( final Field field )
   {
     return cache.getCachedField( field ).wireType != WireType.SKIPWIRE;
   }
 
-  private void injectAnnotatedFields( Object target, @Nonnull CachedClass cachedClass )
+  private void injectAnnotatedFields( final Object target, @Nonnull final CachedClass cachedClass )
     throws ReflectionException
   {
     injectClass( target, cachedClass );
   }
 
   @SuppressWarnings( "deprecation" )
-  private void injectClass( Object target, @Nonnull CachedClass cachedClass )
+  private void injectClass( final Object target, @Nonnull final CachedClass cachedClass )
     throws ReflectionException
   {
-    Field[] declaredFields = getAllInjectableFields( cachedClass );
-    for ( Field field : declaredFields )
+    final Field[] declaredFields = getAllInjectableFields( cachedClass );
+    for ( final Field field : declaredFields )
     {
-      CachedField cachedField = cache.getCachedField( field );
+      final CachedField cachedField = cache.getCachedField( field );
       if ( cachedField.wireType != WireType.IGNORED )
       {
         injectField( target, field, cachedField.wireType == WireType.WIRE );
@@ -189,15 +189,15 @@ public final class CachedInjector
   }
 
   @SuppressWarnings( "unchecked" )
-  private void injectField( Object target, @Nonnull Field field, boolean failOnNotInjected )
+  private void injectField( final Object target, @Nonnull final Field field, final boolean failOnNotInjected )
     throws ReflectionException
   {
-    Class<?> fieldType;
+    final Class<?> fieldType;
     try
     {
       fieldType = field.getType();
     }
-    catch ( RuntimeException ignore )
+    catch ( final RuntimeException ignore )
     {
       // Swallow exception caused by missing typedata on gwt platfString.format("Failed to inject %s into %s:
       // %s not registered with world.")orm.
@@ -206,7 +206,7 @@ public final class CachedInjector
       return;
     }
 
-    Object resolve = fieldHandler.resolve( target, fieldType, field );
+    final Object resolve = fieldHandler.resolve( target, fieldType, field );
     if ( resolve != null )
     {
       setField( target, field, resolve );
@@ -218,7 +218,7 @@ public final class CachedInjector
     }
   }
 
-  private void setField( Object target, @Nonnull Field field, Object fieldValue )
+  private void setField( final Object target, @Nonnull final Field field, final Object fieldValue )
     throws ReflectionException
   {
     field.setAccessible( true );
@@ -226,11 +226,11 @@ public final class CachedInjector
   }
 
   @Nonnull
-  private MundaneWireException onFailedInjection( String typeName, @Nonnull Field failedInjection )
+  private MundaneWireException onFailedInjection( final String typeName, @Nonnull final Field failedInjection )
   {
-    String error = "Failed to inject " + failedInjection.getType().getName() +
-                   " into " + failedInjection.getDeclaringClass().getName() + ": " +
-                   typeName + " not registered with world.";
+    final String error = "Failed to inject " + failedInjection.getType().getName() +
+                         " into " + failedInjection.getDeclaringClass().getName() + ": " +
+                         typeName + " not registered with world.";
 
     return new MundaneWireException( error );
   }

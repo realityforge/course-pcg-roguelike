@@ -22,7 +22,7 @@ public final class EntityTransmuterFactory
   /**
    * Prepare new builder.
    */
-  public EntityTransmuterFactory( @Nonnull World world )
+  public EntityTransmuterFactory( @Nonnull final World world )
   {
     this.world = world;
     types = world.getComponentManager().typeFactory;
@@ -34,9 +34,9 @@ public final class EntityTransmuterFactory
    * Component to add upon transmutation. Overwrites and retires if component exists!
    */
   @Nonnull
-  public EntityTransmuterFactory add( @Nonnull Class<? extends Component> component )
+  public EntityTransmuterFactory add( @Nonnull final Class<? extends Component> component )
   {
-    int index = types.getIndexFor( component );
+    final int index = types.getIndexFor( component );
     additions.set( index, true );
     removals.set( index, false );
     return this;
@@ -46,9 +46,9 @@ public final class EntityTransmuterFactory
    * Component to remove upon transmutation. Does nothing if missing.
    */
   @Nonnull
-  public EntityTransmuterFactory remove( @Nonnull Class<? extends Component> component )
+  public EntityTransmuterFactory remove( @Nonnull final Class<? extends Component> component )
   {
-    int index = types.getIndexFor( component );
+    final int index = types.getIndexFor( component );
     additions.set( index, false );
     removals.set( index, true );
     return this;

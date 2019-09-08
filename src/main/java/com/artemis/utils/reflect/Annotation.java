@@ -9,16 +9,16 @@ import javax.annotation.Nullable;
  */
 public final class Annotation
 {
-  private java.lang.annotation.Annotation annotation;
+  private final java.lang.annotation.Annotation annotation;
 
-  Annotation( java.lang.annotation.Annotation annotation )
+  Annotation( final java.lang.annotation.Annotation annotation )
   {
     this.annotation = annotation;
   }
 
   @Nullable
   @SuppressWarnings( "unchecked" )
-  public <T extends java.lang.annotation.Annotation> T getAnnotation( Class<T> annotationType )
+  public <T extends java.lang.annotation.Annotation> T getAnnotation( final Class<T> annotationType )
   {
     if ( annotation.annotationType().equals( annotationType ) )
     {

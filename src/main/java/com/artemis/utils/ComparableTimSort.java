@@ -89,7 +89,7 @@ class ComparableTimSort
     runLen = new int[ 40 ];
   }
 
-  public void doSort( @Nonnull Object[] a, int lo, int hi )
+  public void doSort( @Nonnull final Object[] a, int lo, final int hi )
   {
     stackSize = 0;
     rangeCheck( a.length, lo, hi );
@@ -102,7 +102,7 @@ class ComparableTimSort
     // If array is small, do a "mini-TimSort" with no merges
     if ( nRemaining < MIN_MERGE )
     {
-      int initRunLen = countRunAndMakeAscending( a, lo, hi );
+      final int initRunLen = countRunAndMakeAscending( a, lo, hi );
       binarySort( a, lo, hi, lo + initRunLen );
       return;
     }
@@ -111,7 +111,7 @@ class ComparableTimSort
 
     /** March over the array once, left to right, finding natural runs, extending short natural runs to minRun elements, and
      * merging runs to maintain stack invariant. */
-    int minRun = minRunLength( nRemaining );
+    final int minRun = minRunLength( nRemaining );
     do
     {
       // Identify next run
@@ -120,7 +120,7 @@ class ComparableTimSort
       // If run is short, extend to min(minRun, nRemaining)
       if ( runLen < minRun )
       {
-        int force = nRemaining <= minRun ? nRemaining : minRun;
+        final int force = nRemaining <= minRun ? nRemaining : minRun;
         binarySort( a, lo, lo + force, lo + runLen );
         runLen = force;
       }
@@ -145,13 +145,13 @@ class ComparableTimSort
    *
    * @param a the array to be sorted
    */
-  private ComparableTimSort( @Nonnull Object[] a )
+  private ComparableTimSort( @Nonnull final Object[] a )
   {
     this.a = a;
 
     // Allocate temp storage (which may be increased later if necessary)
-    int len = a.length;
-    Object[] newArray = new Object[ len < 2 * INITIAL_TMP_STORAGE_LENGTH ? len >>> 1 : INITIAL_TMP_STORAGE_LENGTH ];
+    final int len = a.length;
+    final Object[] newArray = new Object[ len < 2 * INITIAL_TMP_STORAGE_LENGTH ? len >>> 1 : INITIAL_TMP_STORAGE_LENGTH ];
     tmp = newArray;
 
     /*
@@ -161,7 +161,7 @@ class ComparableTimSort
      * The "magic numbers" in the computation below must be changed if MIN_MERGE is decreased. See the MIN_MERGE declaration
      * above for more information.
      */
-    int stackLen = ( len < 120 ? 5 : len < 1542 ? 10 : len < 119151 ? 19 : 40 );
+    final int stackLen = ( len < 120 ? 5 : len < 1542 ? 10 : len < 119151 ? 19 : 40 );
     runBase = new int[ stackLen ];
     runLen = new int[ stackLen ];
   }
@@ -171,12 +171,12 @@ class ComparableTimSort
    * obeys the contract of the public method with the same signature in java.util.Arrays.
    */
 
-  static void sort( @Nonnull Object[] a )
+  static void sort( @Nonnull final Object[] a )
   {
     sort( a, 0, a.length );
   }
 
-  static void sort( @Nonnull Object[] a, int lo, int hi )
+  static void sort( @Nonnull final Object[] a, int lo, final int hi )
   {
     rangeCheck( a.length, lo, hi );
     int nRemaining = hi - lo;
@@ -188,15 +188,15 @@ class ComparableTimSort
     // If array is small, do a "mini-TimSort" with no merges
     if ( nRemaining < MIN_MERGE )
     {
-      int initRunLen = countRunAndMakeAscending( a, lo, hi );
+      final int initRunLen = countRunAndMakeAscending( a, lo, hi );
       binarySort( a, lo, hi, lo + initRunLen );
       return;
     }
 
     /** March over the array once, left to right, finding natural runs, extending short natural runs to minRun elements, and
      * merging runs to maintain stack invariant. */
-    ComparableTimSort ts = new ComparableTimSort( a );
-    int minRun = minRunLength( nRemaining );
+    final ComparableTimSort ts = new ComparableTimSort( a );
+    final int minRun = minRunLength( nRemaining );
     do
     {
       // Identify next run
@@ -205,7 +205,7 @@ class ComparableTimSort
       // If run is short, extend to min(minRun, nRemaining)
       if ( runLen < minRun )
       {
-        int force = nRemaining <= minRun ? nRemaining : minRun;
+        final int force = nRemaining <= minRun ? nRemaining : minRun;
         binarySort( a, lo, lo + force, lo + runLen );
         runLen = force;
       }
@@ -238,7 +238,7 @@ class ComparableTimSort
    * @param start the index of the first element in the range that is not already known to be sorted (@code lo <= start <= hi}
    */
   @SuppressWarnings( { "fallthrough", "rawtypes" } )
-  private static void binarySort( @Nonnull Object[] a, int lo, int hi, int start )
+  private static void binarySort( @Nonnull final Object[] a, final int lo, final int hi, int start )
   {
 		assert !DEBUG || lo <= start && start <= hi;
 		if ( start == lo )
@@ -248,7 +248,7 @@ class ComparableTimSort
     for ( ; start < hi; start++ )
     {
       @SuppressWarnings( "unchecked" )
-      Comparable<Object> pivot = (Comparable) a[ start ];
+      final Comparable<Object> pivot = (Comparable) a[ start ];
 
       // Set left (and right) to the index where a[start] (pivot) belongs
       int left = lo;
@@ -259,7 +259,7 @@ class ComparableTimSort
        */
       while ( left < right )
       {
-        int mid = ( left + right ) >>> 1;
+        final int mid = ( left + right ) >>> 1;
 				if ( pivot.compareTo( a[ mid ] ) < 0 )
 				{
 					right = mid;
@@ -276,7 +276,7 @@ class ComparableTimSort
        * that if there are elements equal to pivot, left points to the first slot after them -- that's why this sort is stable.
        * Slide elements over to make room to make room for pivot.
        */
-      int n = start - left; // The number of elements to move
+      final int n = start - left; // The number of elements to move
       // Switch is just an optimization for arraycopy in default case
       switch ( n )
       {
@@ -313,7 +313,7 @@ class ComparableTimSort
    * @return the length of the run beginning at the specified position in the specified array
    */
   @SuppressWarnings( { "unchecked", "rawtypes" } )
-  private static int countRunAndMakeAscending( Object[] a, int lo, int hi )
+  private static int countRunAndMakeAscending( final Object[] a, final int lo, final int hi )
   {
 		assert !DEBUG || lo < hi;
     int runHi = lo + 1;
@@ -349,12 +349,12 @@ class ComparableTimSort
    * @param lo the index of the first element in the range to be reversed
    * @param hi the index after the last element in the range to be reversed
    */
-  private static void reverseRange( Object[] a, int lo, int hi )
+  private static void reverseRange( final Object[] a, int lo, int hi )
   {
     hi--;
     while ( lo < hi )
     {
-      Object t = a[ lo ];
+      final Object t = a[ lo ];
       a[ lo++ ] = a[ hi ];
       a[ hi-- ] = t;
     }
@@ -393,7 +393,7 @@ class ComparableTimSort
    * @param runBase index of the first element in the run
    * @param runLen  the number of elements in the run
    */
-  private void pushRun( int runBase, int runLen )
+  private void pushRun( final int runBase, final int runLen )
   {
     this.runBase[ stackSize ] = runBase;
     this.runLen[ stackSize ] = runLen;
@@ -455,7 +455,7 @@ class ComparableTimSort
    * @param i stack index of the first of the two runs to merge
    */
   @SuppressWarnings( "unchecked" )
-  private void mergeAt( int i )
+  private void mergeAt( final int i )
   {
 		assert !DEBUG || stackSize >= 2;
 		assert !DEBUG || i >= 0;
@@ -463,7 +463,7 @@ class ComparableTimSort
 
     int base1 = runBase[ i ];
     int len1 = runLen[ i ];
-    int base2 = runBase[ i + 1 ];
+    final int base2 = runBase[ i + 1 ];
     int len2 = runLen[ i + 1 ];
 		assert !DEBUG || len1 > 0 && len2 > 0;
 		assert !DEBUG || base1 + len1 == base2;
@@ -484,7 +484,7 @@ class ComparableTimSort
      * Find where the first element of run2 goes in run1. Prior elements in run1 can be ignored (because they're already in
      * place).
      */
-    int k = gallopRight( (Comparable<Object>) a[ base2 ], a, base1, len1, 0 );
+    final int k = gallopRight( (Comparable<Object>) a[ base2 ], a, base1, len1, 0 );
 		assert !DEBUG || k >= 0;
     base1 += k;
     len1 -= k;
@@ -529,7 +529,7 @@ class ComparableTimSort
    * + n] is infinity. In other words, key belongs at index b + k; or in other words, the first k elements of a should
    * precede key, and the last n - k should follow it.
    */
-  private static int gallopLeft( @Nonnull Comparable<Object> key, Object[] a, int base, int len, int hint )
+  private static int gallopLeft( @Nonnull final Comparable<Object> key, final Object[] a, final int base, final int len, final int hint )
   {
 		assert !DEBUG || len > 0 && hint >= 0 && hint < len;
 
@@ -538,7 +538,7 @@ class ComparableTimSort
     if ( key.compareTo( a[ base + hint ] ) > 0 )
     {
       // Gallop right until a[base+hint+lastOfs] < key <= a[base+hint+ofs]
-      int maxOfs = len - hint;
+      final int maxOfs = len - hint;
       while ( ofs < maxOfs && key.compareTo( a[ base + hint + ofs ] ) > 0 )
       {
         lastOfs = ofs;
@@ -576,7 +576,7 @@ class ComparableTimSort
 			}
 
       // Make offsets relative to base
-      int tmp = lastOfs;
+      final int tmp = lastOfs;
       lastOfs = hint - ofs;
       ofs = hint - tmp;
     }
@@ -589,7 +589,7 @@ class ComparableTimSort
     lastOfs++;
     while ( lastOfs < ofs )
     {
-      int m = lastOfs + ( ( ofs - lastOfs ) >>> 1 );
+      final int m = lastOfs + ( ( ofs - lastOfs ) >>> 1 );
 
 			if ( key.compareTo( a[ base + m ] ) > 0 )
 			{
@@ -616,7 +616,7 @@ class ComparableTimSort
    *             will run.
    * @return the int k, 0 <= k <= n such that a[b + k - 1] <= key < a[b + k]
    */
-  private static int gallopRight( @Nonnull Comparable<Object> key, Object[] a, int base, int len, int hint )
+  private static int gallopRight( @Nonnull final Comparable<Object> key, final Object[] a, final int base, final int len, final int hint )
   {
 		assert !DEBUG || len > 0 && hint >= 0 && hint < len;
 
@@ -625,7 +625,7 @@ class ComparableTimSort
     if ( key.compareTo( a[ base + hint ] ) < 0 )
     {
       // Gallop left until a[b+hint - ofs] <= key < a[b+hint - lastOfs]
-      int maxOfs = hint + 1;
+      final int maxOfs = hint + 1;
       while ( ofs < maxOfs && key.compareTo( a[ base + hint - ofs ] ) < 0 )
       {
         lastOfs = ofs;
@@ -641,14 +641,14 @@ class ComparableTimSort
 			}
 
       // Make offsets relative to b
-      int tmp = lastOfs;
+      final int tmp = lastOfs;
       lastOfs = hint - ofs;
       ofs = hint - tmp;
     }
     else
     { // a[b + hint] <= key
       // Gallop right until a[b+hint + lastOfs] <= key < a[b+hint + ofs]
-      int maxOfs = len - hint;
+      final int maxOfs = len - hint;
       while ( ofs < maxOfs && key.compareTo( a[ base + hint + ofs ] ) >= 0 )
       {
         lastOfs = ofs;
@@ -676,7 +676,7 @@ class ComparableTimSort
     lastOfs++;
     while ( lastOfs < ofs )
     {
-      int m = lastOfs + ( ( ofs - lastOfs ) >>> 1 );
+      final int m = lastOfs + ( ( ofs - lastOfs ) >>> 1 );
 
 			if ( key.compareTo( a[ base + m ] ) < 0 )
 			{
@@ -705,13 +705,13 @@ class ComparableTimSort
    * @param len2  length of second run to be merged (must be > 0)
    */
   @SuppressWarnings( { "unchecked", "rawtypes" } )
-  private void mergeLo( int base1, int len1, int base2, int len2 )
+  private void mergeLo( final int base1, int len1, final int base2, int len2 )
   {
 		assert !DEBUG || len1 > 0 && len2 > 0 && base1 + len1 == base2;
 
     // Copy first run into temp array
-    Object[] a = this.a; // For performance
-    Object[] tmp = ensureCapacity( len1 );
+    final Object[] a = this.a; // For performance
+    final Object[] tmp = ensureCapacity( len1 );
     System.arraycopy( a, base1, tmp, 0, len1 );
 
     int cursor1 = 0; // Indexes into tmp array
@@ -847,13 +847,13 @@ class ComparableTimSort
    * @param len2  length of second run to be merged (must be > 0)
    */
   @SuppressWarnings( { "unchecked", "rawtypes" } )
-  private void mergeHi( int base1, int len1, int base2, int len2 )
+  private void mergeHi( final int base1, int len1, final int base2, int len2 )
   {
 		assert !DEBUG || len1 > 0 && len2 > 0 && base1 + len1 == base2;
 
     // Copy second run into temp array
-    Object[] a = this.a; // For performance
-    Object[] tmp = ensureCapacity( len2 );
+    final Object[] a = this.a; // For performance
+    final Object[] tmp = ensureCapacity( len2 );
     System.arraycopy( a, base2, tmp, 0, len2 );
 
     int cursor1 = base1 + len1 - 1; // Indexes into a
@@ -990,7 +990,7 @@ class ComparableTimSort
    * @param minCapacity the minimum required capacity of the tmp array
    * @return tmp, whether or not it grew
    */
-  private Object[] ensureCapacity( int minCapacity )
+  private Object[] ensureCapacity( final int minCapacity )
   {
     if ( tmp.length < minCapacity )
     {
@@ -1012,7 +1012,7 @@ class ComparableTimSort
 				newSize = Math.min( newSize, a.length >>> 1 );
 			}
 
-      Object[] newArray = new Object[ newSize ];
+      final Object[] newArray = new Object[ newSize ];
       tmp = newArray;
     }
     return tmp;
@@ -1027,7 +1027,7 @@ class ComparableTimSort
    * @throws IllegalArgumentException       if fromIndex > toIndex
    * @throws ArrayIndexOutOfBoundsException if fromIndex < 0 or toIndex > arrayLen
    */
-  private static void rangeCheck( int arrayLen, int fromIndex, int toIndex )
+  private static void rangeCheck( final int arrayLen, final int fromIndex, final int toIndex )
   {
 		if ( fromIndex > toIndex )
 		{

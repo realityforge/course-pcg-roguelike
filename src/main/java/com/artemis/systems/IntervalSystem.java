@@ -25,7 +25,7 @@ public abstract class IntervalSystem
    * @param aspect   the aspect to match entities
    * @param interval the interval at which the system processes
    */
-  public IntervalSystem( Aspect.Builder aspect, float interval )
+  public IntervalSystem( final Aspect.Builder aspect, final float interval )
   {
     super( aspect );
     this.interval = interval;

@@ -34,7 +34,7 @@ public class ShortBag
    *
    * @param capacity the initial capacity of Bag
    */
-  public ShortBag( int capacity )
+  public ShortBag( final int capacity )
   {
     data = new short[ capacity ];
   }
@@ -46,10 +46,10 @@ public class ShortBag
    * @param value the value to be removed
    * @return true, if value was removed
    */
-  public boolean removeValue( short value )
+  public boolean removeValue( final short value )
     throws ArrayIndexOutOfBoundsException
   {
-    int index = indexOf( value );
+    final int index = indexOf( value );
 		if ( index > -1 )
 		{
 			remove( index );
@@ -68,10 +68,10 @@ public class ShortBag
    * @param index the index of element to be removed
    * @return element that was removed from the Bag
    */
-  public int remove( int index )
+  public int remove( final int index )
     throws ArrayIndexOutOfBoundsException
   {
-    int e = data[ index ]; // make copy of element to remove so it can be returned
+    final int e = data[ index ]; // make copy of element to remove so it can be returned
     data[ index ] = data[ --size ]; // overwrite item to remove with last element
     data[ size ] = 0; // null last element, so gc can do its work
     return e;
@@ -83,7 +83,7 @@ public class ShortBag
    * @param value element to check
    * @return index of element, or {@code -1} if there is no such index.
    */
-  public int indexOf( short value )
+  public int indexOf( final short value )
   {
     for ( int i = 0; size > i; i++ )
     {
@@ -101,7 +101,7 @@ public class ShortBag
    * @param value element to check
    * @return {@code true} if the bag contains this element
    */
-  public boolean contains( short value )
+  public boolean contains( final short value )
   {
     for ( int i = 0; size > i; i++ )
     {
@@ -119,7 +119,7 @@ public class ShortBag
    * @param index index of the element to return
    * @return the element at the specified position in bag
    */
-  public short get( int index )
+  public short get( final int index )
     throws ArrayIndexOutOfBoundsException
   {
     return data[ index ];
@@ -163,7 +163,7 @@ public class ShortBag
    *
    * @param value element to be added to this list
    */
-  public void add( short value )
+  public void add( final short value )
   {
     // is size greater than capacity increase capacity
     if ( size == data.length )
@@ -182,7 +182,7 @@ public class ShortBag
    *
    * @param other elements to be added to this list
    */
-  public void addAll( @Nonnull ShortBag other )
+  public void addAll( @Nonnull final ShortBag other )
   {
     for ( int i = 0; i < other.size(); i++ )
     {
@@ -190,7 +190,7 @@ public class ShortBag
     }
   }
 
-  public void unsafeSet( int index, short value )
+  public void unsafeSet( final int index, final short value )
   {
     data[ index ] = value;
   }
@@ -201,7 +201,7 @@ public class ShortBag
    * @param index position of element
    * @param value the element
    */
-  public void set( int index, short value )
+  public void set( final int index, final short value )
   {
     if ( index >= data.length )
     {
@@ -219,7 +219,7 @@ public class ShortBag
    */
   private void grow()
   {
-    int newCapacity = ( data.length * 7 ) / 4 + 1;
+    final int newCapacity = ( data.length * 7 ) / 4 + 1;
     grow( newCapacity );
   }
 
@@ -229,10 +229,10 @@ public class ShortBag
    * @param newCapacity new capacity to grow to
    * @throws ArrayIndexOutOfBoundsException if new capacity is smaller than old
    */
-  private void grow( int newCapacity )
+  private void grow( final int newCapacity )
     throws ArrayIndexOutOfBoundsException
   {
-    short[] oldData = data;
+    final short[] oldData = data;
     data = new short[ newCapacity ];
     System.arraycopy( oldData, 0, data, 0, oldData.length );
   }
@@ -245,7 +245,7 @@ public class ShortBag
    *
    * @param index index to check
    */
-  public void ensureCapacity( int index )
+  public void ensureCapacity( final int index )
   {
     if ( index >= data.length )
     {
@@ -292,13 +292,13 @@ public class ShortBag
    *
    * @param size the size to set
    */
-  public void setSize( int size )
+  public void setSize( final int size )
   {
     this.size = size;
   }
 
   @Override
-  public boolean equals( @Nullable Object o )
+  public boolean equals( @Nullable final Object o )
   {
 		if ( this == o )
 		{
@@ -309,7 +309,7 @@ public class ShortBag
 			return false;
 		}
 
-    ShortBag intBag = (ShortBag) o;
+    final ShortBag intBag = (ShortBag) o;
     return size == intBag.size() && Arrays.equals( data, intBag.data );
   }
 
@@ -329,7 +329,7 @@ public class ShortBag
   @Override
   public String toString()
   {
-    StringBuilder sb = new StringBuilder();
+    final StringBuilder sb = new StringBuilder();
     sb.append( "IntBag(" );
     for ( int i = 0; size > i; i++ )
     {

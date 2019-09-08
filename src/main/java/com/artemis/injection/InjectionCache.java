@@ -57,7 +57,7 @@ public class InjectionCache
     }
   };
 
-  public CachedClass getCachedClass( Class<?> clazz )
+  public CachedClass getCachedClass( final Class<?> clazz )
     throws ReflectionException
   {
     CachedClass cachedClass = classCache.get( clazz );
@@ -83,7 +83,7 @@ public class InjectionCache
   /**
    * Set {@code @Wire} annotation value for cached class.
    */
-  private void setWireAnnotation( @Nonnull CachedClass cachedClass, @Nonnull Wire wireAnnotation )
+  private void setWireAnnotation( @Nonnull final CachedClass cachedClass, @Nonnull final Wire wireAnnotation )
   {
     cachedClass.wireType = WireType.WIRE;
     cachedClass.wireAnnotation = wireAnnotation;
@@ -96,7 +96,7 @@ public class InjectionCache
    * Convention is {@code Wire(injectInherited=true)}
    */
   @Nonnull
-  private WireType getWireType( Class<?> clazz )
+  private WireType getWireType( final Class<?> clazz )
   {
     return
       isAnnotationPresent( clazz, Wire.class ) ? WireType.WIRE :
@@ -104,7 +104,7 @@ public class InjectionCache
       WireType.IGNORED;
   }
 
-  public CachedField getCachedField( @Nonnull Field field )
+  public CachedField getCachedField( @Nonnull final Field field )
   {
     CachedField cachedField = namedWireCache.get( field );
     if ( cachedField == null )
@@ -127,7 +127,7 @@ public class InjectionCache
     return cachedField;
   }
 
-  public ClassType getFieldClassType( Class<?> fieldType )
+  public ClassType getFieldClassType( final Class<?> fieldType )
   {
     ClassType injectionType = fieldClassTypeCache.get( fieldType );
     if ( injectionType == null )
@@ -154,7 +154,7 @@ public class InjectionCache
   }
 
   @Nullable
-  public Class<?> getGenericType( @Nonnull Field field )
+  public Class<?> getGenericType( @Nonnull final Field field )
   {
     Class<?> genericsType = genericsCache.get( field );
     if ( genericsType == null )

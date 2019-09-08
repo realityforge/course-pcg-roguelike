@@ -29,7 +29,7 @@ public abstract class EntityProcessingSystem
    *
    * @param aspect the aspect to match entities
    */
-  public EntityProcessingSystem( Aspect.Builder aspect )
+  public EntityProcessingSystem( final Aspect.Builder aspect )
   {
     super( aspect );
   }
@@ -51,8 +51,8 @@ public abstract class EntityProcessingSystem
   @Override
   protected final void processSystem()
   {
-    Bag<Entity> entities = getEntities();
-    Object[] array = entities.getData();
+    final Bag<Entity> entities = getEntities();
+    final Object[] array = entities.getData();
     for ( int i = 0, s = entities.size(); s > i; i++ )
     {
       process( (Entity) array[ i ] );

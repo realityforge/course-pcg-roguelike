@@ -37,7 +37,7 @@ public class Test
       return text;
     }
 
-    public void setText( String text )
+    public void setText( final String text )
     {
       this.text = text;
     }
@@ -47,7 +47,7 @@ public class Test
       return numberf;
     }
 
-    public void setNumberf( float numberf )
+    public void setNumberf( final float numberf )
     {
       this.numberf = numberf;
     }
@@ -57,12 +57,12 @@ public class Test
       return numberi;
     }
 
-    public void setNumberi( int numberi )
+    public void setNumberi( final int numberi )
     {
       this.numberi = numberi;
     }
 
-    public float getSum( float a, float b )
+    public float getSum( final float a, final float b )
     {
       return a + b;
     }
@@ -74,11 +74,11 @@ public class Test
     @Nonnull
     String text = "This is a string";
 
-    public void testWithPackagePrivate( C c, int a )
+    public void testWithPackagePrivate( final C c, final int a )
     {
     }
 
-    public void testWidthPrivate( A c )
+    public void testWidthPrivate( final A c )
     {
     }
 
@@ -100,14 +100,14 @@ public class Test
   {
     try
     {
-      Type ta = ReflectionCache.getType( A.class );
-      Type tb = ReflectionCache.getType( B.class );
-      B b = (B) tb.newInstance();
-			for ( Field f : tb.getFields() )
+      final Type ta = ReflectionCache.getType( A.class );
+      final Type tb = ReflectionCache.getType( B.class );
+      final B b = (B) tb.newInstance();
+			for ( final Field f : tb.getFields() )
 			{
 				System.out.println( f );
 			}
-			for ( Method m : tb.getMethods() )
+			for ( final Method m : tb.getMethods() )
 			{
 				System.out.println( m );
 			}
@@ -117,7 +117,7 @@ public class Test
       System.out.println( ta.getMethod( "getText" ).invoke( b ) );
       System.out.println( ta.getMethod( "getSum", float.class, float.class ).invoke( b, 1, 2 ) );
     }
-    catch ( Exception e )
+    catch ( final Exception e )
     {
       e.printStackTrace();
     }

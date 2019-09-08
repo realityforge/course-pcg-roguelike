@@ -26,15 +26,15 @@ class LinkFactory
   @Nonnull
   private final ReflexiveMutators reflexiveMutators;
 
-  public LinkFactory( @Nonnull World world )
+  public LinkFactory( @Nonnull final World world )
   {
     this.world = world;
     reflexiveMutators = new ReflexiveMutators( world );
   }
 
-  static int getReferenceTypeId( @Nonnull Field f )
+  static int getReferenceTypeId( @Nonnull final Field f )
   {
-    Class type = f.getType();
+    final Class type = f.getType();
 		if ( Entity.class == type )
 		{
 			return SINGLE_REFERENCE;
@@ -44,7 +44,7 @@ class LinkFactory
 			return MULTI_REFERENCE;
 		}
 
-    boolean explicitEntityId = f.getDeclaredAnnotation( EntityId.class ) != null;
+    final boolean explicitEntityId = f.getDeclaredAnnotation( EntityId.class ) != null;
 		if ( int.class == type && explicitEntityId )
 		{
 			return SINGLE_REFERENCE;
@@ -58,20 +58,20 @@ class LinkFactory
   }
 
   @Nonnull
-  Bag<LinkSite> create( @Nonnull ComponentType ct )
+  Bag<LinkSite> create( @Nonnull final ComponentType ct )
   {
-    Class<?> type = ct.getType();
-    Field[] fields = ClassReflection.getDeclaredFields( type );
+    final Class<?> type = ct.getType();
+    final Field[] fields = ClassReflection.getDeclaredFields( type );
 
     links.clear();
-    for ( Field f : fields )
+    for ( final Field f : fields )
     {
-      int referenceTypeId = getReferenceTypeId( f );
+      final int referenceTypeId = getReferenceTypeId( f );
       if ( referenceTypeId != NULL_REFERENCE && ( SKIP != getPolicy( f ) ) )
       {
         if ( SINGLE_REFERENCE == referenceTypeId )
         {
-          UniLinkSite ls = new UniLinkSite( world, ct, f );
+          final UniLinkSite ls = new UniLinkSite( world, ct, f );
           if ( !configureMutator( ls ) )
           {
             reflexiveMutators.withMutator( ls );
@@ -81,7 +81,7 @@ class LinkFactory
         }
         else if ( MULTI_REFERENCE == referenceTypeId )
         {
-          MultiLinkSite ls = new MultiLinkSite( world, ct, f );
+          final MultiLinkSite ls = new MultiLinkSite( world, ct, f );
           if ( !configureMutator( ls ) )
           {
             reflexiveMutators.withMutator( ls );
@@ -96,21 +96,21 @@ class LinkFactory
   }
 
   @Nullable
-  static LinkPolicy.Policy getPolicy( @Nonnull Field f )
+  static LinkPolicy.Policy getPolicy( @Nonnull final Field f )
   {
-    Annotation annotation = f.getDeclaredAnnotation( LinkPolicy.class );
+    final Annotation annotation = f.getDeclaredAnnotation( LinkPolicy.class );
     if ( annotation != null )
     {
-      LinkPolicy lp = annotation.getAnnotation( LinkPolicy.class );
+      final LinkPolicy lp = annotation.getAnnotation( LinkPolicy.class );
       return lp != null ? lp.value() : null;
     }
 
     return null;
   }
 
-  private boolean configureMutator( @Nonnull UniLinkSite linkSite )
+  private boolean configureMutator( @Nonnull final UniLinkSite linkSite )
   {
-    UniFieldMutator mutator = MutatorUtil.getGeneratedMutator( linkSite );
+    final UniFieldMutator mutator = MutatorUtil.getGeneratedMutator( linkSite );
     if ( mutator != null )
     {
       mutator.setWorld( world );
@@ -123,9 +123,9 @@ class LinkFactory
     }
   }
 
-  private boolean configureMutator( @Nonnull MultiLinkSite linkSite )
+  private boolean configureMutator( @Nonnull final MultiLinkSite linkSite )
   {
-    MultiFieldMutator mutator = MutatorUtil.getGeneratedMutator( linkSite );
+    final MultiFieldMutator mutator = MutatorUtil.getGeneratedMutator( linkSite );
     if ( mutator != null )
     {
       mutator.setWorld( world );
@@ -149,7 +149,7 @@ class LinkFactory
     @Nonnull
     final EntityBagFieldMutator entityBagField;
 
-    public ReflexiveMutators( @Nonnull World world )
+    public ReflexiveMutators( @Nonnull final World world )
     {
       entityField = new EntityFieldMutator();
       entityField.setWorld( world );
@@ -165,14 +165,14 @@ class LinkFactory
     }
 
     @Nonnull
-    UniLinkSite withMutator( @Nonnull UniLinkSite linkSite )
+    UniLinkSite withMutator( @Nonnull final UniLinkSite linkSite )
     {
 			if ( linkSite.fieldMutator != null )
 			{
 				return linkSite;
 			}
 
-      Class type = linkSite.field.getType();
+      final Class type = linkSite.field.getType();
       if ( Entity.class == type )
       {
         linkSite.fieldMutator = entityField;
@@ -190,14 +190,14 @@ class LinkFactory
     }
 
     @Nonnull
-    MultiLinkSite withMutator( @Nonnull MultiLinkSite linkSite )
+    MultiLinkSite withMutator( @Nonnull final MultiLinkSite linkSite )
     {
 			if ( linkSite.fieldMutator != null )
 			{
 				return linkSite;
 			}
 
-      Class type = linkSite.field.getType();
+      final Class type = linkSite.field.getType();
       if ( IntBag.class == type )
       {
         linkSite.fieldMutator = intBagField;

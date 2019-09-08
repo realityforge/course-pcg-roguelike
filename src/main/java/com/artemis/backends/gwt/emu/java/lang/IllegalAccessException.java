@@ -8,7 +8,7 @@ public class IllegalAccessException
     super();
   }
 
-  public IllegalAccessException( String s )
+  public IllegalAccessException( final String s )
   {
     super( s );
   }

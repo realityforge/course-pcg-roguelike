@@ -33,14 +33,14 @@ public final class WorldConfiguration
   final Bag<BaseSystem> systems = new Bag<>( BaseSystem.class );
   protected int expectedEntityCount = 128;
   @Nonnull
-  protected Map<String, Object> injectables = new HashMap<>();
+  protected final Map<String, Object> injectables = new HashMap<>();
   @Nullable
   protected Injector injector;
   @Nullable
   protected SystemInvocationStrategy invocationStrategy;
   private boolean alwaysDelayComponentRemoval = false;
   @Nonnull
-  private Set<Class<? extends BaseSystem>> registered = new HashSet<>();
+  private final Set<Class<? extends BaseSystem>> registered = new HashSet<>();
 
   public WorldConfiguration()
   {
@@ -62,7 +62,7 @@ public final class WorldConfiguration
    * @return This instance for chaining.
    */
   @Nonnull
-  public WorldConfiguration expectedEntityCount( int expectedEntityCount )
+  public WorldConfiguration expectedEntityCount( final int expectedEntityCount )
   {
     this.expectedEntityCount = expectedEntityCount;
     return this;
@@ -75,7 +75,7 @@ public final class WorldConfiguration
    * @return This instance for chaining.
    */
   @Nonnull
-  public WorldConfiguration setInjector( @Nullable Injector injector )
+  public WorldConfiguration setInjector( @Nullable final Injector injector )
   {
 		if ( injector == null )
 		{
@@ -93,7 +93,7 @@ public final class WorldConfiguration
    * @return This instance for chaining.
    */
   @Nonnull
-  public WorldConfiguration setInvocationStrategy( @Nullable SystemInvocationStrategy invocationStrategy )
+  public WorldConfiguration setInvocationStrategy( @Nullable final SystemInvocationStrategy invocationStrategy )
   {
 		if ( invocationStrategy == null )
 		{
@@ -118,7 +118,7 @@ public final class WorldConfiguration
    * @return This instance for chaining.
    */
   @Nonnull
-  public WorldConfiguration register( @Nonnull Object o )
+  public WorldConfiguration register( @Nonnull final Object o )
   {
     return register( o.getClass().getName(), o );
   }
@@ -136,7 +136,7 @@ public final class WorldConfiguration
    * @return This instance for chaining.
    */
   @Nonnull
-  public WorldConfiguration register( String name, Object o )
+  public WorldConfiguration register( final String name, final Object o )
   {
     injectables.put( name, o );
     return this;
@@ -150,13 +150,13 @@ public final class WorldConfiguration
    * @return the added system
    */
   @Nonnull
-  public WorldConfiguration setSystem( @Nonnull Class<? extends BaseSystem> system )
+  public WorldConfiguration setSystem( @Nonnull final Class<? extends BaseSystem> system )
   {
     try
     {
       return setSystem( ClassReflection.newInstance( system ) );
     }
-    catch ( ReflectionException e )
+    catch ( final ReflectionException e )
     {
       throw new RuntimeException( e );
     }
@@ -170,20 +170,20 @@ public final class WorldConfiguration
    * @return the added system
    */
   @Nonnull
-  public <T extends BaseSystem> WorldConfiguration setSystem( @Nonnull T system )
+  public <T extends BaseSystem> WorldConfiguration setSystem( @Nonnull final T system )
   {
     systems.add( system );
 
     if ( !registered.add( system.getClass() ) )
     {
-      String name = system.getClass().getSimpleName();
+      final String name = system.getClass().getSimpleName();
       throw new RuntimeException( name + " already added to " + getClass().getSimpleName() );
     }
 
     return this;
   }
 
-  void initialize( @Nonnull World world, @Nonnull Injector injector, @Nonnull AspectSubscriptionManager asm )
+  void initialize( @Nonnull final World world, @Nonnull final Injector injector, @Nonnull final AspectSubscriptionManager asm )
   {
 		if ( invocationStrategy == null )
 		{
@@ -198,7 +198,7 @@ public final class WorldConfiguration
     systems.set( ENTITY_MANAGER_IDX, world.getEntityManager() );
     systems.set( ASPECT_SUBSCRIPTION_MANAGER_IDX, asm );
 
-    for ( BaseSystem system : systems )
+    for ( final BaseSystem system : systems )
     {
       world.partition.systems.put( system.getClass(), system );
       system.setWorld( world );
@@ -218,17 +218,17 @@ public final class WorldConfiguration
     invocationStrategy.initialize();
   }
 
-  private void initializeSystems( @Nonnull Injector injector )
+  private void initializeSystems( @Nonnull final Injector injector )
   {
     for ( int i = 0, s = systems.size(); i < s; i++ )
     {
-      BaseSystem system = systems.get( i );
+      final BaseSystem system = systems.get( i );
       injector.inject( system );
     }
 
     for ( int i = 0, s = systems.size(); i < s; i++ )
     {
-      BaseSystem system = systems.get( i );
+      final BaseSystem system = systems.get( i );
       system.initialize();
     }
   }
@@ -256,7 +256,7 @@ public final class WorldConfiguration
    *
    * @param value When {@code true}, component removal for all components will be delayed.
    */
-  public void setAlwaysDelayComponentRemoval( boolean value )
+  public void setAlwaysDelayComponentRemoval( final boolean value )
   {
     this.alwaysDelayComponentRemoval = value;
   }

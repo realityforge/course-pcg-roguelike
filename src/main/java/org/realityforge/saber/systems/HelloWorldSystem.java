@@ -13,7 +13,7 @@ public class HelloWorldSystem
   protected ComponentMapper<Hello> mHello;
 
   @Override
-  protected void process( int id )
+  protected void process( final int id )
   {
     DomGlobal.console.log( mHello.get( id ).message );
   }

@@ -23,9 +23,9 @@ import javax.annotation.Nonnull;
 public final class EntityEdit
 {
   int entityId;
-  private ComponentManager cm;
+  private final ComponentManager cm;
 
-  EntityEdit( @Nonnull World world )
+  EntityEdit( @Nonnull final World world )
   {
     cm = world.getComponentManager();
   }
@@ -38,7 +38,7 @@ public final class EntityEdit
    * @param componentKlazz Class to create.
    * @return Newly instanced component.
    */
-  public <T extends Component> T create( Class<T> componentKlazz )
+  public <T extends Component> T create( final Class<T> componentKlazz )
   {
     return cm.getMapper( componentKlazz ).create( entityId );
   }
@@ -51,7 +51,7 @@ public final class EntityEdit
    * @see #create(Class)
    */
   @Nonnull
-  public EntityEdit add( @Nonnull Component component )
+  public EntityEdit add( @Nonnull final Component component )
   {
     return add( component, cm.typeFactory.getTypeFor( component.getClass() ) );
   }
@@ -69,7 +69,7 @@ public final class EntityEdit
    * @see #create(Class)
    */
   @Nonnull
-  public EntityEdit add( @Nonnull Component component, @Nonnull ComponentType type )
+  public EntityEdit add( @Nonnull final Component component, @Nonnull final ComponentType type )
   {
     if ( type.isPooled )
     {
@@ -77,7 +77,7 @@ public final class EntityEdit
                                            "Use EntityEdit#create(Class<Component>) for adding non-basic component types" );
     }
 
-    ComponentMapper mapper = cm.getMapper( type.getType() );
+    final ComponentMapper mapper = cm.getMapper( type.getType() );
 
     mapper.create( entityId );
     mapper.components.getData()[ entityId ] = component;
@@ -112,7 +112,7 @@ public final class EntityEdit
    * @return this EntityEdit for chaining
    */
   @Nonnull
-  public EntityEdit remove( @Nonnull Component component )
+  public EntityEdit remove( @Nonnull final Component component )
   {
     return remove( component.getClass() );
   }
@@ -126,7 +126,7 @@ public final class EntityEdit
    * @return this EntityEdit for chaining
    */
   @Nonnull
-  public EntityEdit remove( @Nonnull ComponentType type )
+  public EntityEdit remove( @Nonnull final ComponentType type )
   {
     cm.getMapper( type.getType() ).remove( entityId );
     return this;
@@ -139,7 +139,7 @@ public final class EntityEdit
    * @return this EntityEdit for chaining
    */
   @Nonnull
-  public EntityEdit remove( Class<? extends Component> type )
+  public EntityEdit remove( final Class<? extends Component> type )
   {
     return remove( cm.typeFactory.getTypeFor( type ) );
   }

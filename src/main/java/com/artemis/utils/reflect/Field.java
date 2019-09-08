@@ -28,7 +28,7 @@ public final class Field
 {
   private final com.artemis.gwtref.client.Field field;
 
-  Field( com.artemis.gwtref.client.Field field )
+  Field( final com.artemis.gwtref.client.Field field )
   {
     this.field = field;
   }
@@ -62,7 +62,7 @@ public final class Field
     return field.isPublic();
   }
 
-  public void setAccessible( boolean accessible )
+  public void setAccessible( final boolean accessible )
   {
     // NOOP in GWT
   }
@@ -144,28 +144,28 @@ public final class Field
    * null otherwise.
    */
   @Nullable
-  public Class getElementType( int index )
+  public Class getElementType( final int index )
   {
-    Type elementType = field.getElementType( index );
+    final Type elementType = field.getElementType( index );
     return elementType != null ? elementType.getClassOfType() : null;
   }
 
   /**
    * Returns the value of the field on the supplied object.
    */
-  public Object get( Object obj )
+  public Object get( final Object obj )
     throws ReflectionException
   {
     try
     {
       return field.get( obj );
     }
-    catch ( IllegalArgumentException e )
+    catch ( final IllegalArgumentException e )
     {
       throw new ReflectionException( "Could not get " + getDeclaringClass() + "#" + getName() + ": " + e.getMessage(),
                                      e );
     }
-    catch ( IllegalAccessException e )
+    catch ( final IllegalAccessException e )
     {
       throw new ReflectionException( "Illegal access to field " + getName() + ": " + e.getMessage(), e );
     }
@@ -174,19 +174,19 @@ public final class Field
   /**
    * Sets the value of the field on the supplied object.
    */
-  public void set( Object obj, Object value )
+  public void set( final Object obj, final Object value )
     throws ReflectionException
   {
     try
     {
       field.set( obj, value );
     }
-    catch ( IllegalArgumentException e )
+    catch ( final IllegalArgumentException e )
     {
       throw new ReflectionException( "Could not set " + getDeclaringClass() + "#" + getName() + ": " + e.getMessage(),
                                      e );
     }
-    catch ( IllegalAccessException e )
+    catch ( final IllegalAccessException e )
     {
       throw new ReflectionException( "Illegal access to field " + getName() + ": " + e.getMessage(), e );
     }
@@ -196,7 +196,7 @@ public final class Field
    * Returns this element's annotation for the specified type if such an annotation is present, else null.
    */
   @Nullable
-  public <T extends java.lang.annotation.Annotation> T getAnnotation( Class<T> annotationClass )
+  public <T extends java.lang.annotation.Annotation> T getAnnotation( final Class<T> annotationClass )
   {
     final Annotation declaredAnnotation = getDeclaredAnnotation( annotationClass );
     return declaredAnnotation != null ? declaredAnnotation.getAnnotation( annotationClass ) : null;
@@ -205,10 +205,10 @@ public final class Field
   /**
    * Returns true if the field includes an annotation of the provided class type.
    */
-  public boolean isAnnotationPresent( Class<? extends java.lang.annotation.Annotation> annotationType )
+  public boolean isAnnotationPresent( final Class<? extends java.lang.annotation.Annotation> annotationType )
   {
-    java.lang.annotation.Annotation[] annotations = field.getDeclaredAnnotations();
-    for ( java.lang.annotation.Annotation annotation : annotations )
+    final java.lang.annotation.Annotation[] annotations = field.getDeclaredAnnotations();
+    for ( final java.lang.annotation.Annotation annotation : annotations )
     {
       if ( annotation.annotationType().equals( annotationType ) )
       {
@@ -225,8 +225,8 @@ public final class Field
   @Nonnull
   public Annotation[] getDeclaredAnnotations()
   {
-    java.lang.annotation.Annotation[] annotations = field.getDeclaredAnnotations();
-    Annotation[] result = new Annotation[ annotations.length ];
+    final java.lang.annotation.Annotation[] annotations = field.getDeclaredAnnotations();
+    final Annotation[] result = new Annotation[ annotations.length ];
     for ( int i = 0; i < annotations.length; i++ )
     {
       result[ i ] = new Annotation( annotations[ i ] );
@@ -240,10 +240,10 @@ public final class Field
    * type he's looking for.
    */
   @Nullable
-  public Annotation getDeclaredAnnotation( Class<? extends java.lang.annotation.Annotation> annotationType )
+  public Annotation getDeclaredAnnotation( final Class<? extends java.lang.annotation.Annotation> annotationType )
   {
-    java.lang.annotation.Annotation[] annotations = field.getDeclaredAnnotations();
-    for ( java.lang.annotation.Annotation annotation : annotations )
+    final java.lang.annotation.Annotation[] annotations = field.getDeclaredAnnotations();
+    for ( final java.lang.annotation.Annotation annotation : annotations )
     {
       if ( annotation.annotationType().equals( annotationType ) )
       {

@@ -33,7 +33,7 @@ public class ComponentMapper<A extends Component>
   private final ComponentRemover<A> purgatory;
 
   @SuppressWarnings( "unchecked" )
-  public ComponentMapper( Class<A> type, @Nonnull World world )
+  public ComponentMapper( final Class<A> type, @Nonnull final World world )
   {
     super( world.getComponentManager().typeFactory.getTypeFor( type ) );
     components = new Bag<>( type );
@@ -70,7 +70,7 @@ public class ComponentMapper<A extends Component>
    * @return the instance of the component.
    */
   @Override
-  public A get( int entityId )
+  public A get( final int entityId )
     throws ArrayIndexOutOfBoundsException
   {
     return components.get( entityId );
@@ -86,7 +86,7 @@ public class ComponentMapper<A extends Component>
    * @return {@code true} if the entity has this component type, {@code false} if it doesn't (or if it is scheduled for delayed removal).
    */
   @Override
-  public boolean has( int entityId )
+  public boolean has( final int entityId )
   {
     return get( entityId ) != null && !purgatory.has( entityId );
   }
@@ -105,9 +105,9 @@ public class ComponentMapper<A extends Component>
    * Does nothing if already removed.
    */
   @Override
-  public void remove( int entityId )
+  public void remove( final int entityId )
   {
-    A component = get( entityId );
+    final A component = get( entityId );
     if ( component != null )
     {
       removeTransmuter.transmuteNoOperation( entityId );
@@ -116,9 +116,9 @@ public class ComponentMapper<A extends Component>
   }
 
   @Override
-  protected void internalRemove( int entityId )
+  protected void internalRemove( final int entityId )
   { // triggers no composition id update
-    A component = get( entityId );
+    final A component = get( entityId );
       if ( component != null )
       {
           purgatory.mark( entityId );
@@ -134,7 +134,7 @@ public class ComponentMapper<A extends Component>
    */
   @Nullable
   @Override
-  public A create( int entityId )
+  public A create( final int entityId )
   {
     A component = get( entityId );
     if ( component == null || purgatory.unmark( entityId ) )
@@ -150,7 +150,7 @@ public class ComponentMapper<A extends Component>
 
   @Nullable
   @Override
-  public A internalCreate( int entityId )
+  public A internalCreate( final int entityId )
   {
     A component = get( entityId );
     if ( component == null || purgatory.unmark( entityId ) )

@@ -30,17 +30,17 @@ public class ReflectionException
     super();
   }
 
-  public ReflectionException( String message )
+  public ReflectionException( final String message )
   {
     super( message );
   }
 
-  public ReflectionException( Throwable cause )
+  public ReflectionException( final Throwable cause )
   {
     super( cause );
   }
 
-  public ReflectionException( String message, Throwable cause )
+  public ReflectionException( final String message, final Throwable cause )
   {
     super( message, cause );
   }

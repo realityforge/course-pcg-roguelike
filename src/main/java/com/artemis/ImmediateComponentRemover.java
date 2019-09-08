@@ -5,17 +5,17 @@ import com.artemis.utils.Bag;
 public class ImmediateComponentRemover<A extends Component>
   extends ComponentRemover<A>
 {
-  public ImmediateComponentRemover( Bag<A> components, ComponentPool pool )
+  public ImmediateComponentRemover( final Bag<A> components, final ComponentPool pool )
   {
     super( components, pool );
   }
 
   @Override
-  void mark( int entityId )
+  void mark( final int entityId )
   {
     if ( pool != null )
     {
-      PooledComponent c = (PooledComponent) components.get( entityId );
+      final PooledComponent c = (PooledComponent) components.get( entityId );
 			if ( c != null )
 			{
 				pool.free( c );
@@ -25,7 +25,7 @@ public class ImmediateComponentRemover<A extends Component>
   }
 
   @Override
-  boolean unmark( int entityId )
+  boolean unmark( final int entityId )
   {
     return false;
   }
@@ -36,7 +36,7 @@ public class ImmediateComponentRemover<A extends Component>
   }
 
   @Override
-  boolean has( int entityId )
+  boolean has( final int entityId )
   {
     return false;
   }

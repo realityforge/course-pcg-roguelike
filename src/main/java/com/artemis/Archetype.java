@@ -17,7 +17,7 @@ public final class Archetype
    * @param transmuter    Desired composition of derived components.
    * @param compositionId uniquely identifies component composition.
    */
-  Archetype( EntityTransmuter.TransmuteOperation transmuter, int compositionId )
+  Archetype( final EntityTransmuter.TransmuteOperation transmuter, final int compositionId )
   {
     this.transmuter = transmuter;
     this.compositionId = compositionId;

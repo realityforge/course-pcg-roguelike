@@ -21,7 +21,7 @@ public class ArtemisFieldResolver
 {
   private World world;
   private InjectionCache cache;
-  private Map<Class<?>, Class<?>> systems;
+  private final Map<Class<?>, Class<?>> systems;
 
   public ArtemisFieldResolver()
   {
@@ -29,13 +29,13 @@ public class ArtemisFieldResolver
   }
 
   @Override
-  public void initialize( @Nonnull World world )
+  public void initialize( @Nonnull final World world )
   {
     this.world = world;
 
-    for ( BaseSystem es : world.getSystems() )
+    for ( final BaseSystem es : world.getSystems() )
     {
-      Class<?> origin = es.getClass();
+      final Class<?> origin = es.getClass();
       Class<?> clazz = origin;
       do
       {
@@ -47,9 +47,9 @@ public class ArtemisFieldResolver
   @Nullable
   @Override
   @SuppressWarnings( "unchecked" )
-  public Object resolve( Object target, Class<?> fieldType, @Nonnull Field field )
+  public Object resolve( final Object target, final Class<?> fieldType, @Nonnull final Field field )
   {
-    ClassType injectionType = cache.getFieldClassType( fieldType );
+    final ClassType injectionType = cache.getFieldClassType( fieldType );
     switch ( injectionType )
     {
       case MAPPER:
@@ -65,15 +65,15 @@ public class ArtemisFieldResolver
   }
 
   @SuppressWarnings( "unchecked" )
-  private ComponentMapper<?> getComponentMapper( @Nonnull Field field )
+  private ComponentMapper<?> getComponentMapper( @Nonnull final Field field )
   {
-    Class<?> mapperType = cache.getGenericType( field );
+    final Class<?> mapperType = cache.getGenericType( field );
     return world.getMapper( (Class<? extends Component>) mapperType );
 
   }
 
   @Override
-  public void setCache( InjectionCache cache )
+  public void setCache( final InjectionCache cache )
   {
     this.cache = cache;
   }

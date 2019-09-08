@@ -24,7 +24,7 @@ public abstract class IntervalEntityProcessingSystem
    * @param aspect   the aspect to match entities
    * @param interval the interval at which the system is processed
    */
-  public IntervalEntityProcessingSystem( Aspect.Builder aspect, float interval )
+  public IntervalEntityProcessingSystem( final Aspect.Builder aspect, final float interval )
   {
     super( aspect, interval );
   }
@@ -42,9 +42,9 @@ public abstract class IntervalEntityProcessingSystem
     processEntities( getEntities() );
   }
 
-  protected void processEntities( @Nonnull Bag<Entity> entities )
+  protected void processEntities( @Nonnull final Bag<Entity> entities )
   {
-    Object[] ids = entities.getData();
+    final Object[] ids = entities.getData();
     for ( int i = 0, s = entities.size(); s > i; i++ )
     {
       process( (Entity) ids[ i ] );

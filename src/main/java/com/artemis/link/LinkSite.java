@@ -29,28 +29,28 @@ abstract class LinkSite
   protected final BitVector activeEntityIds;
   protected LinkListener listener;
 
-  protected LinkSite( @Nonnull World world,
-                      @Nonnull ComponentType type,
-                      @Nonnull Field field,
-                      LinkPolicy.Policy defaultPolicy )
+  protected LinkSite( @Nonnull final World world,
+                      @Nonnull final ComponentType type,
+                      @Nonnull final Field field,
+                      final LinkPolicy.Policy defaultPolicy )
   {
 
     this.type = type;
     this.field = field;
-    LinkPolicy.Policy policyOverride = LinkFactory.getPolicy( field );
+    final LinkPolicy.Policy policyOverride = LinkFactory.getPolicy( field );
     this.policy = ( policyOverride != null ) ? policyOverride : defaultPolicy;
 
     mapper = world.getMapper( type.getType() );
 
     activeEntityIds = world.getAspectSubscriptionManager().get( all() ).getActiveEntityIds();
 
-    AspectSubscriptionManager subscriptions = world.getAspectSubscriptionManager();
+    final AspectSubscriptionManager subscriptions = world.getAspectSubscriptionManager();
     subscription = subscriptions.get( all( type.getType() ) );
     subscription.addSubscriptionListener( this );
   }
 
   @Override
-  public boolean equals( @Nullable Object o )
+  public boolean equals( @Nullable final Object o )
   {
 		if ( this == o )
 		{
@@ -61,7 +61,7 @@ abstract class LinkSite
 			return false;
 		}
 
-    LinkSite that = (LinkSite) o;
+    final LinkSite that = (LinkSite) o;
 
     return type.equals( that.type ) && field.equals( that.field );
   }
@@ -73,9 +73,9 @@ abstract class LinkSite
   }
 
   @Override
-  public void inserted( @Nonnull IntBag entities )
+  public void inserted( @Nonnull final IntBag entities )
   {
-    int[] ids = entities.getData();
+    final int[] ids = entities.getData();
     for ( int i = 0, s = entities.size(); s > i; i++ )
     {
       insert( ids[ i ] );
@@ -85,9 +85,9 @@ abstract class LinkSite
   protected abstract void insert( int id );
 
   @Override
-  public void removed( @Nonnull IntBag entities )
+  public void removed( @Nonnull final IntBag entities )
   {
-    int[] ids = entities.getData();
+    final int[] ids = entities.getData();
     for ( int i = 0, s = entities.size(); s > i; i++ )
     {
       removed( ids[ i ] );
@@ -105,8 +105,8 @@ abstract class LinkSite
 			return;
 		}
 
-    IntBag entities = subscription.getEntities();
-    int[] ids = entities.getData();
+    final IntBag entities = subscription.getEntities();
+    final int[] ids = entities.getData();
     for ( int i = 0, s = entities.size(); s > i; i++ )
     {
       check( ids[ i ] );

@@ -23,23 +23,23 @@ final class BatchChangeProcessor
   private final Bag<EntityEdit> pool = new Bag<>();
   private final WildBag<EntityEdit> edited = new WildBag( EntityEdit.class );
 
-  BatchChangeProcessor( @Nonnull World world )
+  BatchChangeProcessor( @Nonnull final World world )
   {
     this.world = world;
     asm = world.getAspectSubscriptionManager();
 
-    EntityManager em = world.getEntityManager();
+    final EntityManager em = world.getEntityManager();
     em.registerEntityStore( changed );
     em.registerEntityStore( deleted );
     em.registerEntityStore( pendingPurge );
   }
 
-  boolean isDeleted( int entityId )
+  boolean isDeleted( final int entityId )
   {
     return pendingPurge.unsafeGet( entityId );
   }
 
-  void delete( int entityId )
+  void delete( final int entityId )
   {
     deleted.unsafeSet( entityId );
     pendingPurge.unsafeSet( entityId );
@@ -55,15 +55,15 @@ final class BatchChangeProcessor
    * @return a fast albeit verbose editor to perform batch changes to entities.
    */
   @Nullable
-  EntityEdit obtainEditor( int entityId )
+  EntityEdit obtainEditor( final int entityId )
   {
-    int size = edited.size();
+    final int size = edited.size();
 		if ( size != 0 && edited.get( size - 1 ).getEntityId() == entityId )
 		{
 			return edited.get( size - 1 );
 		}
 
-    EntityEdit edit = entityEdit();
+    final EntityEdit edit = entityEdit();
     edited.add( edit );
 
     edit.entityId = entityId;
@@ -120,10 +120,10 @@ final class BatchChangeProcessor
 			return false;
 		}
 
-    Object[] data = edited.getData();
+    final Object[] data = edited.getData();
     for ( int i = 0, s = edited.size(); s > i; i++ )
     {
-      EntityEdit edit = (EntityEdit) data[ i ];
+      final EntityEdit edit = (EntityEdit) data[ i ];
       pool.add( edit );
     }
     edited.setSize( 0 );

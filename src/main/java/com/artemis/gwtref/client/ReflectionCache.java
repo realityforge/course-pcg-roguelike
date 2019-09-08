@@ -22,12 +22,12 @@ import javax.annotation.Nullable;
 
 public class ReflectionCache
 {
-  public static IReflectionCache instance = GWT.create( IReflectionCache.class );
+  public static final IReflectionCache instance = GWT.create( IReflectionCache.class );
 
-  public static Type forName( @Nonnull String name )
+  public static Type forName( @Nonnull final String name )
     throws ClassNotFoundException
   {
-    Type type = instance.forName( convert( name ) );
+    final Type type = instance.forName( convert( name ) );
     if ( type == null )
     {
       throw new RuntimeException( "(artemis-odb) Couldn't find Type for class '" + name + "'" );
@@ -36,13 +36,13 @@ public class ReflectionCache
   }
 
   @Nullable
-  public static Type getType( @Nullable Class clazz )
+  public static Type getType( @Nullable final Class clazz )
   {
 		if ( clazz == null )
 		{
 			return null;
 		}
-    Type type = instance.forName( convert( clazz.getName() ) );
+    final Type type = instance.forName( convert( clazz.getName() ) );
     if ( type == null )
     {
       throw new RuntimeException( "(artemis-odb) Couldn't find Type for class '" + clazz.getName() + "'" );
@@ -51,7 +51,7 @@ public class ReflectionCache
   }
 
   @Nonnull
-  private static String convert( @Nonnull String className )
+  private static String convert( @Nonnull final String className )
   {
     if ( className.startsWith( "[" ) )
     {
@@ -64,7 +64,7 @@ public class ReflectionCache
         suffix += "[]";
         c = className.charAt( dimensions );
       }
-      char t = className.charAt( dimensions );
+      final char t = className.charAt( dimensions );
       switch ( t )
       {
         case 'Z':
@@ -97,7 +97,7 @@ public class ReflectionCache
     }
   }
 
-  public static Object newArray( Class componentType, int size )
+  public static Object newArray( final Class componentType, final int size )
   {
     return instance.newArray( componentType, size );
   }

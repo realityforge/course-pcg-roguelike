@@ -52,7 +52,7 @@ public class TeamManager
    * @param player the player
    * @return the player's team
    */
-  public String getTeam( String player )
+  public String getTeam( final String player )
   {
     return teamByPlayer.get( player );
   }
@@ -66,7 +66,7 @@ public class TeamManager
    * @param player the player
    * @param team   the team to put the player in
    */
-  public void setTeam( @Nonnull String player, String team )
+  public void setTeam( @Nonnull final String player, final String team )
   {
     removeFromTeam( player );
 
@@ -87,7 +87,7 @@ public class TeamManager
    * @param team the team
    * @return all players on the team in a bag
    */
-  public ImmutableBag<String> getPlayers( String team )
+  public ImmutableBag<String> getPlayers( final String team )
   {
     return playersByTeam.get( team );
   }
@@ -97,12 +97,12 @@ public class TeamManager
    *
    * @param player the player to remove
    */
-  public void removeFromTeam( @Nonnull String player )
+  public void removeFromTeam( @Nonnull final String player )
   {
-    String team = teamByPlayer.remove( player );
+    final String team = teamByPlayer.remove( player );
     if ( team != null )
     {
-      Bag<String> players = playersByTeam.get( team );
+      final Bag<String> players = playersByTeam.get( team );
       if ( players != null )
       {
         players.remove( player );

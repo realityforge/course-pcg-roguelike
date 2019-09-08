@@ -32,7 +32,7 @@ public class EntitySubscription
   private final BitVector removedIds;
   final BitVector aspectCache = new BitVector();
 
-  EntitySubscription( @Nonnull World world, @Nonnull Aspect.Builder builder )
+  EntitySubscription( @Nonnull final World world, @Nonnull final Aspect.Builder builder )
   {
     extra = new SubscriptionExtra( builder.build( world ), builder );
 
@@ -42,7 +42,7 @@ public class EntitySubscription
     insertedIds = new BitVector();
     removedIds = new BitVector();
 
-    EntityManager em = world.getEntityManager();
+    final EntityManager em = world.getEntityManager();
     em.registerEntityStore( activeEntityIds );
     em.registerEntityStore( insertedIds );
     em.registerEntityStore( removedIds );
@@ -101,7 +101,7 @@ public class EntitySubscription
    * A new unique component composition detected, check if this
    * subscription's aspect is interested in it.
    */
-  void processComponentIdentity( int id, @Nonnull BitVector componentBits )
+  void processComponentIdentity( final int id, @Nonnull final BitVector componentBits )
   {
     aspectCache.ensureCapacity( id );
     aspectCache.set( id, extra.aspect.isInterested( componentBits ) );
@@ -112,10 +112,10 @@ public class EntitySubscription
     activeEntityIds.toIntBag( entities );
   }
 
-  final void check( int id, int cid )
+  final void check( final int id, final int cid )
   {
-    boolean interested = aspectCache.unsafeGet( cid );
-    boolean contains = activeEntityIds.unsafeGet( id );
+    final boolean interested = aspectCache.unsafeGet( cid );
+    final boolean contains = activeEntityIds.unsafeGet( id );
 
     if ( interested && !contains )
     {
@@ -127,19 +127,19 @@ public class EntitySubscription
     }
   }
 
-  private void remove( int entityId )
+  private void remove( final int entityId )
   {
     activeEntityIds.unsafeClear( entityId );
     removedIds.unsafeSet( entityId );
   }
 
-  private void insert( int entityId )
+  private void insert( final int entityId )
   {
     activeEntityIds.unsafeSet( entityId );
     insertedIds.unsafeSet( entityId );
   }
 
-  void process( @Nonnull IntBag changed, @Nonnull IntBag deleted )
+  void process( @Nonnull final IntBag changed, @Nonnull final IntBag deleted )
   {
     deleted( deleted );
     changed( changed );
@@ -147,7 +147,7 @@ public class EntitySubscription
     informEntityChanges();
   }
 
-  void processAll( @Nonnull IntBag changed, @Nonnull IntBag deleted )
+  void processAll( @Nonnull final IntBag changed, @Nonnull final IntBag deleted )
   {
     deletedAll( deleted );
     changed( changed );
@@ -167,7 +167,7 @@ public class EntitySubscription
     entities.setSize( 0 );
   }
 
-  private void transferBitsToInts( @Nonnull IntBag inserted, @Nonnull IntBag removed )
+  private void transferBitsToInts( @Nonnull final IntBag inserted, @Nonnull final IntBag removed )
   {
     insertedIds.toIntBag( inserted );
     removedIds.toIntBag( removed );
@@ -175,14 +175,14 @@ public class EntitySubscription
     removedIds.clear();
   }
 
-  private void changed( @Nonnull IntBag entitiesWithCompositions )
+  private void changed( @Nonnull final IntBag entitiesWithCompositions )
   {
-    int[] ids = entitiesWithCompositions.getData();
+    final int[] ids = entitiesWithCompositions.getData();
     for ( int i = 0, s = entitiesWithCompositions.size(); s > i; i += 2 )
     {
-      int id = ids[ i ];
-      boolean interested = aspectCache.unsafeGet( ids[ i + 1 ] );
-      boolean contains = activeEntityIds.unsafeGet( id );
+      final int id = ids[ i ];
+      final boolean interested = aspectCache.unsafeGet( ids[ i + 1 ] );
+      final boolean contains = activeEntityIds.unsafeGet( id );
 
       if ( interested && !contains )
       {
@@ -195,12 +195,12 @@ public class EntitySubscription
     }
   }
 
-  private void deleted( @Nonnull IntBag entities )
+  private void deleted( @Nonnull final IntBag entities )
   {
-    int[] ids = entities.getData();
+    final int[] ids = entities.getData();
     for ( int i = 0, s = entities.size(); s > i; i++ )
     {
-      int id = ids[ i ];
+      final int id = ids[ i ];
         if ( activeEntityIds.unsafeGet( id ) )
         {
             remove( id );
@@ -208,12 +208,12 @@ public class EntitySubscription
     }
   }
 
-  private void deletedAll( @Nonnull IntBag entities )
+  private void deletedAll( @Nonnull final IntBag entities )
   {
-    int[] ids = entities.getData();
+    final int[] ids = entities.getData();
     for ( int i = 0, s = entities.size(); s > i; i++ )
     {
-      int id = ids[ i ];
+      final int id = ids[ i ];
       activeEntityIds.unsafeClear( id );
       removedIds.unsafeSet( id );
     }
@@ -224,7 +224,7 @@ public class EntitySubscription
    *
    * @param listener listener to add.
    */
-  public void addSubscriptionListener( SubscriptionListener listener )
+  public void addSubscriptionListener( final SubscriptionListener listener )
   {
     extra.listeners.add( listener );
   }
@@ -234,7 +234,7 @@ public class EntitySubscription
    *
    * @param listener listener to remove.
    */
-  public void removeSubscriptionListener( @Nonnull SubscriptionListener listener )
+  public void removeSubscriptionListener( @Nonnull final SubscriptionListener listener )
   {
     extra.listeners.remove( listener );
   }
@@ -295,7 +295,7 @@ public class EntitySubscription
     final Aspect.Builder aspectReflection;
     final Bag<SubscriptionListener> listeners = new Bag<>();
 
-    public SubscriptionExtra( Aspect aspect, Aspect.Builder aspectReflection )
+    public SubscriptionExtra( final Aspect aspect, final Aspect.Builder aspectReflection )
     {
       this.aspect = aspect;
       this.aspectReflection = aspectReflection;
@@ -313,7 +313,7 @@ public class EntitySubscription
     {
       for ( int i = 0, s = listeners.size(); s > i; i++ )
       {
-        SubscriptionListener listener = listeners.get( i );
+        final SubscriptionListener listener = listeners.get( i );
           if ( removed.size() > 0 )
           {
               listener.removed( removed );

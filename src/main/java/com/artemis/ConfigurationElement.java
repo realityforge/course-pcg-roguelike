@@ -14,9 +14,9 @@ class ConfigurationElement<T>
 {
   public final int priority;
   public final Class<?> itemType;
-  public T item;
+  public final T item;
 
-  public ConfigurationElement( @Nonnull T item, int priority )
+  public ConfigurationElement( @Nonnull final T item, final int priority )
   {
     this.item = item;
     itemType = item.getClass();
@@ -24,14 +24,14 @@ class ConfigurationElement<T>
   }
 
   @Override
-  public int compareTo( @Nonnull ConfigurationElement<T> o )
+  public int compareTo( @Nonnull final ConfigurationElement<T> o )
   {
     // Sort by priority descending.
     return Integer.compare( o.priority, priority );
   }
 
   @Override
-  public boolean equals( @Nullable Object o )
+  public boolean equals( @Nullable final Object o )
   {
 		if ( this == o )
 		{
@@ -54,7 +54,7 @@ class ConfigurationElement<T>
    * create instance of Registerable.
    */
   @Nonnull
-  public static <T> ConfigurationElement<T> of( @Nonnull T item )
+  public static <T> ConfigurationElement<T> of( @Nonnull final T item )
   {
     return of( item, WorldConfigurationBuilder.Priority.NORMAL );
   }
@@ -63,7 +63,7 @@ class ConfigurationElement<T>
    * create instance of Registerable.
    */
   @Nonnull
-  public static <T> ConfigurationElement<T> of( @Nonnull T item, int priority )
+  public static <T> ConfigurationElement<T> of( @Nonnull final T item, final int priority )
   {
     return new ConfigurationElement<>( item, priority );
   }

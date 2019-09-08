@@ -119,7 +119,7 @@ public abstract class BaseSystem
    * @param enabled system will not run when set to false
    * @see #checkProcessing() both must be true before the system will process.
    */
-  public void setEnabled( boolean enabled )
+  public void setEnabled( final boolean enabled )
   {
     world.invocationStrategy.setEnabled( this, enabled );
   }
@@ -129,7 +129,7 @@ public abstract class BaseSystem
    *
    * @param world the world to set
    */
-  protected void setWorld( World world )
+  protected void setWorld( final World world )
   {
     this.world = world;
   }

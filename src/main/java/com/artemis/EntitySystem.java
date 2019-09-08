@@ -27,7 +27,7 @@ public abstract class EntitySystem
   static final int FLAG_REMOVED = 1 << 1;
   private boolean shouldSyncEntities;
   @Nonnull
-  private WildBag<Entity> entities = new WildBag( Entity.class );
+  private final WildBag<Entity> entities = new WildBag( Entity.class );
   private int methodFlags;
 
   /**
@@ -36,7 +36,7 @@ public abstract class EntitySystem
    *
    * @param aspect to match against entities
    */
-  public EntitySystem( Aspect.Builder aspect )
+  public EntitySystem( final Aspect.Builder aspect )
   {
     super( aspect );
   }
@@ -51,7 +51,7 @@ public abstract class EntitySystem
    * @param world the world to set
    */
   @Override
-  protected void setWorld( World world )
+  protected void setWorld( final World world )
   {
     super.setWorld( world );
 		if ( implementsObserver( this, "inserted" ) )
@@ -65,7 +65,7 @@ public abstract class EntitySystem
   }
 
   @Override
-  public final void inserted( @Nonnull IntBag entities )
+  public final void inserted( @Nonnull final IntBag entities )
   {
     shouldSyncEntities = true;
     // performance hack, skip calls to entities if system lacks implementation of added.
@@ -76,13 +76,13 @@ public abstract class EntitySystem
   }
 
   @Override
-  protected final void inserted( int entityId )
+  protected final void inserted( final int entityId )
   {
     inserted( world.getEntity( entityId ) );
   }
 
   @Override
-  public final void removed( @Nonnull IntBag entities )
+  public final void removed( @Nonnull final IntBag entities )
   {
     shouldSyncEntities = true;
     // performance hack, skip calls to entities if system lacks implementation of deleted.
@@ -93,7 +93,7 @@ public abstract class EntitySystem
   }
 
   @Override
-  protected final void removed( int entityId )
+  protected final void removed( final int entityId )
   {
     removed( world.getEntity( entityId ) );
   }
@@ -104,7 +104,7 @@ public abstract class EntitySystem
    *
    * @param e the entity that was added to this system
    */
-  public void inserted( Entity e )
+  public void inserted( final Entity e )
   {
     throw new RuntimeException( "everything changes" );
   }
@@ -121,7 +121,7 @@ public abstract class EntitySystem
    *
    * @param e the entity that was removed from this system
    */
-  public void removed( Entity e )
+  public void removed( final Entity e )
   {
     throw new RuntimeException( "everything breaks" );
   }
@@ -137,10 +137,10 @@ public abstract class EntitySystem
   {
     if ( shouldSyncEntities )
     {
-      int oldSize = entities.size();
+      final int oldSize = entities.size();
       entities.setSize( 0 );
-      IntBag entityIds = subscription.getEntities();
-      int[] ids = entityIds.getData();
+      final IntBag entityIds = subscription.getEntities();
+      final int[] ids = entityIds.getData();
       for ( int i = 0; i < entityIds.size(); i++ )
       {
         entities.add( world.getEntity( ids[ i ] ) );

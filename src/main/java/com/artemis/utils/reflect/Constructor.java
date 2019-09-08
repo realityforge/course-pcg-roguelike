@@ -27,7 +27,7 @@ public final class Constructor
 {
   private final com.artemis.gwtref.client.Constructor constructor;
 
-  Constructor( com.artemis.gwtref.client.Constructor constructor )
+  Constructor( final com.artemis.gwtref.client.Constructor constructor )
   {
     this.constructor = constructor;
   }
@@ -54,7 +54,7 @@ public final class Constructor
     return constructor.isPublic();
   }
 
-  public void setAccessible( boolean accessible )
+  public void setAccessible( final boolean accessible )
   {
     // NOOP in GWT
   }
@@ -68,14 +68,14 @@ public final class Constructor
    * Uses the constructor to create and initialize a new instance of the constructor's declaring class, with the supplied
    * initialization parameters.
    */
-  public Object newInstance( Object... args )
+  public Object newInstance( final Object... args )
     throws ReflectionException
   {
     try
     {
       return constructor.newInstance( args );
     }
-    catch ( IllegalArgumentException e )
+    catch ( final IllegalArgumentException e )
     {
       throw new ReflectionException( "Illegal argument(s) supplied to constructor for class: " +
                                      getDeclaringClass().getName(),

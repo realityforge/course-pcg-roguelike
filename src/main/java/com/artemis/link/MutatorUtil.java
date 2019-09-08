@@ -9,7 +9,7 @@ final class MutatorUtil
   }
 
   @Nullable
-  static <T> T getGeneratedMutator( LinkSite linkSite )
+  static <T> T getGeneratedMutator( final LinkSite linkSite )
   {
     return null;
   }

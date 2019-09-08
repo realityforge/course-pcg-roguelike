@@ -27,7 +27,7 @@ public final class Entity
   /**
    * The entities identifier in the world.
    */
-  int id;
+  final int id;
   /**
    * The world this entity belongs to.
    */
@@ -43,7 +43,7 @@ public final class Entity
    * @param world the world to create the entity in
    * @param id    the id to set
    */
-  protected Entity( World world, int id )
+  protected Entity( final World world, final int id )
   {
     this.world = world;
     this.id = id;
@@ -115,7 +115,7 @@ public final class Entity
    *             ComponentType instance for the expected component
    * @return component that matches, or {@code null} if none is found
    */
-  public Component getComponent( @Nonnull ComponentType type )
+  public Component getComponent( @Nonnull final ComponentType type )
   {
     return world.getComponentManager().getComponent( id, type );
   }
@@ -132,9 +132,9 @@ public final class Entity
    */
   @Nonnull
   @SuppressWarnings( "unchecked" )
-  public <T extends Component> T getComponent( Class<T> type )
+  public <T extends Component> T getComponent( final Class<T> type )
   {
-    ComponentTypeFactory tf = world.getComponentManager().typeFactory;
+    final ComponentTypeFactory tf = world.getComponentManager().typeFactory;
     return (T) getComponent( tf.getTypeFor( type ) );
   }
 
@@ -148,7 +148,7 @@ public final class Entity
    * @param fillBag the bag to put the components into
    * @return the fillBag containing the components
    */
-  public Bag<Component> getComponents( Bag<Component> fillBag )
+  public Bag<Component> getComponents( final Bag<Component> fillBag )
   {
     return world.getComponentManager().getComponentsFor( id, fillBag );
   }
@@ -185,7 +185,7 @@ public final class Entity
    * id equality
    */
   @Override
-  public boolean equals( @Nullable Object o )
+  public boolean equals( @Nullable final Object o )
   {
 		if ( this == o )
 		{
@@ -196,7 +196,7 @@ public final class Entity
 			return false;
 		}
 
-    Entity entity = (Entity) o;
+    final Entity entity = (Entity) o;
 
     return id == entity.id;
 
@@ -205,7 +205,7 @@ public final class Entity
   /**
    * id equality
    */
-  public boolean equals( @Nullable Entity o )
+  public boolean equals( @Nullable final Entity o )
   {
     return o != null && o.id == id;
   }

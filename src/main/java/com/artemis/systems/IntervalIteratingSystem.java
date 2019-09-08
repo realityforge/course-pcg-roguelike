@@ -23,7 +23,7 @@ public abstract class IntervalIteratingSystem
    * @param aspect   the aspect to match entities
    * @param interval the interval at which the system is processed
    */
-  public IntervalIteratingSystem( Aspect.Builder aspect, float interval )
+  public IntervalIteratingSystem( final Aspect.Builder aspect, final float interval )
   {
     super( aspect, interval );
   }
@@ -38,8 +38,8 @@ public abstract class IntervalIteratingSystem
   @Override
   protected void processSystem()
   {
-    IntBag entities = subscription.getEntities();
-    int[] ids = entities.getData();
+    final IntBag entities = subscription.getEntities();
+    final int[] ids = entities.getData();
     for ( int i = 0, s = entities.size(); s > i; i++ )
     {
       process( ids[ i ] );

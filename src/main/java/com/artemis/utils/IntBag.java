@@ -36,7 +36,7 @@ public class IntBag
    *
    * @param capacity the initial capacity of Bag
    */
-  public IntBag( int capacity )
+  public IntBag( final int capacity )
   {
     data = new int[ capacity ];
   }
@@ -48,10 +48,10 @@ public class IntBag
    * @param value the value to be removed
    * @return true, if value was removed
    */
-  public boolean removeValue( int value )
+  public boolean removeValue( final int value )
     throws ArrayIndexOutOfBoundsException
   {
-    int index = indexOf( value );
+    final int index = indexOf( value );
 		if ( index > -1 )
 		{
 			remove( index );
@@ -70,10 +70,10 @@ public class IntBag
    * @param index the index of element to be removed
    * @return element that was removed from the Bag
    */
-  public int remove( int index )
+  public int remove( final int index )
     throws ArrayIndexOutOfBoundsException
   {
-    int e = data[ index ]; // make copy of element to remove so it can be returned
+    final int e = data[ index ]; // make copy of element to remove so it can be returned
     data[ index ] = data[ --size ]; // overwrite item to remove with last element
     data[ size ] = 0; // null last element, so gc can do its work
     return e;
@@ -85,7 +85,7 @@ public class IntBag
    * @param value element to check
    * @return index of element, or {@code -1} if there is no such index.
    */
-  public int indexOf( int value )
+  public int indexOf( final int value )
   {
     for ( int i = 0; size > i; i++ )
     {
@@ -103,7 +103,7 @@ public class IntBag
    * @param value element to check
    * @return {@code true} if the bag contains this element
    */
-  public boolean contains( int value )
+  public boolean contains( final int value )
   {
     for ( int i = 0; size > i; i++ )
     {
@@ -121,12 +121,12 @@ public class IntBag
    * @param index index of the element to return
    * @return the element at the specified position in bag
    */
-  public int get( int index )
+  public int get( final int index )
     throws ArrayIndexOutOfBoundsException
   {
     if ( index >= size )
     {
-      String message = "tried accessing element " + index + "/" + size;
+      final String message = "tried accessing element " + index + "/" + size;
       throw new ArrayIndexOutOfBoundsException( message );
     }
 
@@ -159,7 +159,7 @@ public class IntBag
    * @param index index to check
    * @return {@code true} if the index is within bounds
    */
-  public boolean isIndexWithinBounds( int index )
+  public boolean isIndexWithinBounds( final int index )
   {
     return index < getCapacity();
   }
@@ -182,7 +182,7 @@ public class IntBag
    *
    * @param value element to be added to this list
    */
-  public void add( int value )
+  public void add( final int value )
   {
     // is size greater than capacity increase capacity
 		if ( size == data.length )
@@ -201,7 +201,7 @@ public class IntBag
    *
    * @param other elements to be added to this list
    */
-  public void addAll( @Nonnull IntBag other )
+  public void addAll( @Nonnull final IntBag other )
   {
     for ( int i = 0; i < other.size(); i++ )
     {
@@ -215,7 +215,7 @@ public class IntBag
    * @param index position of element
    * @param value the element
    */
-  public void set( int index, int value )
+  public void set( final int index, final int value )
   {
     if ( index >= data.length )
     {
@@ -226,10 +226,10 @@ public class IntBag
     data[ index ] = value;
   }
 
-  private void grow( int newCapacity )
+  private void grow( final int newCapacity )
     throws ArrayIndexOutOfBoundsException
   {
-    int[] oldData = data;
+    final int[] oldData = data;
     data = new int[ newCapacity ];
     System.arraycopy( oldData, 0, data, 0, oldData.length );
   }
@@ -242,7 +242,7 @@ public class IntBag
    *
    * @param index index to check
    */
-  public void ensureCapacity( int index )
+  public void ensureCapacity( final int index )
   {
     if ( index >= data.length )
     {
@@ -285,13 +285,13 @@ public class IntBag
    *
    * @param size the size to set
    */
-  public void setSize( int size )
+  public void setSize( final int size )
   {
     this.size = size;
   }
 
   @Override
-  public boolean equals( @Nullable Object o )
+  public boolean equals( @Nullable final Object o )
   {
 		if ( this == o )
 		{
@@ -302,7 +302,7 @@ public class IntBag
 			return false;
 		}
 
-    IntBag intBag = (IntBag) o;
+    final IntBag intBag = (IntBag) o;
 		if ( size != intBag.size() )
 		{
 			return false;
@@ -335,7 +335,7 @@ public class IntBag
   @Override
   public String toString()
   {
-    StringBuilder sb = new StringBuilder();
+    final StringBuilder sb = new StringBuilder();
     sb.append( "IntBag(" );
     for ( int i = 0; size > i; i++ )
     {

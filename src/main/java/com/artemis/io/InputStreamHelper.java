@@ -21,7 +21,7 @@ public class InputStreamHelper
    * is 0 unless another position was marked or an offset was specified
    * in the constructor.
    */
-  public static void reset( @Nonnull InputStream is )
+  public static void reset( @Nonnull final InputStream is )
     throws IOException
   {
     ensureIsByteArrayInputStream( is );
@@ -40,13 +40,13 @@ public class InputStreamHelper
    * @see InputStream#mark(int)
    * @see InputStream#reset()
    */
-  public static boolean isMarkSupported( @Nonnull InputStream is )
+  public static boolean isMarkSupported( @Nonnull final InputStream is )
   {
     ensureIsByteArrayInputStream( is );
     return is.markSupported();
   }
 
-  private static void ensureIsByteArrayInputStream( @Nonnull InputStream is )
+  private static void ensureIsByteArrayInputStream( @Nonnull final InputStream is )
   {
 		if ( !isByteArrayInputStream( is ) )
 		{
@@ -54,7 +54,7 @@ public class InputStreamHelper
 		}
   }
 
-  private static boolean isByteArrayInputStream( @Nonnull InputStream is )
+  private static boolean isByteArrayInputStream( @Nonnull final InputStream is )
   {
     return ByteArrayInputStream.class.equals( is.getClass() );
   }

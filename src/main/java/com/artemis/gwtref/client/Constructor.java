@@ -25,23 +25,23 @@ import java.lang.annotation.Annotation;
 public class Constructor
   extends Method
 {
-  Constructor( String name,
-               Class enclosingType,
-               Class returnType,
-               Parameter[] parameters,
-               boolean isAbstract,
-               boolean isFinal,
-               boolean isStatic,
-               boolean isDefaultAccess,
-               boolean isPrivate,
-               boolean isProtected,
-               boolean isPublic,
-               boolean isNative,
-               boolean isVarArgs,
-               boolean isMethod,
-               boolean isConstructor,
-               int methodId,
-               Annotation[] annotations )
+  Constructor( final String name,
+               final Class enclosingType,
+               final Class returnType,
+               final Parameter[] parameters,
+               final boolean isAbstract,
+               final boolean isFinal,
+               final boolean isStatic,
+               final boolean isDefaultAccess,
+               final boolean isPrivate,
+               final boolean isProtected,
+               final boolean isPublic,
+               final boolean isNative,
+               final boolean isVarArgs,
+               final boolean isMethod,
+               final boolean isConstructor,
+               final int methodId,
+               final Annotation[] annotations )
   {
     super( name,
            enclosingType,
@@ -65,7 +65,7 @@ public class Constructor
   /**
    * @return a new instance of the enclosing type of this constructor.
    */
-  public Object newInstance( Object... params )
+  public Object newInstance( final Object... params )
   {
     return super.invoke( null, params );
   }

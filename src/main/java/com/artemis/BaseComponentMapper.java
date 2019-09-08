@@ -11,7 +11,7 @@ public abstract class BaseComponentMapper<A extends Component>
    */
   public final ComponentType type;
 
-  protected BaseComponentMapper( ComponentType type )
+  protected BaseComponentMapper( final ComponentType type )
   {
     this.type = type;
   }
@@ -25,7 +25,7 @@ public abstract class BaseComponentMapper<A extends Component>
    * @return a new mapper
    */
   @SuppressWarnings( "unchecked" )
-  public static <T extends Component> BaseComponentMapper<T> getFor( Class<T> type, @Nonnull World world )
+  public static <T extends Component> BaseComponentMapper<T> getFor( final Class<T> type, @Nonnull final World world )
   {
     return world.getMapper( type );
   }
@@ -45,7 +45,7 @@ public abstract class BaseComponentMapper<A extends Component>
    * @param e the entity that should possess the component
    * @return the instance of the component.
    */
-  public A get( @Nonnull Entity e )
+  public A get( @Nonnull final Entity e )
     throws ArrayIndexOutOfBoundsException
   {
     return get( e.getId() );
@@ -75,7 +75,7 @@ public abstract class BaseComponentMapper<A extends Component>
    * @param e the entity to check
    * @return true if the entity has this component type, false if it doesn't
    */
-  public boolean has( @Nonnull Entity e )
+  public boolean has( @Nonnull final Entity e )
     throws ArrayIndexOutOfBoundsException
   {
     return has( e.getId() );
@@ -91,7 +91,7 @@ public abstract class BaseComponentMapper<A extends Component>
    * @return the instance of the component.
    */
   @Nullable
-  public A create( @Nonnull Entity entity )
+  public A create( @Nonnull final Entity entity )
   {
     return create( entity.getId() );
   }
@@ -104,7 +104,7 @@ public abstract class BaseComponentMapper<A extends Component>
    *
    * @param entity entity to remove.
    */
-  public void remove( @Nonnull Entity entity )
+  public void remove( @Nonnull final Entity entity )
   {
     remove( entity.getId() );
   }
@@ -125,7 +125,7 @@ public abstract class BaseComponentMapper<A extends Component>
    * @param fallback fallback component to return, or {@code null} to return null.
    * @return the instance of the component
    */
-  public A getSafe( int entityId, A fallback )
+  public A getSafe( final int entityId, final A fallback )
   {
     final A c = get( entityId );
     return ( c != null ) ? c : fallback;
@@ -141,7 +141,7 @@ public abstract class BaseComponentMapper<A extends Component>
    * @return the instance of the component, or {@code null} if removed.
    */
   @Nullable
-  public A set( int entityId, boolean value )
+  public A set( final int entityId, final boolean value )
   {
     if ( value )
     {
@@ -164,7 +164,7 @@ public abstract class BaseComponentMapper<A extends Component>
    * @return the instance of the component, or {@code null} if removed.
    */
   @Nullable
-  public A set( @Nonnull Entity entity, boolean value )
+  public A set( @Nonnull final Entity entity, final boolean value )
   {
     return set( entity.getId(), value );
   }
@@ -177,7 +177,7 @@ public abstract class BaseComponentMapper<A extends Component>
    * @param fallback fallback component to return, or {@code null} to return null.
    * @return the instance of the component
    */
-  public A getSafe( @Nonnull Entity entity, A fallback )
+  public A getSafe( @Nonnull final Entity entity, final A fallback )
   {
     return getSafe( entity.getId(), fallback );
   }

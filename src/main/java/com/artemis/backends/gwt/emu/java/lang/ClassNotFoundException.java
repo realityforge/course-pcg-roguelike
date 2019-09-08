@@ -8,17 +8,17 @@ public class ClassNotFoundException
     super();
   }
 
-  public ClassNotFoundException( String message, Throwable cause )
+  public ClassNotFoundException( final String message, final Throwable cause )
   {
     super( message, cause );
   }
 
-  public ClassNotFoundException( String message )
+  public ClassNotFoundException( final String message )
   {
     super( message );
   }
 
-  public ClassNotFoundException( Throwable cause )
+  public ClassNotFoundException( final Throwable cause )
   {
     super( cause );
   }

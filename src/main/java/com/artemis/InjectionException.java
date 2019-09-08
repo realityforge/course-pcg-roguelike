@@ -8,12 +8,12 @@ package com.artemis;
 public class InjectionException
   extends RuntimeException
 {
-  public InjectionException( String msg )
+  public InjectionException( final String msg )
   {
     super( msg );
   }
 
-  public InjectionException( String msg, Throwable e )
+  public InjectionException( final String msg, final Throwable e )
   {
     super( msg, e );
   }

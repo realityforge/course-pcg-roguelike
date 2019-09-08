@@ -10,13 +10,13 @@ public final class ConverterUtil
   }
 
   @Nonnull
-  public static IntBag toIntBag( @Nonnull BitVector bs, @Nonnull IntBag out )
+  public static IntBag toIntBag( @Nonnull final BitVector bs, @Nonnull final IntBag out )
   {
     return bs.toIntBag( out );
   }
 
   @Nonnull
-  public static IntBag toIntBag( @Nonnull BitSet bs, @Nonnull IntBag out )
+  public static IntBag toIntBag( @Nonnull final BitSet bs, @Nonnull final IntBag out )
   {
     if ( bs.isEmpty() )
     {
@@ -24,11 +24,11 @@ public final class ConverterUtil
       return out;
     }
 
-    int size = bs.cardinality();
+    final int size = bs.cardinality();
     out.setSize( size );
     out.ensureCapacity( size );
 
-    int[] activesArray = out.getData();
+    final int[] activesArray = out.getData();
     for ( int i = 0, id = -1, s = size; s > i; i++ )
     {
       id = bs.nextSetBit( id + 1 );
@@ -39,9 +39,9 @@ public final class ConverterUtil
   }
 
   @Nonnull
-  public static BitVector toBitVector( @Nonnull IntBag bag, @Nonnull BitVector out )
+  public static BitVector toBitVector( @Nonnull final IntBag bag, @Nonnull final BitVector out )
   {
-    int[] data = bag.getData();
+    final int[] data = bag.getData();
     for ( int i = 0, s = bag.size(); s > i; i++ )
     {
       out.set( data[ i ] );
@@ -51,9 +51,9 @@ public final class ConverterUtil
   }
 
   @Nonnull
-  public static BitSet toBitSet( @Nonnull IntBag bag, @Nonnull BitSet out )
+  public static BitSet toBitSet( @Nonnull final IntBag bag, @Nonnull final BitSet out )
   {
-    int[] data = bag.getData();
+    final int[] data = bag.getData();
     for ( int i = 0, s = bag.size(); s > i; i++ )
     {
       out.set( data[ i ] );

@@ -29,8 +29,8 @@ import javax.annotation.Nullable;
  */
 public class FieldHandler
 {
-  private InjectionCache cache;
-  protected Bag<FieldResolver> fieldResolvers;
+  private final InjectionCache cache;
+  protected final Bag<FieldResolver> fieldResolvers;
 
   /**
    * Constructs a new FieldHandler with the provided fieldResolvers. This constructor should be used when full
@@ -44,7 +44,7 @@ public class FieldHandler
    * @param fieldResolvers bag of fieldresolver this FieldHandler should use.
    * @see ArtemisFieldResolver
    */
-  public FieldHandler( InjectionCache cache, Bag<FieldResolver> fieldResolvers )
+  public FieldHandler( final InjectionCache cache, final Bag<FieldResolver> fieldResolvers )
   {
     this.cache = cache;
     this.fieldResolvers = fieldResolvers;
@@ -59,7 +59,7 @@ public class FieldHandler
    * @param cache used for better reflection-speed.
    * @see ArtemisFieldResolver
    */
-  public FieldHandler( InjectionCache cache )
+  public FieldHandler( final InjectionCache cache )
   {
     this.fieldResolvers = new Bag( FieldResolver.class );
     this.cache = cache;
@@ -81,14 +81,14 @@ public class FieldHandler
    * @param world the world this FieldHandler is being used for
    * @throws com.artemis.WorldConfigurationException when injector has no way to deal with injectables.
    */
-  public void initialize( World world, @Nullable Map<String, Object> injectables )
+  public void initialize( final World world, @Nullable final Map<String, Object> injectables )
   {
 
     boolean fieldResolverFound = false;
 
     for ( int i = 0, s = fieldResolvers.size(); i < s; i++ )
     {
-      FieldResolver fieldResolver = fieldResolvers.get( i );
+      final FieldResolver fieldResolver = fieldResolvers.get( i );
       if ( ClassReflection.isInstance( UseInjectionCache.class, fieldResolver ) )
       {
         ( (UseInjectionCache) fieldResolver ).setCache( cache );
@@ -120,11 +120,11 @@ public class FieldHandler
    * for the {@code field}, null if the {@code field} could not be resolved
    */
   @Nullable
-  public Object resolve( Object target, Class<?> fieldType, Field field )
+  public Object resolve( final Object target, final Class<?> fieldType, final Field field )
   {
     for ( int i = 0, s = fieldResolvers.size(); i < s; i++ )
     {
-      Object resolved = fieldResolvers.get( i ).resolve( target, fieldType, field );
+      final Object resolved = fieldResolvers.get( i ).resolve( target, fieldType, field );
       if ( resolved != null )
       {
         return resolved;
@@ -139,7 +139,7 @@ public class FieldHandler
    *
    * @param fieldResolver is added to this FieldHandler fieldresolver-list
    */
-  public final void addFieldResolver( FieldResolver fieldResolver )
+  public final void addFieldResolver( final FieldResolver fieldResolver )
   {
     fieldResolvers.add( fieldResolver );
   }

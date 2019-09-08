@@ -37,15 +37,15 @@ public class Aspect
   /**
    * Component bits the entity must all possess.
    */
-  BitVector allSet;
+  final BitVector allSet;
   /**
    * Component bits the entity must not possess.
    */
-  BitVector exclusionSet;
+  final BitVector exclusionSet;
   /**
    * Component bits of which the entity must possess at least one.
    */
-  BitVector oneSet;
+  final BitVector oneSet;
 
   private Aspect()
   {
@@ -88,7 +88,7 @@ public class Aspect
   /**
    * Returns whether this Aspect would accept the given Entity.
    */
-  public boolean isInterested( @Nonnull Entity e )
+  public boolean isInterested( @Nonnull final Entity e )
   {
     return isInterested( e.getComponentBits() );
   }
@@ -96,7 +96,7 @@ public class Aspect
   /**
    * Returns whether this Aspect would accept the given set.
    */
-  public boolean isInterested( @Nonnull BitVector componentBits )
+  public boolean isInterested( @Nonnull final BitVector componentBits )
   {
     // Check if the entity possesses ALL of the components defined in the aspect.
     if ( !allSet.isEmpty() )
@@ -144,7 +144,7 @@ public class Aspect
    */
   @Nonnull
   @SafeVarargs
-  public static Builder all( Class<? extends Component>... types )
+  public static Builder all( final Class<? extends Component>... types )
   {
     return new Builder().all( types );
   }
@@ -157,7 +157,7 @@ public class Aspect
    * @return an aspect that can be matched against entities
    */
   @Nonnull
-  public static Builder all( @Nonnull Collection<Class<? extends Component>> types )
+  public static Builder all( @Nonnull final Collection<Class<? extends Component>> types )
   {
     return new Builder().all( types );
   }
@@ -174,7 +174,7 @@ public class Aspect
    */
   @Nonnull
   @SafeVarargs
-  public static Builder exclude( Class<? extends Component>... types )
+  public static Builder exclude( final Class<? extends Component>... types )
   {
     return new Builder().exclude( types );
   }
@@ -190,7 +190,7 @@ public class Aspect
    * @return an aspect that can be matched against entities
    */
   @Nonnull
-  public static Builder exclude( @Nonnull Collection<Class<? extends Component>> types )
+  public static Builder exclude( @Nonnull final Collection<Class<? extends Component>> types )
   {
     return new Builder().exclude( types );
   }
@@ -204,7 +204,7 @@ public class Aspect
    */
   @Nonnull
   @SafeVarargs
-  public static Builder one( Class<? extends Component>... types )
+  public static Builder one( final Class<? extends Component>... types )
   {
     return new Builder().one( types );
   }
@@ -217,7 +217,7 @@ public class Aspect
    * @return an aspect that can be matched against entities
    */
   @Nonnull
-  public static Builder one( @Nonnull Collection<Class<? extends Component>> types )
+  public static Builder one( @Nonnull final Collection<Class<? extends Component>> types )
   {
     return new Builder().one( types );
   }
@@ -250,9 +250,9 @@ public class Aspect
      */
     @Nonnull
     @SafeVarargs
-    public final Builder all( @Nonnull Class<? extends Component>... types )
+    public final Builder all( @Nonnull final Class<? extends Component>... types )
     {
-      for ( Class<? extends Component> t : types )
+      for ( final Class<? extends Component> t : types )
       {
         allTypes.add( t );
       }
@@ -265,7 +265,7 @@ public class Aspect
     @Nonnull
     public Builder copy()
     {
-      Builder b = new Builder();
+      final Builder b = new Builder();
       b.allTypes.addAll( allTypes );
       b.exclusionTypes.addAll( exclusionTypes );
       b.oneTypes.addAll( oneTypes );
@@ -280,9 +280,9 @@ public class Aspect
      * @return an aspect that can be matched against entities
      */
     @Nonnull
-    public Builder all( @Nonnull Collection<Class<? extends Component>> types )
+    public Builder all( @Nonnull final Collection<Class<? extends Component>> types )
     {
-      for ( Class<? extends Component> t : types )
+      for ( final Class<? extends Component> t : types )
       {
         allTypes.add( t );
       }
@@ -299,9 +299,9 @@ public class Aspect
      */
     @Nonnull
     @SafeVarargs
-    public final Builder one( @Nonnull Class<? extends Component>... types )
+    public final Builder one( @Nonnull final Class<? extends Component>... types )
     {
-			for ( Class<? extends Component> t : types )
+			for ( final Class<? extends Component> t : types )
 			{
 				oneTypes.add( t );
 			}
@@ -317,9 +317,9 @@ public class Aspect
      * @return an aspect that can be matched against entities
      */
     @Nonnull
-    public Builder one( @Nonnull Collection<Class<? extends Component>> types )
+    public Builder one( @Nonnull final Collection<Class<? extends Component>> types )
     {
-			for ( Class<? extends Component> t : types )
+			for ( final Class<? extends Component> t : types )
 			{
 				oneTypes.add( t );
 			}
@@ -339,9 +339,9 @@ public class Aspect
      */
     @Nonnull
     @SafeVarargs
-    public final Builder exclude( @Nonnull Class<? extends Component>... types )
+    public final Builder exclude( @Nonnull final Class<? extends Component>... types )
     {
-			for ( Class<? extends Component> t : types )
+			for ( final Class<? extends Component> t : types )
 			{
 				exclusionTypes.add( t );
 			}
@@ -359,9 +359,9 @@ public class Aspect
      * @return an aspect that can be matched against entities
      */
     @Nonnull
-    public Builder exclude( @Nonnull Collection<Class<? extends Component>> types )
+    public Builder exclude( @Nonnull final Collection<Class<? extends Component>> types )
     {
-			for ( Class<? extends Component> t : types )
+			for ( final Class<? extends Component> t : types )
 			{
 				exclusionTypes.add( t );
 			}
@@ -375,10 +375,10 @@ public class Aspect
      * @return Instance of Aspect.
      */
     @Nonnull
-    public Aspect build( @Nonnull World world )
+    public Aspect build( @Nonnull final World world )
     {
-      ComponentTypeFactory tf = world.getComponentManager().typeFactory;
-      Aspect aspect = new Aspect();
+      final ComponentTypeFactory tf = world.getComponentManager().typeFactory;
+      final Aspect aspect = new Aspect();
       associate( tf, allTypes, aspect.allSet );
       associate( tf, exclusionTypes, aspect.exclusionSet );
       associate( tf, oneTypes, aspect.oneSet );
@@ -386,18 +386,18 @@ public class Aspect
       return aspect;
     }
 
-    private static void associate( @Nonnull ComponentTypeFactory tf,
-                                   @Nonnull Bag<Class<? extends Component>> types,
-                                   @Nonnull BitVector componentBits )
+    private static void associate( @Nonnull final ComponentTypeFactory tf,
+                                   @Nonnull final Bag<Class<? extends Component>> types,
+                                   @Nonnull final BitVector componentBits )
     {
-      for ( Class<? extends Component> t : types )
+      for ( final Class<? extends Component> t : types )
       {
         componentBits.set( tf.getIndexFor( t ) );
       }
     }
 
     @Override
-    public boolean equals( @Nullable Object o )
+    public boolean equals( @Nullable final Object o )
     {
 			if ( this == o )
 			{
@@ -408,7 +408,7 @@ public class Aspect
 				return false;
 			}
 
-      Builder builder = (Builder) o;
+      final Builder builder = (Builder) o;
 
 			if ( !allTypes.equals( builder.allTypes ) )
 			{
@@ -442,13 +442,13 @@ public class Aspect
     }
 
     @Nonnull
-    private StringBuilder append( @Nonnull Bag<Class<? extends Component>> types )
+    private StringBuilder append( @Nonnull final Bag<Class<? extends Component>> types )
     {
-      StringBuilder sb = new StringBuilder();
+      final StringBuilder sb = new StringBuilder();
       String delim = "";
 
       sb.append( "(" );
-      for ( Class<? extends Component> type : types )
+      for ( final Class<? extends Component> type : types )
       {
         sb.append( delim ).append( type.getSimpleName() );
         delim = ", ";

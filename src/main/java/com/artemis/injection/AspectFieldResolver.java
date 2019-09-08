@@ -36,10 +36,10 @@ public class AspectFieldResolver
   private static final Class<? extends Component>[] EMPTY_COMPONENT_CLASS_ARRAY = new Class[ 0 ];
   private World world;
   @Nonnull
-  private IdentityHashMap<Field, Aspect.Builder> fields = new IdentityHashMap<>();
+  private final IdentityHashMap<Field, Aspect.Builder> fields = new IdentityHashMap<>();
 
   @Override
-  public void initialize( World world )
+  public void initialize( final World world )
   {
     this.world = world;
   }
@@ -47,15 +47,15 @@ public class AspectFieldResolver
   @Nullable
   @Override
   @SuppressWarnings( "unchecked" )
-  public Object resolve( Object target, Class<?> fieldType, @Nonnull Field field )
+  public Object resolve( final Object target, final Class<?> fieldType, @Nonnull final Field field )
   {
-    Aspect.Builder aspect = aspect( field );
+    final Aspect.Builder aspect = aspect( field );
 		if ( aspect == null )
 		{
 			return null;
 		}
 
-    Class type = field.getType();
+    final Class type = field.getType();
     if ( Aspect.class == type )
     {
       return world.getAspectSubscriptionManager().get( aspect ).getAspect();
@@ -82,11 +82,11 @@ public class AspectFieldResolver
     return null;
   }
 
-  private Aspect.Builder aspect( @Nonnull Field field )
+  private Aspect.Builder aspect( @Nonnull final Field field )
   {
     if ( !fields.containsKey( field ) )
     {
-      AspectDescriptor descriptor = descriptor( field );
+      final AspectDescriptor descriptor = descriptor( field );
 
       if ( descriptor != null )
       {
@@ -113,20 +113,20 @@ public class AspectFieldResolver
   }
 
   @Nullable
-  private AspectDescriptor descriptor( @Nonnull Field field )
+  private AspectDescriptor descriptor( @Nonnull final Field field )
   {
-    Annotation anno = field.getDeclaredAnnotation( AspectDescriptor.class );
+    final Annotation anno = field.getDeclaredAnnotation( AspectDescriptor.class );
     return ( anno != null )
            ? anno.getAnnotation( AspectDescriptor.class )
            : null;
   }
 
-  private Aspect.Builder toAspect( @Nonnull AspectDescriptor ad )
+  private Aspect.Builder toAspect( @Nonnull final AspectDescriptor ad )
   {
     return all( ad.all() ).one( ad.one() ).exclude( ad.exclude() );
   }
 
-  private Aspect.Builder toAspect( @Nullable All all, @Nullable One one, @Nullable Exclude exclude )
+  private Aspect.Builder toAspect( @Nullable final All all, @Nullable final One one, @Nullable final Exclude exclude )
   {
     return all( all != null ? all.value() : EMPTY_COMPONENT_CLASS_ARRAY )
       .one( one != null ? one.value() : EMPTY_COMPONENT_CLASS_ARRAY )
@@ -134,9 +134,9 @@ public class AspectFieldResolver
   }
 
   @Nullable
-  private Class<? extends Component>[] allComponents( @Nonnull Field field )
+  private Class<? extends Component>[] allComponents( @Nonnull final Field field )
   {
-    AspectDescriptor descriptor = descriptor( field );
+    final AspectDescriptor descriptor = descriptor( field );
 
     if ( descriptor != null )
     {
@@ -144,7 +144,7 @@ public class AspectFieldResolver
     }
     else
     {
-      All all = field.getAnnotation( All.class );
+      final All all = field.getAnnotation( All.class );
 
       if ( all != null )
       {

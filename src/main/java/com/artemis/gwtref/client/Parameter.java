@@ -23,7 +23,7 @@ public class Parameter
   final Class type;
   final String jnsi;
 
-  Parameter( String name, Class type, String jnsi )
+  Parameter( final String name, final Class type, final String jnsi )
   {
     this.name = name;
     this.type = type;

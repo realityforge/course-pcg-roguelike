@@ -15,16 +15,16 @@ class UniLinkSite
   UniFieldMutator fieldMutator;
   private final IntBag sourceToTarget = new IntBag();
 
-  protected UniLinkSite( @Nonnull World world,
-                         @Nonnull ComponentType type,
-                         @Nonnull Field field )
+  protected UniLinkSite( @Nonnull final World world,
+                         @Nonnull final ComponentType type,
+                         @Nonnull final Field field )
   {
 
     super( world, type, field, LinkPolicy.Policy.CHECK_SOURCE_AND_TARGETS );
   }
 
   @Override
-  protected void check( int id )
+  protected void check( final int id )
   {
     // -1 == not linked
     int target = fieldMutator.read( mapper.get( id ), field );
@@ -35,7 +35,7 @@ class UniLinkSite
       fieldMutator.write( target, mapper.get( id ), field );
     }
 
-    int oldTarget = sourceToTarget.get( id );
+    final int oldTarget = sourceToTarget.get( id );
     if ( target != oldTarget )
     {
       if ( listener != null )
@@ -47,9 +47,9 @@ class UniLinkSite
     }
   }
 
-  private void fireLinkListener( int id, int target )
+  private void fireLinkListener( final int id, final int target )
   {
-    int oldTarget = sourceToTarget.get( id );
+    final int oldTarget = sourceToTarget.get( id );
     if ( oldTarget == -1 )
     {
       listener.onLinkEstablished( id, target );
@@ -65,9 +65,9 @@ class UniLinkSite
   }
 
   @Override
-  protected void insert( int id )
+  protected void insert( final int id )
   {
-    int target = fieldMutator.read( mapper.get( id ), field );
+    final int target = fieldMutator.read( mapper.get( id ), field );
     sourceToTarget.set( id, target );
 		if ( target != -1 && listener != null )
 		{
@@ -76,9 +76,9 @@ class UniLinkSite
   }
 
   @Override
-  protected void removed( int id )
+  protected void removed( final int id )
   {
-    int target = sourceToTarget.size() > id
+    final int target = sourceToTarget.size() > id
                  ? sourceToTarget.get( id )
                  : -1;
 

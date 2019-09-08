@@ -18,11 +18,11 @@ class EntityBagFieldMutator
   private EntitySubscription all;
 
   @Override
-  public void validate( int sourceId, @Nonnull Bag<Entity> entities, @Nullable LinkListener listener )
+  public void validate( final int sourceId, @Nonnull final Bag<Entity> entities, @Nullable final LinkListener listener )
   {
     for ( int i = 0; entities.size() > i; i++ )
     {
-      Entity e = entities.get( i );
+      final Entity e = entities.get( i );
       if ( !all.getActiveEntityIds().unsafeGet( e.getId() ) )
       {
         entities.remove( i-- );
@@ -36,21 +36,21 @@ class EntityBagFieldMutator
 
   @Nonnull
   @Override
-  public Bag<Entity> read( Component c, @Nonnull Field f )
+  public Bag<Entity> read( final Component c, @Nonnull final Field f )
   {
     try
     {
-      Bag<Entity> e = (Bag<Entity>) f.get( c );
+      final Bag<Entity> e = (Bag<Entity>) f.get( c );
       return ( e != null ) ? e : empty;
     }
-    catch ( ReflectionException exc )
+    catch ( final ReflectionException exc )
     {
       throw new RuntimeException( exc );
     }
   }
 
   @Override
-  public void setWorld( @Nonnull World world )
+  public void setWorld( @Nonnull final World world )
   {
     all = world.getAspectSubscriptionManager().get( all() );
   }

@@ -39,8 +39,8 @@ public abstract class BaseEntitySystem
       aspect = new SystemMetadata( getClass() ).getAspect();
       if ( aspect == null )
       {
-        String error = "Aspect was null and no aspect annotations set on system (@All); to use systems which " +
-                       "do not subscribe to entities, extend BaseSystem directly.";
+        final String error = "Aspect was null and no aspect annotations set on system (@All); to use systems which " +
+                             "do not subscribe to entities, extend BaseSystem directly.";
         throw new NullPointerException( error );
       }
     }
@@ -48,7 +48,7 @@ public abstract class BaseEntitySystem
     aspectConfiguration = aspect;
   }
 
-  protected void setWorld( World world )
+  protected void setWorld( final World world )
   {
     super.setWorld( world );
 
@@ -69,9 +69,9 @@ public abstract class BaseEntitySystem
   }
 
   @Override
-  public void inserted( @Nonnull IntBag entities )
+  public void inserted( @Nonnull final IntBag entities )
   {
-    int[] ids = entities.getData();
+    final int[] ids = entities.getData();
     for ( int i = 0, s = entities.size(); s > i; i++ )
     {
       inserted( ids[ i ] );
@@ -99,7 +99,7 @@ public abstract class BaseEntitySystem
    *
    * @param entityId the entity that was added to this system
    */
-  protected void inserted( int entityId )
+  protected void inserted( final int entityId )
   {
   }
 
@@ -116,9 +116,9 @@ public abstract class BaseEntitySystem
    * @param entities entities removed from this system.
    */
   @Override
-  public void removed( @Nonnull IntBag entities )
+  public void removed( @Nonnull final IntBag entities )
   {
-    int[] ids = entities.getData();
+    final int[] ids = entities.getData();
     for ( int i = 0, s = entities.size(); s > i; i++ )
     {
       removed( ids[ i ] );
@@ -141,7 +141,7 @@ public abstract class BaseEntitySystem
    *
    * @param entityId the entity that was removed from this system
    */
-  protected void removed( int entityId )
+  protected void removed( final int entityId )
   {
   }
 }

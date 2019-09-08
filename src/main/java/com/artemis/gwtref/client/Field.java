@@ -39,21 +39,21 @@ public class Field
   @Nonnull
   final Annotation[] annotations;
 
-  Field( String name,
-         Class enclosingType,
-         Class type,
-         boolean isFinal,
-         boolean isDefaultAccess,
-         boolean isPrivate,
-         boolean isProtected,
-         boolean isPublic,
-         boolean isStatic,
-         boolean isTransient,
-         boolean isVolatile,
-         int getter,
-         int setter,
-         Class[] elementTypes,
-         @Nullable Annotation[] annotations )
+  Field( final String name,
+         final Class enclosingType,
+         final Class type,
+         final boolean isFinal,
+         final boolean isDefaultAccess,
+         final boolean isPrivate,
+         final boolean isProtected,
+         final boolean isPublic,
+         final boolean isStatic,
+         final boolean isTransient,
+         final boolean isVolatile,
+         final int getter,
+         final int setter,
+         final Class[] elementTypes,
+         @Nullable final Annotation[] annotations )
   {
     this.name = name;
     this.enclosingType = enclosingType;
@@ -78,20 +78,20 @@ public class Field
     return annotations;
   }
 
-  public Object get( Object obj )
+  public Object get( final Object obj )
     throws IllegalAccessException
   {
     return ReflectionCache.instance.get( this, obj );
   }
 
-  public void set( Object obj, Object value )
+  public void set( final Object obj, final Object value )
     throws IllegalAccessException
   {
     ReflectionCache.instance.set( this, obj, value );
   }
 
   @Nullable
-  public Type getElementType( int index )
+  public Type getElementType( final int index )
   {
 		if ( elementTypes != null && index < elementTypes.length )
 		{

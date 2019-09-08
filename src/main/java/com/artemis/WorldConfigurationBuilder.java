@@ -58,7 +58,7 @@ public class WorldConfigurationBuilder
     return config;
   }
 
-  private void registerInvocationStrategies( @Nonnull WorldConfiguration config )
+  private void registerInvocationStrategies( @Nonnull final WorldConfiguration config )
   {
     if ( invocationStrategy != null )
     {
@@ -86,7 +86,7 @@ public class WorldConfigurationBuilder
   /**
    * add custom field handler with resolvers.
    */
-  protected void registerFieldResolvers( @Nonnull WorldConfiguration config )
+  protected void registerFieldResolvers( @Nonnull final WorldConfiguration config )
   {
 
     if ( fieldResolvers.size() > 0 )
@@ -95,7 +95,7 @@ public class WorldConfigurationBuilder
       // instance default field handler
       final FieldHandler fieldHandler = new FieldHandler( InjectionCache.sharedCache.get() );
 
-      for ( ConfigurationElement<? extends FieldResolver> configurationElement : fieldResolvers )
+      for ( final ConfigurationElement<? extends FieldResolver> configurationElement : fieldResolvers )
       {
         fieldHandler.addFieldResolver( configurationElement.item );
       }
@@ -107,10 +107,10 @@ public class WorldConfigurationBuilder
   /**
    * add systems to config.
    */
-  private void registerSystems( @Nonnull WorldConfiguration config )
+  private void registerSystems( @Nonnull final WorldConfiguration config )
   {
     Sort.instance().sort( systems );
-    for ( ConfigurationElement<? extends BaseSystem> configurationElement : systems )
+    for ( final ConfigurationElement<? extends BaseSystem> configurationElement : systems )
     {
       config.setSystem( configurationElement.item );
     }
@@ -142,7 +142,7 @@ public class WorldConfigurationBuilder
    *              will be delayed. Components without the annotation will not be retrievable in listeners.
    */
   @Nonnull
-  public WorldConfigurationBuilder alwaysDelayComponentRemoval( boolean value )
+  public WorldConfigurationBuilder alwaysDelayComponentRemoval( final boolean value )
   {
     this.alwaysDelayComponentRemoval = value;
     return this;
@@ -154,9 +154,9 @@ public class WorldConfigurationBuilder
    * @return this
    */
   @Nonnull
-  public WorldConfigurationBuilder register( @Nonnull FieldResolver... fieldResolvers )
+  public WorldConfigurationBuilder register( @Nonnull final FieldResolver... fieldResolvers )
   {
-    for ( FieldResolver fieldResolver : fieldResolvers )
+    for ( final FieldResolver fieldResolver : fieldResolvers )
     {
       this.fieldResolvers.add( ConfigurationElement.of( fieldResolver ) );
     }
@@ -170,7 +170,7 @@ public class WorldConfigurationBuilder
    * @return this
    */
   @Nonnull
-  public WorldConfigurationBuilder register( SystemInvocationStrategy strategy )
+  public WorldConfigurationBuilder register( final SystemInvocationStrategy strategy )
   {
     this.invocationStrategy = strategy;
     return this;
@@ -188,7 +188,7 @@ public class WorldConfigurationBuilder
    * @return this
    */
   @Nonnull
-  public final WorldConfigurationBuilder dependsOn( Class... types )
+  public final WorldConfigurationBuilder dependsOn( final Class... types )
   {
     return dependsOn( Priority.NORMAL, types );
   }
@@ -204,9 +204,9 @@ public class WorldConfigurationBuilder
    */
   @Nonnull
   @SuppressWarnings( "unchecked" )
-  public final WorldConfigurationBuilder dependsOn( int priority, @Nonnull Class... types )
+  public final WorldConfigurationBuilder dependsOn( final int priority, @Nonnull final Class... types )
   {
-    for ( Class type : types )
+    for ( final Class type : types )
     {
       try
       {
@@ -230,7 +230,7 @@ public class WorldConfigurationBuilder
             }
         }
       }
-      catch ( ReflectionException e )
+      catch ( final ReflectionException e )
       {
         throw new WorldConfigurationException( "Unable to instance " + type + " via reflection.", e );
       }
@@ -238,7 +238,7 @@ public class WorldConfigurationBuilder
     return this;
   }
 
-  protected void dependsOnSystem( int priority, @Nonnull Class<? extends BaseSystem> type )
+  protected void dependsOnSystem( final int priority, @Nonnull final Class<? extends BaseSystem> type )
     throws ReflectionException
   {
     if ( !containsType( systems, type ) )
@@ -247,7 +247,7 @@ public class WorldConfigurationBuilder
     }
   }
 
-  private void dependsOnPlugin( @Nonnull Class<? extends ArtemisPlugin> type )
+  private void dependsOnPlugin( @Nonnull final Class<? extends ArtemisPlugin> type )
     throws ReflectionException
   {
 
@@ -280,7 +280,7 @@ public class WorldConfigurationBuilder
    * @throws WorldConfigurationException if registering the same class twice.
    */
   @Nonnull
-  public WorldConfigurationBuilder with( int priority, @Nonnull BaseSystem... systems )
+  public WorldConfigurationBuilder with( final int priority, @Nonnull final BaseSystem... systems )
   {
     addSystems( priority, systems );
     return this;
@@ -296,7 +296,7 @@ public class WorldConfigurationBuilder
    * @throws WorldConfigurationException if registering the same class twice.
    */
   @Nonnull
-  public WorldConfigurationBuilder with( @Nonnull BaseSystem... systems )
+  public WorldConfigurationBuilder with( @Nonnull final BaseSystem... systems )
   {
     addSystems( Priority.NORMAL, systems );
     return this;
@@ -315,7 +315,7 @@ public class WorldConfigurationBuilder
    * @throws WorldConfigurationException if type is added more than once.
    */
   @Nonnull
-  public WorldConfigurationBuilder with( @Nonnull ArtemisPlugin... plugins )
+  public WorldConfigurationBuilder with( @Nonnull final ArtemisPlugin... plugins )
   {
     addPlugins( plugins );
     return this;
@@ -324,9 +324,9 @@ public class WorldConfigurationBuilder
   /**
    * helper to queue systems for registration.
    */
-  private void addSystems( int priority, @Nonnull BaseSystem[] systems )
+  private void addSystems( final int priority, @Nonnull final BaseSystem[] systems )
   {
-    for ( BaseSystem system : systems )
+    for ( final BaseSystem system : systems )
     {
 
       if ( containsType( this.systems, system.getClass() ) )
@@ -348,9 +348,9 @@ public class WorldConfigurationBuilder
    * @return {@code true} if found {@code false} if none.
    */
   @SuppressWarnings( "unchecked" )
-  private boolean containsType( Bag items, Class type )
+  private boolean containsType( final Bag items, final Class type )
   {
-    for ( ConfigurationElement<?> registration : (Bag<ConfigurationElement<?>>) items )
+    for ( final ConfigurationElement<?> registration : (Bag<ConfigurationElement<?>>) items )
     {
       if ( registration.itemType == type )
       {
@@ -368,9 +368,9 @@ public class WorldConfigurationBuilder
    * @return {@code true} if found {@code false} if none.
    */
   @SuppressWarnings( "unchecked" )
-  private boolean anyAssignableTo( Bag items, Class type )
+  private boolean anyAssignableTo( final Bag items, final Class type )
   {
-    for ( ConfigurationElement<?> registration : (Bag<ConfigurationElement<?>>) items )
+    for ( final ConfigurationElement<?> registration : (Bag<ConfigurationElement<?>>) items )
     {
       if ( ClassReflection.isAssignableFrom( type, registration.itemType ) )
       {
@@ -383,9 +383,9 @@ public class WorldConfigurationBuilder
   /**
    * Add new plugins.
    */
-  private void addPlugins( @Nonnull ArtemisPlugin[] plugins )
+  private void addPlugins( @Nonnull final ArtemisPlugin[] plugins )
   {
-    for ( ArtemisPlugin plugin : plugins )
+    for ( final ArtemisPlugin plugin : plugins )
     {
 
       if ( containsType( this.plugins, plugin.getClass() ) )

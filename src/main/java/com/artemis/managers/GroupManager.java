@@ -64,12 +64,12 @@ public class GroupManager
       .addSubscriptionListener( new EntitySubscription.SubscriptionListener()
       {
         @Override
-        public void inserted( IntBag entities )
+        public void inserted( final IntBag entities )
         {
         }
 
         @Override
-        public void removed( @Nonnull IntBag entities )
+        public void removed( @Nonnull final IntBag entities )
         {
           deleted( entities );
         }
@@ -82,7 +82,7 @@ public class GroupManager
    * @param group group to add the entity into
    * @param e     entity to add into the group
    */
-  public void add( @Nonnull Entity e, @Nonnull String group )
+  public void add( @Nonnull final Entity e, @Nonnull final String group )
   {
     Bag<Entity> entities = entitiesByGroup.get( group );
     if ( entities == null )
@@ -114,7 +114,7 @@ public class GroupManager
     }
   }
 
-  public void add( final int entityId, @Nonnull String group )
+  public void add( final int entityId, @Nonnull final String group )
   {
     final Entity e = world.getEntity( entityId );
     add( e, group );
@@ -127,13 +127,13 @@ public class GroupManager
    * @param g2 group to add the entity into
    * @param e  entity to add into the group
    */
-  public void add( @Nonnull Entity e, @Nonnull String g1, @Nonnull String g2 )
+  public void add( @Nonnull final Entity e, @Nonnull final String g1, @Nonnull final String g2 )
   {
     add( e, g1 );
     add( e, g2 );
   }
 
-  public void add( final int entityId, @Nonnull String g1, @Nonnull String g2 )
+  public void add( final int entityId, @Nonnull final String g1, @Nonnull final String g2 )
   {
     final Entity e = world.getEntity( entityId );
     add( e, g1, g2 );
@@ -147,14 +147,14 @@ public class GroupManager
    * @param g3 group to add the entity into
    * @param e  entity to add into the group
    */
-  public void add( @Nonnull Entity e, @Nonnull String g1, @Nonnull String g2, @Nonnull String g3 )
+  public void add( @Nonnull final Entity e, @Nonnull final String g1, @Nonnull final String g2, @Nonnull final String g3 )
   {
     add( e, g1 );
     add( e, g2 );
     add( e, g3 );
   }
 
-  public void add( final int entityId, @Nonnull String g1, @Nonnull String g2, @Nonnull String g3 )
+  public void add( final int entityId, @Nonnull final String g1, @Nonnull final String g2, @Nonnull final String g3 )
   {
     final Entity e = world.getEntity( entityId );
     add( e, g1, g2, g3 );
@@ -166,15 +166,15 @@ public class GroupManager
    * @param groups groups to add the entity into
    * @param e      entity to add into the group
    */
-  public void add( @Nonnull Entity e, @Nonnull String... groups )
+  public void add( @Nonnull final Entity e, @Nonnull final String... groups )
   {
-    for ( String group : groups )
+    for ( final String group : groups )
     {
       add( e, group );
     }
   }
 
-  public void add( final int entityId, String... groups )
+  public void add( final int entityId, final String... groups )
   {
     final Entity e = world.getEntity( entityId );
     add( e, groups );
@@ -186,7 +186,7 @@ public class GroupManager
    * @param e     entity to remove from group
    * @param group group to remove the entity from
    */
-  public void remove( @Nonnull Entity e, @Nonnull String group )
+  public void remove( @Nonnull final Entity e, @Nonnull final String group )
   {
     final Bag<Entity> entities = entitiesByGroup.get( group );
     if ( entities != null )
@@ -199,7 +199,7 @@ public class GroupManager
       identities.removeValue( e.getId() );
     }
 
-    Bag<String> groups = groupsByEntity.get( e );
+    final Bag<String> groups = groupsByEntity.get( e );
     if ( groups != null )
     {
       groups.remove( group );
@@ -210,7 +210,7 @@ public class GroupManager
     }
   }
 
-  public void remove( final int entityId, @Nonnull String group )
+  public void remove( final int entityId, @Nonnull final String group )
   {
     remove( world.getEntity( entityId ), group );
   }
@@ -222,13 +222,13 @@ public class GroupManager
    * @param g1 group to remove the entity from
    * @param g2 group to remove the entity from
    */
-  public void remove( @Nonnull Entity e, @Nonnull String g1, @Nonnull String g2 )
+  public void remove( @Nonnull final Entity e, @Nonnull final String g1, @Nonnull final String g2 )
   {
     remove( e, g1 );
     remove( e, g2 );
   }
 
-  public void remove( final int entityId, @Nonnull String g1, @Nonnull String g2 )
+  public void remove( final int entityId, @Nonnull final String g1, @Nonnull final String g2 )
   {
     remove( world.getEntity( entityId ), g1, g2 );
   }
@@ -241,14 +241,14 @@ public class GroupManager
    * @param g2 group to remove the entity from
    * @param g3 group to remove the entity from
    */
-  public void remove( @Nonnull Entity e, @Nonnull String g1, @Nonnull String g2, @Nonnull String g3 )
+  public void remove( @Nonnull final Entity e, @Nonnull final String g1, @Nonnull final String g2, @Nonnull final String g3 )
   {
     remove( e, g1 );
     remove( e, g2 );
     remove( e, g3 );
   }
 
-  public void remove( final int entityId, @Nonnull String g1, @Nonnull String g2, @Nonnull String g3 )
+  public void remove( final int entityId, @Nonnull final String g1, @Nonnull final String g2, @Nonnull final String g3 )
   {
     remove( world.getEntity( entityId ), g1, g2, g3 );
   }
@@ -259,15 +259,15 @@ public class GroupManager
    * @param e      entity to remove from group
    * @param groups groups to remove the entity from
    */
-  public void remove( @Nonnull Entity e, @Nonnull String... groups )
+  public void remove( @Nonnull final Entity e, @Nonnull final String... groups )
   {
-    for ( String group : groups )
+    for ( final String group : groups )
     {
       remove( e, group );
     }
   }
 
-  public void remove( final int entityId, String... groups )
+  public void remove( final int entityId, final String... groups )
   {
     remove( world.getEntity( entityId ), groups );
   }
@@ -277,21 +277,21 @@ public class GroupManager
    *
    * @param e the entity to remove
    */
-  public void removeFromAllGroups( @Nonnull Entity e )
+  public void removeFromAllGroups( @Nonnull final Entity e )
   {
-    Bag<String> groups = groupsByEntity.get( e );
+    final Bag<String> groups = groupsByEntity.get( e );
       if ( groups == null )
       {
           return;
       }
     for ( int i = 0, s = groups.size(); s > i; i++ )
     {
-      Bag<Entity> entities = entitiesByGroup.get( groups.get( i ) );
+      final Bag<Entity> entities = entitiesByGroup.get( groups.get( i ) );
       if ( entities != null )
       {
         entities.remove( e );
       }
-      IntBag identities = identitiesByGroup.get( groups.get( i ) );
+      final IntBag identities = identitiesByGroup.get( groups.get( i ) );
       if ( identities != null )
       {
         identities.removeValue( e.getId() );
@@ -312,7 +312,7 @@ public class GroupManager
    * @param group name of the group
    * @return read-only bag of entities belonging to the group
    */
-  public ImmutableBag<Entity> getEntities( String group )
+  public ImmutableBag<Entity> getEntities( final String group )
   {
     Bag<Entity> entities = entitiesByGroup.get( group );
     if ( entities == null )
@@ -342,9 +342,9 @@ public class GroupManager
    * @return the groups the entity belongs to.
    */
   @Nonnull
-  public ImmutableBag<String> getGroups( Entity e )
+  public ImmutableBag<String> getGroups( final Entity e )
   {
-    Bag<String> groups = groupsByEntity.get( e );
+    final Bag<String> groups = groupsByEntity.get( e );
     return groups != null ? groups : EMPTY_BAG;
   }
 
@@ -361,7 +361,7 @@ public class GroupManager
    * @param e the entity to check
    * @return true. if it is in any group, false if none
    */
-  public boolean isInAnyGroup( Entity e )
+  public boolean isInAnyGroup( final Entity e )
   {
     return getGroups( e ).size() > 0;
   }
@@ -379,17 +379,17 @@ public class GroupManager
    * @param e     the entity to check for
    * @return true if the entity is in the supplied group, false if not
    */
-  public boolean isInGroup( Entity e, @Nullable String group )
+  public boolean isInGroup( final Entity e, @Nullable final String group )
   {
     if ( group != null )
     {
-      Bag<String> bag = groupsByEntity.get( e );
+      final Bag<String> bag = groupsByEntity.get( e );
       if ( bag != null )
       {
-        Object[] groups = bag.getData();
+        final Object[] groups = bag.getData();
         for ( int i = 0, s = bag.size(); s > i; i++ )
         {
-          String g = (String) groups[ i ];
+          final String g = (String) groups[ i ];
           if ( group.equals( g ) )
           {
             return true;
@@ -400,15 +400,15 @@ public class GroupManager
     return false;
   }
 
-  public boolean isInGroup( final int entityId, String group )
+  public boolean isInGroup( final int entityId, final String group )
   {
     final Entity e = world.getEntity( entityId );
     return isInGroup( e, group );
   }
 
-  void deleted( @Nonnull IntBag entities )
+  void deleted( @Nonnull final IntBag entities )
   {
-    int[] ids = entities.getData();
+    final int[] ids = entities.getData();
     for ( int i = 0, s = entities.size(); s > i; i++ )
     {
       removeFromAllGroups( world.getEntity( ids[ i ] ) );

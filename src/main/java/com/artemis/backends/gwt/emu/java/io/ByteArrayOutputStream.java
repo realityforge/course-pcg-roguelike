@@ -60,7 +60,7 @@ public class ByteArrayOutputStream
    *             non-negative.
    * @throws IllegalArgumentException if {@code size} < 0.
    */
-  public ByteArrayOutputStream( int size )
+  public ByteArrayOutputStream( final int size )
   {
     if ( size >= 0 )
     {
@@ -89,7 +89,7 @@ public class ByteArrayOutputStream
     super.close();
   }
 
-  private void expand( int i )
+  private void expand( final int i )
   {
     /* Can the buffer handle @i more bytes, if not expand it */
     if ( count + i <= buf.length )
@@ -97,7 +97,7 @@ public class ByteArrayOutputStream
       return;
     }
 
-    byte[] newbuf = new byte[ ( count + i ) * 2 ];
+    final byte[] newbuf = new byte[ ( count + i ) * 2 ];
     System.arraycopy( buf, 0, newbuf, 0, count );
     buf = newbuf;
   }
@@ -132,7 +132,7 @@ public class ByteArrayOutputStream
   @Nonnull
   public byte[] toByteArray()
   {
-    byte[] newArray = new byte[ count ];
+    final byte[] newArray = new byte[ count ];
     System.arraycopy( buf, 0, newArray, 0, count );
     return newArray;
   }
@@ -166,9 +166,9 @@ public class ByteArrayOutputStream
    */
   @Nonnull
   @Deprecated
-  public String toString( int hibyte )
+  public String toString( final int hibyte )
   {
-    char[] newBuf = new char[ size() ];
+    final char[] newBuf = new char[ size() ];
     for ( int i = 0; i < newBuf.length; i++ )
     {
       newBuf[ i ] = (char) ( ( ( hibyte & 0xff ) << 8 ) | ( buf[ i ] & 0xff ) );
@@ -186,7 +186,7 @@ public class ByteArrayOutputStream
    * @throws UnsupportedEncodingException if the provided encoding is not supported.
    */
   @Nonnull
-  public String toString( @Nonnull String charsetName )
+  public String toString( @Nonnull final String charsetName )
     throws UnsupportedEncodingException
   {
     return new String( buf, 0, count, charsetName );
@@ -205,7 +205,7 @@ public class ByteArrayOutputStream
    *                                   {@code buffer}.
    */
   @Override
-  public void write( @Nonnull byte[] buffer, int offset, int len )
+  public void write( @Nonnull final byte[] buffer, final int offset, final int len )
   {
     checkOffsetAndCount( buffer.length, offset, len );
     if ( len == 0 )
@@ -224,7 +224,7 @@ public class ByteArrayOutputStream
    * @param oneByte the byte to be written.
    */
   @Override
-  public void write( int oneByte )
+  public void write( final int oneByte )
   {
     if ( count == buf.length )
     {
@@ -240,13 +240,13 @@ public class ByteArrayOutputStream
    * @param out an OutputStream on which to write the contents of this stream.
    * @throws IOException if an error occurs while writing to {@code out}.
    */
-  public void writeTo( @Nonnull OutputStream out )
+  public void writeTo( @Nonnull final OutputStream out )
     throws IOException
   {
     out.write( buf, 0, count );
   }
 
-  private static void checkOffsetAndCount( int length, int offset, int count )
+  private static void checkOffsetAndCount( final int length, final int offset, final int count )
   {
     if ( ( offset < 0 ) || ( count < 0 ) || ( ( offset + count ) > length ) )
     {

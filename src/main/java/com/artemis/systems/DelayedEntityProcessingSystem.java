@@ -50,7 +50,7 @@ public abstract class DelayedEntityProcessingSystem
    *
    * @param aspect the aspect to match against entities
    */
-  public DelayedEntityProcessingSystem( Aspect.Builder aspect )
+  public DelayedEntityProcessingSystem( final Aspect.Builder aspect )
   {
     super( aspect );
   }
@@ -62,8 +62,8 @@ public abstract class DelayedEntityProcessingSystem
   @Override
   protected final void processSystem()
   {
-    Bag<Entity> entities = getEntities();
-    int processed = entities.size();
+    final Bag<Entity> entities = getEntities();
+    final int processed = entities.size();
     if ( processed == 0 )
     {
       stop();
@@ -71,12 +71,12 @@ public abstract class DelayedEntityProcessingSystem
     }
 
     delay = Float.MAX_VALUE;
-    Object[] array = entities.getData();
+    final Object[] array = entities.getData();
     for ( int i = 0; processed > i; i++ )
     {
-      Entity e = (Entity) array[ i ];
+      final Entity e = (Entity) array[ i ];
       processDelta( e, acc );
-      float remaining = getRemainingDelay( e );
+      final float remaining = getRemainingDelay( e );
       if ( remaining <= 0 )
       {
         processExpired( e );
@@ -90,9 +90,9 @@ public abstract class DelayedEntityProcessingSystem
   }
 
   @Override
-  public void inserted( Entity entity )
+  public void inserted( final Entity entity )
   {
-    float remainingDelay = getRemainingDelay( entity );
+    final float remainingDelay = getRemainingDelay( entity );
     processDelta( entity, -acc );
     if ( remainingDelay > 0 )
     {
@@ -155,7 +155,7 @@ public abstract class DelayedEntityProcessingSystem
    *
    * @param offeredDelay delay to offer
    */
-  public void offerDelay( float offeredDelay )
+  public void offerDelay( final float offeredDelay )
   {
     if ( !running )
     {

@@ -59,27 +59,27 @@ public class TagManager
       .addSubscriptionListener( new EntitySubscription.SubscriptionListener()
       {
         @Override
-        public void inserted( IntBag entities )
+        public void inserted( final IntBag entities )
         {
         }
 
         @Override
-        public void removed( @Nonnull IntBag entities )
+        public void removed( @Nonnull final IntBag entities )
         {
           deleted( entities );
         }
       } );
   }
 
-  void deleted( @Nonnull IntBag entities )
+  void deleted( @Nonnull final IntBag entities )
   {
-    int[] ids = entities.getData();
+    final int[] ids = entities.getData();
     for ( int i = 0, s = entities.size(); s > i; i++ )
     {
-      int id = ids[ i ];
+      final int id = ids[ i ];
       if ( registered.get( id ) )
       {
-        String removedTag = tagsByEntity.remove( world.getEntity( id ) );
+        final String removedTag = tagsByEntity.remove( world.getEntity( id ) );
         entitiesByTag.remove( removedTag );
         registered.clear( id );
       }
@@ -95,7 +95,7 @@ public class TagManager
    * @param tag the tag
    * @param e   the entity to get tagged
    */
-  public void register( String tag, @Nonnull Entity e )
+  public void register( final String tag, @Nonnull final Entity e )
   {
     unregister( tag );
     if ( getTag( e ) != null )
@@ -108,7 +108,7 @@ public class TagManager
     registered.set( e.getId() );
   }
 
-  public void register( String tag, int entityId )
+  public void register( final String tag, final int entityId )
   {
     register( tag, world.getEntity( entityId ) );
   }
@@ -118,9 +118,9 @@ public class TagManager
    *
    * @param tag the tag to remove
    */
-  public void unregister( String tag )
+  public void unregister( final String tag )
   {
-    Entity removed = entitiesByTag.remove( tag );
+    final Entity removed = entitiesByTag.remove( tag );
     if ( removed != null )
     {
       tagsByEntity.remove( removed );
@@ -134,7 +134,7 @@ public class TagManager
    * @param tag the tag to check
    * @return {@code true} if the tag is in use
    */
-  public boolean isRegistered( String tag )
+  public boolean isRegistered( final String tag )
   {
     return entitiesByTag.containsKey( tag );
   }
@@ -145,14 +145,14 @@ public class TagManager
    * @param tag the tag the entity is tagged with
    * @return the tagged entity
    */
-  public Entity getEntity( String tag )
+  public Entity getEntity( final String tag )
   {
     return entitiesByTag.get( tag );
   }
 
-  public int getEntityId( String tag )
+  public int getEntityId( final String tag )
   {
-    Entity e = getEntity( tag );
+    final Entity e = getEntity( tag );
     return e != null ? e.getId() : -1;
   }
 
@@ -162,12 +162,12 @@ public class TagManager
    * @param entity the entity
    * @return the tag
    */
-  public String getTag( Entity entity )
+  public String getTag( final Entity entity )
   {
     return tagsByEntity.get( entity );
   }
 
-  public String getTag( int entityId )
+  public String getTag( final int entityId )
   {
     return getTag( world.getEntity( entityId ) );
   }

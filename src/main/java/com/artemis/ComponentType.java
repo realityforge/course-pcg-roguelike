@@ -25,7 +25,7 @@ public class ComponentType
    */
   private final int index;
 
-  ComponentType( Class<? extends Component> type, int index )
+  ComponentType( final Class<? extends Component> type, final int index )
   {
     this.index = index;
     this.type = type;
@@ -61,7 +61,7 @@ public class ComponentType
   }
 
   @Override
-  public boolean equals( @Nullable Object o )
+  public boolean equals( @Nullable final Object o )
   {
     if ( this == o )
     {
@@ -72,7 +72,7 @@ public class ComponentType
       return false;
     }
 
-    ComponentType that = (ComponentType) o;
+    final ComponentType that = (ComponentType) o;
 
     return index == that.index;
   }

@@ -34,7 +34,7 @@ public class EntityLinkManager
    * @param processSitesEvenIfNoListener If true, only act on fields with an attached {@link LinkListener}.
    * @param fireEventsOnRegistration     If true,
    */
-  public EntityLinkManager( boolean processSitesEvenIfNoListener, boolean fireEventsOnRegistration )
+  public EntityLinkManager( final boolean processSitesEvenIfNoListener, final boolean fireEventsOnRegistration )
   {
     super( all() );
     this.requireListener = !processSitesEvenIfNoListener;
@@ -53,7 +53,7 @@ public class EntityLinkManager
   @Override
   protected void initialize()
   {
-    LinkCreateListener listener = new LinkCreateListener( this );
+    final LinkCreateListener listener = new LinkCreateListener( this );
     world.getComponentManager().getTypeFactory().register( listener );
   }
 
@@ -70,9 +70,9 @@ public class EntityLinkManager
     }
   }
 
-  private void process( @Nonnull Bag<LinkSite> sites )
+  private void process( @Nonnull final Bag<LinkSite> sites )
   {
-    for ( LinkSite ls : sites )
+    for ( final LinkSite ls : sites )
     {
       ls.process();
     }
@@ -88,7 +88,7 @@ public class EntityLinkManager
    * @param component component type associated with listener
    * @param listener  link listener
    */
-  public void register( Class<? extends Component> component, LinkListener listener )
+  public void register( final Class<? extends Component> component, final LinkListener listener )
   {
     register( component, null, listener );
   }
@@ -103,17 +103,17 @@ public class EntityLinkManager
    * @param field     target field for listener
    * @param listener  link listener
    */
-  public void register( Class<? extends Component> component, @Nullable String field, LinkListener listener )
+  public void register( final Class<? extends Component> component, @Nullable final String field, final LinkListener listener )
   {
     world.inject( listener );
     try
     {
-      Field f = ( field != null )
+      final Field f = ( field != null )
                 ? ClassReflection.getDeclaredField( component, field )
                 : null;
 
-      ComponentType ct = world.getComponentManager().getTypeFactory().getTypeFor( component );
-      for ( LinkSite site : linkSites )
+      final ComponentType ct = world.getComponentManager().getTypeFactory().getTypeFor( component );
+      for ( final LinkSite site : linkSites )
       {
         if ( ct.equals( site.type ) && ( f == null || site.field.equals( f ) ) )
         {
@@ -130,7 +130,7 @@ public class EntityLinkManager
         }
       }
     }
-    catch ( ReflectionException e )
+    catch ( final ReflectionException e )
     {
       throw new RuntimeException( e );
     }
@@ -144,14 +144,14 @@ public class EntityLinkManager
     @Nonnull
     private final LinkFactory linkFactory;
 
-    public LinkCreateListener( @Nonnull EntityLinkManager elm )
+    public LinkCreateListener( @Nonnull final EntityLinkManager elm )
     {
       this.elm = elm;
       this.linkFactory = new LinkFactory( elm.getWorld() );
     }
 
     @Override
-    public void initialize( @Nonnull Bag<ComponentType> types )
+    public void initialize( @Nonnull final Bag<ComponentType> types )
     {
       for ( int i = 0, s = types.size(); s > i; i++ )
       {
@@ -160,9 +160,9 @@ public class EntityLinkManager
     }
 
     @Override
-    public void onCreated( @Nonnull ComponentType type )
+    public void onCreated( @Nonnull final ComponentType type )
     {
-      Bag<LinkSite> links = linkFactory.create( type );
+      final Bag<LinkSite> links = linkFactory.create( type );
 			if ( links.isEmpty() )
 			{
 				return;

@@ -16,7 +16,7 @@ public class SystemMetadata
 {
   private final Class<? extends BaseSystem> c;
 
-  public SystemMetadata( Class<? extends BaseSystem> c )
+  public SystemMetadata( final Class<? extends BaseSystem> c )
   {
     this.c = c;
   }
@@ -49,7 +49,7 @@ public class SystemMetadata
       }
       return ( all != null || exclude != null || one != null ) ? aspect : null;
     }
-    catch ( ReflectionException e )
+    catch ( final ReflectionException e )
     {
       throw new RuntimeException( e );
     }

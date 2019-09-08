@@ -30,7 +30,7 @@ public abstract class SystemInvocationStrategy
   /**
    * World to operate on.
    */
-  protected final void setWorld( World world )
+  protected final void setWorld( final World world )
   {
     this.world = world;
   }
@@ -38,7 +38,7 @@ public abstract class SystemInvocationStrategy
   /**
    * Called prior to {@link #initialize()}
    */
-  protected void setSystems( Bag<BaseSystem> systems )
+  protected void setSystems( final Bag<BaseSystem> systems )
   {
     this.systems = systems;
   }
@@ -64,17 +64,17 @@ public abstract class SystemInvocationStrategy
    * @deprecated superseded by {@link #process()}
    */
   @Deprecated
-  protected final void process( Bag<BaseSystem> systems )
+  protected final void process( final Bag<BaseSystem> systems )
   {
     throw new RuntimeException( "wrong process method" );
   }
 
   protected abstract void process();
 
-  public boolean isEnabled( @Nonnull BaseSystem system )
+  public boolean isEnabled( @Nonnull final BaseSystem system )
   {
-    Class<? extends BaseSystem> target = system.getClass();
-    ImmutableBag<BaseSystem> systems = world.getSystems();
+    final Class<? extends BaseSystem> target = system.getClass();
+    final ImmutableBag<BaseSystem> systems = world.getSystems();
     for ( int i = 0; i < systems.size(); i++ )
     {
 			if ( target == systems.get( i ).getClass() )
@@ -86,10 +86,10 @@ public abstract class SystemInvocationStrategy
     throw new RuntimeException( "huh?" );
   }
 
-  public void setEnabled( @Nonnull BaseSystem system, boolean value )
+  public void setEnabled( @Nonnull final BaseSystem system, final boolean value )
   {
-    Class<? extends BaseSystem> target = system.getClass();
-    ImmutableBag<BaseSystem> systems = world.getSystems();
+    final Class<? extends BaseSystem> target = system.getClass();
+    final ImmutableBag<BaseSystem> systems = world.getSystems();
     for ( int i = 0; i < systems.size(); i++ )
     {
 			if ( target == systems.get( i ).getClass() )

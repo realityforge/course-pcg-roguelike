@@ -10,33 +10,33 @@ class IntFieldMutator
   implements UniFieldMutator
 {
   @Override
-  public int read( Component c, @Nonnull Field f )
+  public int read( final Component c, @Nonnull final Field f )
   {
     try
     {
       return (Integer) f.get( c );
     }
-    catch ( ReflectionException e )
+    catch ( final ReflectionException e )
     {
       throw new RuntimeException( e );
     }
   }
 
   @Override
-  public void write( int value, Component c, @Nonnull Field f )
+  public void write( final int value, final Component c, @Nonnull final Field f )
   {
     try
     {
       f.set( c, value );
     }
-    catch ( ReflectionException e )
+    catch ( final ReflectionException e )
     {
       throw new RuntimeException( e );
     }
   }
 
   @Override
-  public void setWorld( World world )
+  public void setWorld( final World world )
   {
   }
 }

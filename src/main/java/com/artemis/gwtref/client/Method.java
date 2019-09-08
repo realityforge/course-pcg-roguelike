@@ -48,23 +48,23 @@ public class Method
   @Nonnull
   final Annotation[] annotations;
 
-  public Method( String name,
-                 Class enclosingType,
-                 Class returnType,
-                 @Nullable Parameter[] parameters,
-                 boolean isAbstract,
-                 boolean isFinal,
-                 boolean isStatic,
-                 boolean isDefaultAccess,
-                 boolean isPrivate,
-                 boolean isProtected,
-                 boolean isPublic,
-                 boolean isNative,
-                 boolean isVarArgs,
-                 boolean isMethod,
-                 boolean isConstructor,
-                 int methodId,
-                 @Nullable Annotation[] annotations )
+  public Method( final String name,
+                 final Class enclosingType,
+                 final Class returnType,
+                 @Nullable final Parameter[] parameters,
+                 final boolean isAbstract,
+                 final boolean isFinal,
+                 final boolean isStatic,
+                 final boolean isDefaultAccess,
+                 final boolean isPrivate,
+                 final boolean isProtected,
+                 final boolean isPublic,
+                 final boolean isNative,
+                 final boolean isVarArgs,
+                 final boolean isMethod,
+                 final boolean isConstructor,
+                 final int methodId,
+                 @Nullable final Annotation[] annotations )
   {
     this.name = name;
     this.enclosingType = enclosingType;
@@ -181,7 +181,7 @@ public class Method
    * @param params the parameters to pass to the method or null.
    * @return the return value or null if the method does not return anything.
    */
-  public Object invoke( Object obj, @Nullable Object... params )
+  public Object invoke( final Object obj, @Nullable final Object... params )
   {
 		if ( parameters.length != ( params != null ? params.length : 0 ) )
 		{
@@ -191,12 +191,12 @@ public class Method
     return ReflectionCache.instance.invoke( this, obj, params );
   }
 
-  boolean match( String name, Class... types )
+  boolean match( final String name, final Class... types )
   {
     return this.name.equals( name ) && match( types );
   }
 
-  boolean match( @Nullable Class... types )
+  boolean match( @Nullable final Class... types )
   {
 		if ( types == null )
 		{
@@ -208,8 +208,8 @@ public class Method
 		}
     for ( int i = 0; i < types.length; i++ )
     {
-      Type t1 = ReflectionCache.instance.forName( parameters[ i ].getType().getName() );
-      Type t2 = ReflectionCache.instance.forName( types[ i ].getName() );
+      final Type t1 = ReflectionCache.instance.forName( parameters[ i ].getType().getName() );
+      final Type t2 = ReflectionCache.instance.forName( types[ i ].getName() );
 			if ( t1 != t2 && !t1.isAssignableFrom( t2 ) )
 			{
 				return false;

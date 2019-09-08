@@ -48,7 +48,7 @@ public class PlayerManager
    * @param e      the entity to associate
    * @param player the player to associtate to the entity with
    */
-  public void setPlayer( Entity e, String player )
+  public void setPlayer( final Entity e, final String player )
   {
     playerByEntity.put( e, player );
     Bag<Entity> entities = entitiesByPlayer.get( player );
@@ -66,7 +66,7 @@ public class PlayerManager
    * @param player the player
    * @return a bag containing all entities belonging to the player
    */
-  public ImmutableBag<Entity> getEntitiesOfPlayer( String player )
+  public ImmutableBag<Entity> getEntitiesOfPlayer( final String player )
   {
     Bag<Entity> entities = entitiesByPlayer.get( player );
     if ( entities == null )
@@ -81,12 +81,12 @@ public class PlayerManager
    *
    * @param e the entity to remove
    */
-  public void removeFromPlayer( @Nonnull Entity e )
+  public void removeFromPlayer( @Nonnull final Entity e )
   {
-    String player = playerByEntity.get( e );
+    final String player = playerByEntity.get( e );
     if ( player != null )
     {
-      Bag<Entity> entities = entitiesByPlayer.get( player );
+      final Bag<Entity> entities = entitiesByPlayer.get( player );
       if ( entities != null )
       {
         entities.remove( e );
@@ -100,7 +100,7 @@ public class PlayerManager
    * @param e the entity to get the player for
    * @return the player
    */
-  public String getPlayer( Entity e )
+  public String getPlayer( final Entity e )
   {
     return playerByEntity.get( e );
   }
@@ -111,7 +111,7 @@ public class PlayerManager
    * @param e the deleted entity
    */
   @Override
-  public void deleted( @Nonnull Entity e )
+  public void deleted( @Nonnull final Entity e )
   {
     removeFromPlayer( e );
   }

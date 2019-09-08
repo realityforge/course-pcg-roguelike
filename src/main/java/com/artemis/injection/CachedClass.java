@@ -12,7 +12,7 @@ import com.artemis.utils.reflect.Field;
  */
 public class CachedClass
 {
-  public CachedClass( Class<?> clazz )
+  public CachedClass( final Class<?> clazz )
   {
     this.clazz = clazz;
   }
@@ -20,7 +20,7 @@ public class CachedClass
   /**
    * The class that this CachedClass represents.
    */
-  public Class<?> clazz;
+  public final Class<?> clazz;
   /**
    * All fields relevant for the class. If the {@link Wire} annotation has injectInherited
    * set to true, this array will contain ALL declared fields for this class and superclasses.

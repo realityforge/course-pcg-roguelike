@@ -7,7 +7,7 @@ public class Hello
 {
   public String message;
 
-  public void set( String message )
+  public void set( final String message )
   {
     this.message = message;
   }

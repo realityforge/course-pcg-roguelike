@@ -26,17 +26,17 @@ public class WiredFieldResolver
   }
 
   @Override
-  public void initialize( World world )
+  public void initialize( final World world )
   {
     this.world = world;
   }
 
   @Nullable
   @Override
-  public Object resolve( Object target, Class<?> fieldType, @Nonnull Field field )
+  public Object resolve( final Object target, final Class<?> fieldType, @Nonnull final Field field )
   {
-    ClassType injectionType = cache.getFieldClassType( fieldType );
-    CachedField cachedField = cache.getCachedField( field );
+    final ClassType injectionType = cache.getFieldClassType( fieldType );
+    final CachedField cachedField = cache.getCachedField( field );
 
     if ( injectionType == ClassType.CUSTOM || injectionType == ClassType.WORLD )
     {
@@ -50,7 +50,7 @@ public class WiredFieldResolver
 
         if ( !pojos.containsKey( key ) && cachedField.failOnNull )
         {
-          String err = "Not registered: " + key + "=" + fieldType;
+          final String err = "Not registered: " + key + "=" + fieldType;
           throw new MundaneWireException( err );
         }
 
@@ -61,13 +61,13 @@ public class WiredFieldResolver
   }
 
   @Override
-  public void setCache( InjectionCache cache )
+  public void setCache( final InjectionCache cache )
   {
     this.cache = cache;
   }
 
   @Override
-  public void setPojos( Map<String, Object> pojos )
+  public void setPojos( final Map<String, Object> pojos )
   {
     this.pojos = pojos;
   }
