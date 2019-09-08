@@ -12,6 +12,9 @@ complete as there is too much un-said.
 
 * TileType should be data driven and loaded from a file.
 
+* Artemis should be rewritten to use annotation processor based code generation and that way reflection
+  can be ditched.
+
 ## Notes
 
 * Consider using a deterministic world generated from an initial seed. This means all decisions must occur
