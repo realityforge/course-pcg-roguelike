@@ -236,23 +236,23 @@ public final class EntityTransmuter
 
     public void perform( int entityId )
     {
-      for ( int i = 0, s = additions.length; s > i; i++ )
+      for ( final ComponentMapper addition : additions )
       {
-        additions[ i ].internalCreate( entityId );
+        addition.internalCreate( entityId );
       }
 
-      for ( int i = 0, s = removals.length; s > i; i++ )
+      for ( final ComponentMapper removal : removals )
       {
-        removals[ i ].internalRemove( entityId );
+        removal.internalRemove( entityId );
       }
     }
 
     @Nonnull
     Bag<Class<? extends Component>> getAdditions( @Nonnull Bag<Class<? extends Component>> out )
     {
-      for ( int i = 0, s = additions.length; s > i; i++ )
+      for ( final ComponentMapper addition : additions )
       {
-        out.add( additions[ i ].getType().getType() );
+        out.add( addition.getType().getType() );
       }
 
       return out;

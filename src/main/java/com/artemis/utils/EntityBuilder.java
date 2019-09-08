@@ -127,9 +127,9 @@ public class EntityBuilder
   @Nonnull
   public EntityBuilder with( @Nonnull Component... components )
   {
-    for ( int i = 0, n = components.length; i < n; i++ )
+    for ( final Component component : components )
     {
-      edit.add( components[ i ] );
+      edit.add( component );
     }
     return this;
   }
@@ -209,9 +209,9 @@ public class EntityBuilder
   @Nonnull
   public EntityBuilder with( @Nonnull Class<? extends Component>... components )
   {
-    for ( int i = 0, n = components.length; i < n; i++ )
+    for ( final Class<? extends Component> component : components )
     {
-      edit.create( components[ i ] );
+      edit.create( component );
     }
     return this;
   }
@@ -264,9 +264,9 @@ public class EntityBuilder
   @Nonnull
   public EntityBuilder groups( @Nonnull String... groups )
   {
-    for ( int i = 0; groups.length > i; i++ )
+    for ( final String group : groups )
     {
-      group( groups[ i ] );
+      group( group );
     }
     return this;
   }

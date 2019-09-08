@@ -64,29 +64,28 @@ class LinkFactory
     Field[] fields = ClassReflection.getDeclaredFields( type );
 
     links.clear();
-    for ( int i = 0; fields.length > i; i++ )
+    for ( Field f : fields )
     {
-      Field f = fields[ i ];
       int referenceTypeId = getReferenceTypeId( f );
       if ( referenceTypeId != NULL_REFERENCE && ( SKIP != getPolicy( f ) ) )
       {
         if ( SINGLE_REFERENCE == referenceTypeId )
         {
           UniLinkSite ls = new UniLinkSite( world, ct, f );
-					if ( !configureMutator( ls ) )
-					{
-						reflexiveMutators.withMutator( ls );
-					}
+          if ( !configureMutator( ls ) )
+          {
+            reflexiveMutators.withMutator( ls );
+          }
 
           links.add( ls );
         }
         else if ( MULTI_REFERENCE == referenceTypeId )
         {
           MultiLinkSite ls = new MultiLinkSite( world, ct, f );
-					if ( !configureMutator( ls ) )
-					{
-						reflexiveMutators.withMutator( ls );
-					}
+          if ( !configureMutator( ls ) )
+          {
+            reflexiveMutators.withMutator( ls );
+          }
 
           links.add( ls );
         }

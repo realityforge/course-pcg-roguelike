@@ -71,14 +71,12 @@ public class ArchetypeBuilder
   @Nonnull
   public ArchetypeBuilder add( @Nonnull Class<? extends Component>... types )
   {
-    for ( int i = 0; types.length > i; i++ )
+    for ( Class<? extends Component> type : types )
     {
-      Class<? extends Component> type = types[ i ];
-
-			if ( !classes.contains( type ) )
-			{
-				classes.add( type );
-			}
+      if ( !classes.contains( type ) )
+      {
+        classes.add( type );
+      }
     }
 
     return this;
@@ -104,9 +102,9 @@ public class ArchetypeBuilder
   @Nonnull
   public ArchetypeBuilder remove( @Nonnull Class<? extends Component>... types )
   {
-    for ( int i = 0; types.length > i; i++ )
+    for ( final Class<? extends Component> type : types )
     {
-      classes.remove( types[ i ] );
+      classes.remove( type );
     }
 
     return this;
@@ -144,10 +142,10 @@ public class ArchetypeBuilder
   private static BitVector bitset( @Nonnull ComponentType[] types )
   {
     BitVector bs = new BitVector();
-		for ( int i = 0; types.length > i; i++ )
-		{
-			bs.set( types[ i ].getIndex() );
-		}
+    for ( final ComponentType type : types )
+    {
+      bs.set( type.getIndex() );
+    }
 
     return bs;
   }

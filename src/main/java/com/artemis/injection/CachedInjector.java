@@ -116,9 +116,9 @@ public final class CachedInjector
     throws ReflectionException
   {
     Field[] declaredFields = getAllInjectableFields( cachedClass );
-    for ( int i = 0, s = declaredFields.length; s > i; i++ )
+    for ( final Field declaredField : declaredFields )
     {
-      injectField( target, declaredFields[ i ], cachedClass.failOnNull );
+      injectField( target, declaredField, cachedClass.failOnNull );
     }
   }
 
@@ -147,11 +147,11 @@ public final class CachedInjector
       if ( cache.getCachedClass( clazz ).wireType != WireType.SKIPWIRE )
       {
         Field[] classFields = ClassReflection.getDeclaredFields( clazz );
-        for ( int i = 0; i < classFields.length; i++ )
+        for ( final Field classField : classFields )
         {
-          if ( isWireable( classFields[ i ] ) )
+          if ( isWireable( classField ) )
           {
-            fieldList.add( classFields[ i ] );
+            fieldList.add( classField );
           }
         }
       }
@@ -178,9 +178,8 @@ public final class CachedInjector
     throws ReflectionException
   {
     Field[] declaredFields = getAllInjectableFields( cachedClass );
-    for ( int i = 0, s = declaredFields.length; s > i; i++ )
+    for ( Field field : declaredFields )
     {
-      Field field = declaredFields[ i ];
       CachedField cachedField = cache.getCachedField( field );
       if ( cachedField.wireType != WireType.IGNORED )
       {
