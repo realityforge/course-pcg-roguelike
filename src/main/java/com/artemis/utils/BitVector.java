@@ -508,7 +508,7 @@ public class BitVector
 
   public native int cardinality() /*-{
     var count = 0;
-    var array = this.@java.util.BitSet::array;
+    var array = this.@com.artemis.utils.BitVector::array;
     for (var property in array) {
       var number = property >>> 0;
       if (String(number) == property && number !== 0xffffffff) {
