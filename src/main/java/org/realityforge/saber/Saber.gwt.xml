@@ -9,6 +9,7 @@
   <inherits name='com.artemis.backends.artemis_backends_gwt'/>
 
   <extend-configuration-property name="artemis.reflect.include" value="org.realityforge.saber.systems"/>
+  <extend-configuration-property name="artemis.reflect.include" value="org.realityforge.saber.screens"/>
   <extend-configuration-property name="artemis.reflect.include" value="org.realityforge.saber.components"/>
 
   <source path=''/>
