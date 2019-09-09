@@ -1,6 +1,0 @@
-<module>
-  <!-- TODO: This should be moved into the library -->
-  <inherits name='com.google.gwt.core.Core'/>
-
-  <source path='annotation'/>
-</module>

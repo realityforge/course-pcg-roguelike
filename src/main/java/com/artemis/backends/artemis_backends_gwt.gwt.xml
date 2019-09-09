@@ -3,7 +3,7 @@
 <module rename-to='com.artemis.backends.gwt'>
   <inherits name='com.google.gwt.user.User'/>
 
-  <inherits name="javax.annotation"/>
+  <inherits name="javax.annotation.Annotation"/>
   <inherits name="com.artemis"/>
   <inherits name="com.artemis.gwtref.ArtemisReflect"/>
 
