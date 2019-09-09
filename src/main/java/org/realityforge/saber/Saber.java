@@ -18,19 +18,13 @@ public class Saber
     game.init();
     game.start( LevelData.LEVEL1_DATA );
 
-    // 1. Register any plugins, setup the world.
     final WorldConfiguration setup = new WorldConfigurationBuilder()
       .with( new HelloWorldSystem() )
       .build();
-
-    // 2. Create the world.
     final World world = new World( setup );
-
-    // 3. Create entity. You can do it here or inside systems.
     final int entityId = world.create();
     world.edit( entityId ).create( Hello.class ).message = "\n\rHello world!\n\r";
 
-    // 4. Run the world. HelloWorldSystem should print the hello world message.
     world.process();
   }
 }
