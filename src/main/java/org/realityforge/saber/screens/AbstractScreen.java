@@ -8,6 +8,6 @@ public abstract class AbstractScreen
   extends PassiveSystem
   implements Screen
 {
-    ScreenSystem screen;
-    PlayerManager pManager;
+  ScreenSystem screen;
+  PlayerManager pManager;
 }
