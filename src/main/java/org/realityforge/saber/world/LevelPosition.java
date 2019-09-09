@@ -1,23 +1,33 @@
 package org.realityforge.saber.world;
 
-final class LevelPosition
+public final class LevelPosition
 {
-  private final int _column;
-  private final int _row;
+  private int _column;
+  private int _row;
 
-  LevelPosition( final int column, final int row )
+  public LevelPosition( final int column, final int row )
   {
     _column = column;
     _row = row;
   }
 
-  int getColumn()
+  public int getColumn()
   {
     return _column;
   }
 
-  int getRow()
+  public void setColumn( final int column )
+  {
+    _column = column;
+  }
+
+  public int getRow()
   {
     return _row;
+  }
+
+  public void setRow( final int row )
+  {
+    _row = row;
   }
 }
