@@ -10,9 +10,7 @@ import com.artemis.World;
 import com.artemis.managers.GroupManager;
 import com.artemis.managers.PlayerManager;
 import com.artemis.managers.TagManager;
-import com.artemis.managers.UuidEntityManager;
 import com.artemis.utils.reflect.ClassReflection;
-import java.util.UUID;
 import javax.annotation.Nonnull;
 
 /**
@@ -216,16 +214,6 @@ public class EntityBuilder
     {
       edit.create( component );
     }
-    return this;
-  }
-
-  /**
-   * Set UUID of entity
-   */
-  @Nonnull
-  public EntityBuilder UUID( final UUID uuid )
-  {
-    resolveManager( UuidEntityManager.class ).setUuid( edit.getEntity(), uuid );
     return this;
   }
 
