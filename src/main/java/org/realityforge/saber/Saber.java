@@ -1,12 +1,9 @@
 package org.realityforge.saber;
 
 import com.artemis.World;
-import com.artemis.WorldConfiguration;
-import com.artemis.WorldConfigurationBuilder;
 import com.google.gwt.core.client.EntryPoint;
 import org.realityforge.saber.components.Hello;
 import org.realityforge.saber.game.LevelData;
-import org.realityforge.saber.systems.HelloWorldSystem;
 
 public class Saber
   implements EntryPoint

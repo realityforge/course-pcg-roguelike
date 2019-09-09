@@ -3,7 +3,6 @@ package com.artemis;
 import com.artemis.annotations.DelayedComponentRemoval;
 import com.artemis.utils.Bag;
 import com.artemis.utils.IntBag;
-import java.util.Arrays;
 import javax.annotation.Nonnull;
 import static com.artemis.utils.reflect.ReflectionUtil.*;
 
