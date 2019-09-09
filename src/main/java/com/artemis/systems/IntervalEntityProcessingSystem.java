@@ -50,5 +50,4 @@ public abstract class IntervalEntityProcessingSystem
       process( ids[ i ] );
     }
   }
-
 }
