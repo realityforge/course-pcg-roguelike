@@ -97,12 +97,6 @@ public final class Game
 
   private void runFrame()
   {
-    /*
-    if ( _simulationActive )
-    {
-      simulateWorld();
-    }
-    */
     if ( _texturesLoaded )
     {
       renderWorld();
