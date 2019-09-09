@@ -392,11 +392,10 @@ public class GroupManager
       final Bag<String> bag = groupsByEntity.get( e );
       if ( bag != null )
       {
-        final Object[] groups = bag.getData();
+        final String[] groups = bag.getData();
         for ( int i = 0, s = bag.size(); s > i; i++ )
         {
-          final String g = (String) groups[ i ];
-          if ( group.equals( g ) )
+          if ( group.equals( groups[ i ] ) )
           {
             return true;
           }

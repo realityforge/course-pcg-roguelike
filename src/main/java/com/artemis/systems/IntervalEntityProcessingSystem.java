@@ -44,10 +44,10 @@ public abstract class IntervalEntityProcessingSystem
 
   protected void processEntities( @Nonnull final Bag<Entity> entities )
   {
-    final Object[] ids = entities.getData();
+    final Entity[] ids = entities.getData();
     for ( int i = 0, s = entities.size(); s > i; i++ )
     {
-      process( (Entity) ids[ i ] );
+      process( ids[ i ] );
     }
   }
 

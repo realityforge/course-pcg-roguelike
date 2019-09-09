@@ -382,7 +382,7 @@ public class Bag<E>
    * @return the underlying array
    * @see Bag#size()
    */
-  public Object[] getData()
+  public E[] getData()
   {
     return data;
   }

@@ -49,10 +49,10 @@ public abstract class EntityProcessingSystem
   protected final void processSystem()
   {
     final Bag<Entity> entities = getEntities();
-    final Object[] array = entities.getData();
+    final Entity[] array = entities.getData();
     for ( int i = 0, s = entities.size(); s > i; i++ )
     {
-      process( (Entity) array[ i ] );
+      process( array[ i ] );
     }
   }
 }
