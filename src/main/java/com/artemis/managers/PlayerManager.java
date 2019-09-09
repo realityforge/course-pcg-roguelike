@@ -1,12 +1,16 @@
 package com.artemis.managers;
 
+import com.artemis.BaseSystem;
 import com.artemis.Entity;
-import com.artemis.Manager;
+import com.artemis.EntitySubscription;
+import com.artemis.World;
 import com.artemis.utils.Bag;
 import com.artemis.utils.ImmutableBag;
+import com.artemis.utils.IntBag;
 import java.util.HashMap;
 import java.util.Map;
 import javax.annotation.Nonnull;
+import static com.artemis.Aspect.*;
 
 /**
  * You may sometimes want to specify to which player an entity belongs to.
@@ -17,7 +21,7 @@ import javax.annotation.Nonnull;
  * @author Arni Arent
  */
 public class PlayerManager
-  extends Manager
+  extends BaseSystem
 {
   /**
    * All players mapped to entities as key.
@@ -110,9 +114,54 @@ public class PlayerManager
    *
    * @param e the deleted entity
    */
-  @Override
   public void deleted( @Nonnull final Entity e )
   {
     removeFromPlayer( e );
+  }
+
+  @Override
+  protected void setWorld( final World world )
+  {
+    super.setWorld( world );
+    registerManager();
+  }
+
+  /**
+   * Hack to register manager to right subscription
+   */
+  private void registerManager()
+  {
+    world.getAspectSubscriptionManager()
+      .get( all() )
+      .addSubscriptionListener( new EntitySubscription.SubscriptionListener()
+      {
+        @Override
+        public void inserted( @Nonnull final IntBag entities )
+        {
+        }
+
+        @Override
+        public void removed( @Nonnull final IntBag entities )
+        {
+          deleted( entities );
+        }
+      } );
+  }
+
+  private void deleted( @Nonnull final IntBag entities )
+  {
+    final int[] ids = entities.getData();
+    for ( int i = 0, s = entities.size(); s > i; i++ )
+    {
+      deleted( world.getEntity( ids[ i ] ) );
+    }
+  }
+
+  /**
+   * Managers are not interested in processing.
+   */
+  @Override
+  protected final void processSystem()
+  {
   }
 }

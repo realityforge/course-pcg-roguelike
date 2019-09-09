@@ -2,7 +2,6 @@ package com.artemis.annotations;
 
 import com.artemis.ComponentMapper;
 import com.artemis.EntitySystem;
-import com.artemis.Manager;
 import com.artemis.World;
 import com.artemis.WorldConfiguration;
 import java.lang.annotation.Documented;

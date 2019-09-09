@@ -4,7 +4,7 @@ import com.artemis.BaseEntitySystem;
 import com.artemis.BaseSystem;
 import com.artemis.Entity;
 import com.artemis.EntitySystem;
-import com.artemis.Manager;
+import com.artemis.managers.PlayerManager;
 import com.artemis.utils.IntBag;
 import java.util.Arrays;
 import javax.annotation.Nonnull;
@@ -26,7 +26,7 @@ public final class ReflectionUtil
     {
       final Method method = getMethod( owner.getClass(), methodName, PARAM_ENTITY );
       final Class declarer = method.getDeclaringClass();
-      return !( Manager.class.equals( declarer ) || EntitySystem.class.equals( declarer ) );
+      return !( PlayerManager.class.equals( declarer ) || EntitySystem.class.equals( declarer ) );
     }
     catch ( final ReflectionException e )
     {
@@ -36,7 +36,7 @@ public final class ReflectionUtil
 
   public static boolean implementsAnyObserver( @Nonnull final BaseEntitySystem owner )
   {
-    if ( isInstance( Manager.class, owner ) || isInstance( EntitySystem.class, owner ) )
+    if ( isInstance( PlayerManager.class, owner ) || isInstance( EntitySystem.class, owner ) )
     {
       return true; // case handled by implementsObserver(owner, methodName)
     }

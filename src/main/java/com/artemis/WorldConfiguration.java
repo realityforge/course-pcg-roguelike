@@ -204,10 +204,6 @@ public final class WorldConfiguration
     {
       world.partition.systems.put( system.getClass(), system );
       system.setWorld( world );
-      if ( ClassReflection.isInstance( Manager.class, system ) )
-      {
-        ( (Manager) system ).registerManager();
-      }
     }
 
     injector.initialize( world, injectables );
