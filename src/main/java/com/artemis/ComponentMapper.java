@@ -162,6 +162,7 @@ public class ComponentMapper<A extends Component>
     return component;
   }
 
+  @SuppressWarnings( "unchecked" )
   @Nullable
   private A createNew()
   {
