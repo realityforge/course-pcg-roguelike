@@ -8,6 +8,12 @@ complete as there is too much un-said.
     - Use Canvas2D to render world
     - Consider using [Ashley](https://github.com/libgdx/ashley) or another ECS to implement entities.
 
+* Add commands system that maps keys to commands. `KeyUp` -> `MoveForward`
+
+* Add binding layer that allows binding keys to commands (think quakes console).
+
+* Consider having an `InputUpdateSystem` that takes a sequence of keys
+
 ## Reimplementation Notes
 
 * TileType should be data driven and loaded from a file.
