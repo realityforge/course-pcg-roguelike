@@ -45,7 +45,6 @@ public class Bag<E>
    *
    * @param capacity the initial capacity of Bag
    */
-  @SuppressWarnings( "unchecked" )
   public Bag( final int capacity )
   {
     data = new Object[ capacity ];

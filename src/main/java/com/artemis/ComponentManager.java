@@ -81,7 +81,6 @@ public class ComponentManager
   }
 
   @Nonnull
-  @SuppressWarnings( "unchecked" )
   static <T extends Component> T newInstance( @Nonnull final Class<T> componentClass )
   {
     try

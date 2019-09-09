@@ -46,7 +46,6 @@ public class AspectFieldResolver
 
   @Nullable
   @Override
-  @SuppressWarnings( "unchecked" )
   public Object resolve( final Object target, final Class<?> fieldType, @Nonnull final Field field )
   {
     final Aspect.Builder aspect = aspect( field );

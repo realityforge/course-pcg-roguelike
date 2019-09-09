@@ -172,7 +172,6 @@ public final class CachedInjector
     injectClass( target, cachedClass );
   }
 
-  @SuppressWarnings( "deprecation" )
   private void injectClass( final Object target, @Nonnull final CachedClass cachedClass )
     throws ReflectionException
   {
@@ -187,7 +186,6 @@ public final class CachedInjector
     }
   }
 
-  @SuppressWarnings( "unchecked" )
   private void injectField( final Object target, @Nonnull final Field field, final boolean failOnNotInjected )
     throws ReflectionException
   {

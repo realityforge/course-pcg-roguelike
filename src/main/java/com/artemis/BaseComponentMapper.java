@@ -24,7 +24,6 @@ public abstract class BaseComponentMapper<A extends Component>
    * @param world the world that this component mapper should use
    * @return a new mapper
    */
-  @SuppressWarnings( "unchecked" )
   public static <T extends Component> BaseComponentMapper<T> getFor( final Class<T> type, @Nonnull final World world )
   {
     return world.getMapper( type );
