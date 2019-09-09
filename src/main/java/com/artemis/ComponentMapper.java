@@ -165,7 +165,7 @@ public class ComponentMapper<A extends Component>
   @Nullable
   private A createNew()
   {
-    return (A) ( ( pool != null )
+    return (A) ( ( null != pool )
                  ? pool.obtain()
                  : ComponentManager.newInstance( type.getType() ) );
   }
