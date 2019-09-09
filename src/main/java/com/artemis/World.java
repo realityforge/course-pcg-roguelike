@@ -201,6 +201,7 @@ public class World
    * @param entityId entity to fetch editor for.
    * @return a fast albeit verbose editor to perform batch changes to entities.
    */
+  @Nonnull
   public EntityEdit edit( final int entityId )
   {
     if ( !em.isActive( entityId ) )

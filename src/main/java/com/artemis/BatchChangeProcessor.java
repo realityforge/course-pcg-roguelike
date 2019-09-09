@@ -54,16 +54,21 @@ final class BatchChangeProcessor
    * @param entityId entity to fetch editor for.
    * @return a fast albeit verbose editor to perform batch changes to entities.
    */
-  @Nullable
+  @Nonnull
   EntityEdit obtainEditor( final int entityId )
   {
     final int size = edited.size();
-    if ( size != 0 && edited.get( size - 1 ).getEntityId() == entityId )
+    if ( 0 != size )
     {
-      return edited.get( size - 1 );
+      final EntityEdit edit = edited.get( size - 1 );
+      if ( entityId == edit.getEntityId() )
+      {
+        return edit;
+      }
     }
 
     final EntityEdit edit = entityEdit();
+    assert null != edit;
     edited.add( edit );
 
     edit.entityId = entityId;
