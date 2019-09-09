@@ -301,11 +301,10 @@ public class ComponentManager
      */
     int getIdentity( @Nonnull final BitVector components )
     {
-      final BitVector[] bitsets = compositionBits.getData();
       final int size = compositionBits.size();
       for ( int i = NO_COMPONENTS; size > i; i++ )
       { // want to start from 1 so that 0 can mean null
-        if ( components.equals( bitsets[ i ] ) )
+        if ( components.equals( compositionBits.get( i ) ) )
         {
           return i;
         }

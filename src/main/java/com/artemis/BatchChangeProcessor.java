@@ -120,10 +120,9 @@ final class BatchChangeProcessor
       return false;
     }
 
-    final EntityEdit[] data = edited.getData();
     for ( int i = 0, s = edited.size(); s > i; i++ )
     {
-      pool.add( data[ i ] );
+      pool.add( edited.get( i ) );
     }
     edited.setSize( 0 );
 

@@ -71,10 +71,9 @@ public abstract class DelayedEntityProcessingSystem
     }
 
     delay = Float.MAX_VALUE;
-    final Entity[] array = entities.getData();
     for ( int i = 0; processed > i; i++ )
     {
-      final Entity e = array[ i ];
+      final Entity e = entities.get( i );
       processDelta( e, acc );
       final float remaining = getRemainingDelay( e );
       if ( remaining <= 0 )

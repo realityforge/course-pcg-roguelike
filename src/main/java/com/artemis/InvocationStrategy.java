@@ -18,7 +18,6 @@ public class InvocationStrategy
   @Override
   protected void process()
   {
-    final BaseSystem[] systemsData = systems.getData();
     for ( int i = 0, s = systems.size(); s > i; i++ )
     {
       if ( disabled.get( i ) )
@@ -27,7 +26,7 @@ public class InvocationStrategy
       }
 
       updateEntityStates();
-      systemsData[ i ].process();
+      systems.get( i ).process();
     }
 
     updateEntityStates();

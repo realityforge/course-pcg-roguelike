@@ -80,7 +80,7 @@ public final class EntityEdit
     final ComponentMapper mapper = cm.getMapper( type.getType() );
 
     mapper.create( entityId );
-    mapper.components.getData()[ entityId ] = component;
+    mapper.components.unsafeSet( entityId, component );
 
     return this;
   }

@@ -148,7 +148,7 @@ public abstract class EntitySystem
 
       if ( oldSize > entities.size() )
       {
-        Arrays.fill( entities.getData(), entities.size(), oldSize, null );
+        entities.clearTail( oldSize );
       }
 
       shouldSyncEntities = false;

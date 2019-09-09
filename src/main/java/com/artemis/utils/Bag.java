@@ -16,13 +16,14 @@ import static java.lang.Math.*;
  * @param <E> object type this bag holds
  * @author Arni Arent
  */
+@SuppressWarnings( "unchecked" )
 public class Bag<E>
   implements ImmutableBag<E>
 {
   /**
    * The backing array.
    */
-  E[] data;
+  Object[] data;
   /**
    * The amount of elements contained in bag.
    */
@@ -77,7 +78,7 @@ public class Bag<E>
   public E remove( final int index )
     throws ArrayIndexOutOfBoundsException
   {
-    final E e = data[ index ]; // make copy of element to remove so it can be returned
+    final E e = (E) data[ index ]; // make copy of element to remove so it can be returned
     data[ index ] = data[ --size ]; // overwrite item to remove with last element
     data[ size ] = null; // null last element, so gc can do its work
     return e;
@@ -101,7 +102,7 @@ public class Bag<E>
   {
     if ( size > 0 )
     {
-      final E e = data[ --size ];
+      final E e = (E) data[ --size ];
       data[ size ] = null;
       return e;
     }
@@ -124,7 +125,7 @@ public class Bag<E>
   {
     for ( int i = 0; i < size; i++ )
     {
-      final E e2 = data[ i ];
+      final E e2 = (E) data[ i ];
 
       if ( e.equals( e2 ) )
       {
@@ -173,7 +174,7 @@ public class Bag<E>
 
       for ( int j = 0; j < size; j++ )
       {
-        final E e2 = data[ j ];
+        final E e2 = (E) data[ j ];
 
         if ( e1.equals( e2 ) )
         {
@@ -198,7 +199,7 @@ public class Bag<E>
   public E get( final int index )
     throws ArrayIndexOutOfBoundsException
   {
-    return data[ index ];
+    return (E) data[ index ];
   }
 
   /**
@@ -216,7 +217,7 @@ public class Bag<E>
       grow( Math.max( ( 2 * data.length ), ( 3 * index ) / 2 ) );
     }
 
-    return data[ index ];
+    return (E) data[ index ];
   }
 
   /**
@@ -316,7 +317,6 @@ public class Bag<E>
    *
    * @throws ArrayIndexOutOfBoundsException if new capacity is smaller than old
    */
-  @SuppressWarnings( "unchecked" )
   private void grow()
   {
     grow( data.length * 2 );
@@ -325,8 +325,8 @@ public class Bag<E>
   private void grow( final int newCapacity )
     throws ArrayIndexOutOfBoundsException
   {
-    final E[] oldData = data;
-    data = (E[]) new Object[ newCapacity ];
+    final Object[] oldData = data;
+    data = new Object[ newCapacity ];
     System.arraycopy( oldData, 0, data, 0, oldData.length );
   }
 
@@ -374,17 +374,11 @@ public class Bag<E>
   }
 
   /**
-   * Returns this bag's underlying array.
-   * <p>
-   * Use with care.
-   * </p>
-   *
-   * @return the underlying array
-   * @see Bag#size()
+   * Null out entries in underlying array from current size to oldSize.
    */
-  public E[] getData()
+  public void clearTail( final int oldSize )
   {
-    return data;
+    Arrays.fill( data, size, oldSize, null );
   }
 
   @Nonnull
@@ -493,7 +487,7 @@ public class Bag<E>
         throw new NoSuchElementException( "Iterated past last element" );
       }
 
-      final E e = data[ cursor++ ];
+      final E e = (E) data[ cursor++ ];
       validCursorPos = true;
       return e;
     }

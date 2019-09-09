@@ -44,10 +44,9 @@ public abstract class IntervalEntityProcessingSystem
 
   protected void processEntities( @Nonnull final Bag<Entity> entities )
   {
-    final Entity[] ids = entities.getData();
     for ( int i = 0, s = entities.size(); s > i; i++ )
     {
-      process( ids[ i ] );
+      process( entities.get( i ) );
     }
   }
 }

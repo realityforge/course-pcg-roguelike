@@ -49,10 +49,9 @@ public abstract class EntityProcessingSystem
   protected final void processSystem()
   {
     final Bag<Entity> entities = getEntities();
-    final Entity[] array = entities.getData();
     for ( int i = 0, s = entities.size(); s > i; i++ )
     {
-      process( array[ i ] );
+      process( entities.get( i ) );
     }
   }
 }
