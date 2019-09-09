@@ -26,7 +26,7 @@ public class ComponentTypeFactory
   /**
    * Index of this component type in componentTypes.
    */
-  final Bag<ComponentType> types = new Bag( ComponentType.class );
+  final Bag<ComponentType> types = new Bag<>();
   int initialMapperCapacity;
   private final ComponentManager cm;
 

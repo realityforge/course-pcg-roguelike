@@ -25,7 +25,7 @@ public class AspectSubscriptionManager
 {
   @Nonnull
   private final Map<Aspect.Builder, EntitySubscription> subscriptionMap;
-  private final Bag<EntitySubscription> subscriptions = new Bag( EntitySubscription.class );
+  private final Bag<EntitySubscription> subscriptions = new Bag<>();
   private final IntBag changed = new IntBag();
   private final IntBag deleted = new IntBag();
 

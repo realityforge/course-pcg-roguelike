@@ -30,7 +30,7 @@ public final class WorldConfiguration
   public static final int COMPONENT_MANAGER_IDX = 0;
   public static final int ENTITY_MANAGER_IDX = 1;
   public static final int ASPECT_SUBSCRIPTION_MANAGER_IDX = 2;
-  final Bag<BaseSystem> systems = new Bag<>( BaseSystem.class );
+  final Bag<BaseSystem> systems = new Bag<>();
   protected int expectedEntityCount = 128;
   @Nonnull
   protected final Map<String, Object> injectables = new HashMap<>();

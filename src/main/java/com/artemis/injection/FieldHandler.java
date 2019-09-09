@@ -61,7 +61,7 @@ public class FieldHandler
    */
   public FieldHandler( final InjectionCache cache )
   {
-    this.fieldResolvers = new Bag( FieldResolver.class );
+    this.fieldResolvers = new Bag<>();
     this.cache = cache;
     // the order FieldResolvers are added is relevant, we want to prioritize @Wired fields
     addFieldResolver( new WiredFieldResolver() );

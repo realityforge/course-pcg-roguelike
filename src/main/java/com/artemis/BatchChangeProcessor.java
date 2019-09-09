@@ -13,7 +13,7 @@ final class BatchChangeProcessor
   @Nonnull
   private final AspectSubscriptionManager asm;
   final BitVector changed = new BitVector();
-  final WildBag<ComponentRemover> purgatories = new WildBag<>( ComponentRemover.class );
+  final WildBag<ComponentRemover> purgatories = new WildBag<>();
   // marked for deletion, will be removed for entity subscriptions asap
   private final BitVector deleted = new BitVector();
   // collected deleted entities during this {@link World#process()} round;
@@ -21,7 +21,7 @@ final class BatchChangeProcessor
   private final BitVector pendingPurge = new BitVector();
   private final IntBag toPurge = new IntBag();
   private final Bag<EntityEdit> pool = new Bag<>();
-  private final WildBag<EntityEdit> edited = new WildBag( EntityEdit.class );
+  private final WildBag<EntityEdit> edited = new WildBag<>();
 
   BatchChangeProcessor( @Nonnull final World world )
   {

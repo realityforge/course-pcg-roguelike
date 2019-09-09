@@ -36,7 +36,7 @@ public class ComponentMapper<A extends Component>
   public ComponentMapper( final Class<A> type, @Nonnull final World world )
   {
     super( world.getComponentManager().typeFactory.getTypeFor( type ) );
-    components = new Bag<>( type );
+    components = new Bag<>();
 
     pool = ( this.type.isPooled )
            ? new ComponentPool( type )

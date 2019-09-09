@@ -46,7 +46,7 @@ public final class EntityTransmuter
     em = world.getEntityManager();
     entityToIdentity = world.getComponentManager().entityToIdentity;
     batchProcessor = world.batchProcessor;
-    operations = new Bag<>( TransmuteOperation.class );
+    operations = new Bag<>();
 
     factory = new Factory( world, additions, removals );
   }
@@ -169,7 +169,7 @@ public final class EntityTransmuter
     private Bag<ComponentMapper> getAdditions( @Nonnull final BitVector origin )
     {
       final ComponentTypeFactory tf = cm.typeFactory;
-      final Bag<ComponentMapper> types = new Bag( ComponentMapper.class );
+      final Bag<ComponentMapper> types = new Bag<>();
       for ( int i = additions.nextSetBit( 0 ); i >= 0; i = additions.nextSetBit( i + 1 ) )
       {
         if ( !origin.get( i ) )
@@ -185,7 +185,7 @@ public final class EntityTransmuter
     private Bag<ComponentMapper> getRemovals( @Nonnull final BitVector origin )
     {
       final ComponentTypeFactory tf = cm.typeFactory;
-      final Bag<ComponentMapper> types = new Bag( ComponentMapper.class );
+      final Bag<ComponentMapper> types = new Bag<>();
       for ( int i = removals.nextSetBit( 0 ); i >= 0; i = removals.nextSetBit( i + 1 ) )
       {
         if ( origin.get( i ) )

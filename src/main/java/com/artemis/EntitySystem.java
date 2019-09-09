@@ -27,7 +27,7 @@ public abstract class EntitySystem
   static final int FLAG_REMOVED = 1 << 1;
   private boolean shouldSyncEntities;
   @Nonnull
-  private final WildBag<Entity> entities = new WildBag( Entity.class );
+  private final WildBag<Entity> entities = new WildBag<>();
   private int methodFlags;
 
   /**

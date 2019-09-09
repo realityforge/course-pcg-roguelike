@@ -32,7 +32,7 @@ public class ComponentManager
    * Collects all Entites marked for deletion from this ComponentManager.
    */
   @Nonnull
-  private final Bag<ComponentMapper> mappers = new Bag( ComponentMapper.class );
+  private final Bag<ComponentMapper> mappers = new Bag<>();
   private final ComponentIdentityResolver identityResolver = new ComponentIdentityResolver();
   @Nonnull
   final ShortBag entityToIdentity;
@@ -290,10 +290,10 @@ public class ComponentManager
 
     ComponentIdentityResolver()
     {
-      compositionBits = new Bag( BitVector.class );
+      compositionBits = new Bag<>();
       compositionBits.add( new BitVector() );
       compositionMappers = new Bag<>();
-      compositionMappers.add( new Bag( ComponentMapper.class ) );
+      compositionMappers.add( new Bag<>() );
     }
 
     /**
@@ -316,7 +316,7 @@ public class ComponentManager
     int allocateIdentity( @Nonnull final BitVector componentBits, @Nonnull final ComponentManager cm )
     {
       final Bag<ComponentMapper> mappers =
-        new Bag<>( ComponentMapper.class, componentBits.cardinality() );
+        new Bag<>( componentBits.cardinality() );
 
       final ComponentTypeFactory tf = cm.getTypeFactory();
       for ( int i = componentBits.nextSetBit( 0 ); i >= 0; i = componentBits.nextSetBit( i + 1 ) )

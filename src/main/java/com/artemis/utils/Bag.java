@@ -1,6 +1,5 @@
 package com.artemis.utils;
 
-import com.artemis.utils.reflect.ArrayReflection;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Iterator;
@@ -42,14 +41,6 @@ public class Bag<E>
   }
 
   /**
-   * Constructs an empty Bag with an initial capacity of 64.
-   */
-  public Bag( final Class<E> type )
-  {
-    this( 64 );
-  }
-
-  /**
    * Constructs an empty Bag with the specified initial capacity.
    *
    * @param capacity the initial capacity of Bag
@@ -57,12 +48,7 @@ public class Bag<E>
   @SuppressWarnings( "unchecked" )
   public Bag( final int capacity )
   {
-    data = (E[]) ArrayReflection.newInstance( Object.class, capacity );
-  }
-
-  public Bag( final Class<E> type, final int capacity )
-  {
-    this( capacity );
+    data = new Object[ capacity ];
   }
 
   /**

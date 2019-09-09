@@ -27,7 +27,7 @@ public class EntityManager
   private final IntDeque limbo = new IntDeque();
   private int nextId;
   @Nonnull
-  private final Bag<BitVector> entityBitVectors = new Bag<>( BitVector.class );
+  private final Bag<BitVector> entityBitVectors = new Bag<>();
 
   /**
    * Creates a new EntityManager Instance.
