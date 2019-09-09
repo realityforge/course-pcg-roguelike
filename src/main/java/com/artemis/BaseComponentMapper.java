@@ -65,6 +65,7 @@ public abstract class BaseComponentMapper<A extends Component>
    * @param entityId the entity that should possess the component
    * @return the instance of the component.
    */
+  @Nullable
   public abstract A get( int entityId )
     throws ArrayIndexOutOfBoundsException;
 

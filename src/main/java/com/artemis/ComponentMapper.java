@@ -69,6 +69,7 @@ public class ComponentMapper<A extends Component>
    * @param entityId the entity that should possess the component
    * @return the instance of the component.
    */
+  @Nullable
   @Override
   public A get( final int entityId )
     throws ArrayIndexOutOfBoundsException
