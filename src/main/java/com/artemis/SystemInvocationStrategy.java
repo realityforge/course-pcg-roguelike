@@ -75,7 +75,8 @@ public abstract class SystemInvocationStrategy
   {
     final Class<? extends BaseSystem> target = system.getClass();
     final ImmutableBag<BaseSystem> systems = world.getSystems();
-    for ( int i = 0; i < systems.size(); i++ )
+    final int size = systems.size();
+    for ( int i = 0; i < size; i++ )
     {
       if ( target == systems.get( i ).getClass() )
       {
