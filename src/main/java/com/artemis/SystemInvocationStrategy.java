@@ -58,17 +58,6 @@ public abstract class SystemInvocationStrategy
     world.batchProcessor.update();
   }
 
-  /**
-   * Process all systems.
-   *
-   * @deprecated superseded by {@link #process()}
-   */
-  @Deprecated
-  protected final void process( final Bag<BaseSystem> systems )
-  {
-    throw new RuntimeException( "wrong process method" );
-  }
-
   protected abstract void process();
 
   public boolean isEnabled( @Nonnull final BaseSystem system )
