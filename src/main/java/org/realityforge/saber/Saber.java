@@ -18,13 +18,8 @@ public class Saber
     game.init();
     game.start( LevelData.LEVEL1_DATA );
 
-    final WorldConfiguration setup = new WorldConfigurationBuilder()
-      .with( new HelloWorldSystem() )
-      .build();
-    final World world = new World( setup );
+    final World world = game.getWorld();
     final int entityId = world.create();
     world.edit( entityId ).create( Hello.class ).message = "\n\rHello world!\n\r";
-
-    world.process();
   }
 }

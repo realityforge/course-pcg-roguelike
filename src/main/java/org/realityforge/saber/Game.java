@@ -1,11 +1,16 @@
 package org.realityforge.saber;
 
+import com.artemis.World;
+import com.artemis.WorldConfiguration;
+import com.artemis.WorldConfigurationBuilder;
 import elemental2.dom.CanvasRenderingContext2D;
 import elemental2.dom.DomGlobal;
 import elemental2.dom.HTMLCanvasElement;
+import elemental2.dom.KeyboardEvent;
 import java.util.Objects;
 import javax.annotation.Nonnull;
 import org.realityforge.saber.game.Tiles;
+import org.realityforge.saber.systems.HelloWorldSystem;
 import org.realityforge.saber.world.Level;
 import org.realityforge.saber.world.Tile;
 import org.realityforge.saber.world.TileType;
@@ -22,14 +27,22 @@ public final class Game
   private final TileTypeManager _tileTypeManager = new TileTypeManager();
   @Nonnull
   private final TextureManager _textureManager = new TextureManager( this::texturesLoaded );
+  @Nonnull
+  private final World _world;
   private Level _level;
   private boolean _texturesLoaded;
   private double _cellWidth;
   private double _cellHeight;
+  private int _turn;
 
   public Game( @Nonnull final Renderer renderer )
   {
     _renderer = Objects.requireNonNull( renderer );
+    final WorldConfiguration setup = new WorldConfigurationBuilder()
+      .with( new HelloWorldSystem() )
+      .build();
+
+    _world = new World( setup );
   }
 
   public void init()
@@ -58,6 +71,12 @@ public final class Game
     final TileType emptyTileType = _tileTypeManager.registerEmptyTileType( Tiles.EMPTY, 0 );
 
     initLevel( emptyTileType );
+  }
+
+  @Nonnull
+  public World getWorld()
+  {
+    return _world;
   }
 
   private void initLevel( @Nonnull final TileType emptyTileType )
@@ -93,6 +112,18 @@ public final class Game
     loadFromData( levelData );
     runFrame();
     DomGlobal.setInterval( v -> runFrame(), FRAME_DELAY );
+    DomGlobal.document.addEventListener( "keyup", e -> onKeyUp( (KeyboardEvent) e ) );
+  }
+
+  private void onKeyUp( @Nonnull final KeyboardEvent event )
+  {
+    executeTurn( event );
+  }
+
+  public void executeTurn( @Nonnull final Object action )
+  {
+    _turn++;
+    getWorld().process();
   }
 
   private void runFrame()
