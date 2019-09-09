@@ -27,7 +27,7 @@ public class ComponentMapper<A extends Component>
   private final EntityTransmuter createTransmuter;
   @Nonnull
   private final EntityTransmuter removeTransmuter;
-  @Nonnull
+  @Nullable
   private final ComponentPool pool;
   @Nonnull
   private final ComponentRemover<A> purgatory;
