@@ -3,6 +3,7 @@ package com.artemis;
 import com.artemis.utils.Bag;
 import com.artemis.utils.reflect.ClassReflection;
 import com.artemis.utils.reflect.ReflectionException;
+import java.util.Objects;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -18,14 +19,14 @@ public class ComponentPool<T extends PooledComponent>
     cache = new Bag<>();
   }
 
-  @Nullable
+  @Nonnull
   @SuppressWarnings( "unchecked" )
   <T extends PooledComponent> T obtain()
   {
     try
     {
       return (T) ( ( cache.size() > 0 )
-                   ? cache.removeLast()
+                   ? Objects.requireNonNull(cache.removeLast())
                    : ClassReflection.newInstance( type ) );
     }
     catch ( final ReflectionException e )

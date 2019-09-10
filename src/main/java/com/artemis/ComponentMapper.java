@@ -133,7 +133,7 @@ public class ComponentMapper<A extends Component>
    * @param entityId the entity that should possess the component
    * @return the instance of the component.
    */
-  @Nullable
+  @Nonnull
   @Override
   public A create( final int entityId )
   {
@@ -164,7 +164,7 @@ public class ComponentMapper<A extends Component>
   }
 
   @SuppressWarnings( "unchecked" )
-  @Nullable
+  @Nonnull
   private A createNew()
   {
     return (A) ( ( null != pool )

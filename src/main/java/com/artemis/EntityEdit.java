@@ -38,6 +38,7 @@ public final class EntityEdit
    * @param componentKlazz Class to create.
    * @return Newly instanced component.
    */
+  @Nonnull
   public <T extends Component> T create( final Class<T> componentKlazz )
   {
     return cm.getMapper( componentKlazz ).create( entityId );
