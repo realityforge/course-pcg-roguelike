@@ -1,17 +1,25 @@
 package org.realityforge.saber;
 
+import com.artemis.Entity;
+import com.artemis.EntityEdit;
 import com.artemis.World;
 import com.artemis.WorldConfiguration;
 import com.artemis.WorldConfigurationBuilder;
 import elemental2.dom.CanvasRenderingContext2D;
 import elemental2.dom.DomGlobal;
 import elemental2.dom.HTMLCanvasElement;
+import elemental2.dom.HTMLImageElement;
 import elemental2.dom.KeyboardEvent;
 import java.util.Objects;
 import javax.annotation.Nonnull;
+import org.realityforge.saber.components.CommandTarget;
+import org.realityforge.saber.components.Position;
+import org.realityforge.saber.components.Sprite;
 import org.realityforge.saber.game.Tiles;
+import org.realityforge.saber.systems.CommandSystem;
 import org.realityforge.saber.systems.HelloWorldSystem;
 import org.realityforge.saber.world.Level;
+import org.realityforge.saber.world.LevelPosition;
 import org.realityforge.saber.world.Tile;
 import org.realityforge.saber.world.TileType;
 import org.realityforge.saber.world.TileTypeManager;
@@ -21,6 +29,7 @@ public final class Game
   private static final int FRAMES_PER_SECOND = 30;
   private static final int MILLIS_PER_SECOND = 1000;
   private static final int FRAME_DELAY = MILLIS_PER_SECOND / FRAMES_PER_SECOND;
+  public static Game c_game;
   @Nonnull
   private final Renderer _renderer;
   @Nonnull
@@ -34,15 +43,30 @@ public final class Game
   private double _cellWidth;
   private double _cellHeight;
   private int _turn;
+  private Texture _playerTexture;
+  private int _playerEntityId;
+
+  public static Game getGame()
+  {
+    assert null != c_game;
+    return c_game;
+  }
 
   public Game( @Nonnull final Renderer renderer )
   {
+    c_game = this;
     _renderer = Objects.requireNonNull( renderer );
     final WorldConfiguration setup = new WorldConfigurationBuilder()
       .with( new HelloWorldSystem() )
+      .with( new CommandSystem() )
       .build();
 
     _world = new World( setup );
+  }
+
+  public Level getLevel()
+  {
+    return _level;
   }
 
   public void init()
@@ -71,6 +95,8 @@ public final class Game
     final TileType emptyTileType = _tileTypeManager.registerEmptyTileType( Tiles.EMPTY, 0 );
 
     initLevel( emptyTileType );
+
+    _playerTexture = _textureManager.registerTexture( "resources/players/warrior/spr_warrior_idle_down" );
   }
 
   @Nonnull
@@ -110,20 +136,55 @@ public final class Game
   {
     _textureManager.startTextureLoad();
     loadFromData( levelData );
+
+    _playerEntityId = _world.create();
+    final EntityEdit edit = _world.edit( _playerEntityId );
+    final LevelPosition position = edit.create( Position.class ).position;
+    position.setColumn( _level.getColumnCount() / 2 );
+    position.setRow( _level.getRowCount() / 2 );
+    edit.create( Sprite.class ).texture = _playerTexture;
+    edit.create( CommandTarget.class );
+
     runFrame();
     DomGlobal.setInterval( v -> runFrame(), FRAME_DELAY );
-    DomGlobal.document.addEventListener( "keyup", e -> onKeyUp( (KeyboardEvent) e ) );
+    DomGlobal.document.addEventListener( "keydown", e -> onKeyUp( (KeyboardEvent) e ) );
   }
 
   private void onKeyUp( @Nonnull final KeyboardEvent event )
   {
-    executeTurn( event );
+    final CommandType commandType;
+    if ( "ArrowLeft".equals( event.code ) )
+    {
+      commandType = CommandType.TurnLeft;
+    }
+    else if ( "ArrowRight".equals( event.code ) )
+    {
+      commandType = CommandType.TurnRight;
+    }
+    else if ( "ArrowUp".equals( event.code ) )
+    {
+      commandType = CommandType.MoveForward;
+    }
+    else if ( "ArrowDown".equals( event.code ) )
+    {
+      commandType = CommandType.MoveBackward;
+    }
+    else
+    {
+      return;
+    }
+    event.preventDefault();
+    event.stopPropagation();
+
+    executeTurn( commandType );
   }
 
-  public void executeTurn( @Nonnull final Object action )
+  private void executeTurn( @Nonnull final CommandType commandType )
   {
     _turn++;
-    getWorld().process();
+    final World world = getWorld();
+    world.getEntity( _playerEntityId ).getComponent( CommandTarget.class ).command = commandType;
+    world.process();
   }
 
   private void runFrame()
@@ -139,6 +200,19 @@ public final class Game
     clearBackground();
 
     drawWorld();
+
+    final Entity player = getWorld().getEntity( _playerEntityId );
+    final Position position = player.getComponent( Position.class );
+    final Texture texture = player.getComponent( Sprite.class ).texture;
+
+    final HTMLCanvasElement canvas = _renderer.getCanvas();
+    final int columnWidth = canvas.width / _level.getColumnCount();
+    final int rowHeight = canvas.height / _level.getRowCount();
+
+    assert null != texture;
+    final HTMLImageElement image = texture.getImage();
+    _renderer.getContext()
+      .drawImage( image, position.position.getColumn() * columnWidth, position.position.getRow() * rowHeight );
   }
 
   private void clearBackground()
