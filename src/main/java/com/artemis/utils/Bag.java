@@ -1,7 +1,6 @@
 package com.artemis.utils;
 
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 import javax.annotation.Nonnull;
@@ -70,14 +69,6 @@ public class Bag<E>
   }
 
   /**
-   * Sorts the bag using the {@code comparator}.
-   */
-  public void sort( final Comparator<E> comparator )
-  {
-    Sort.instance().sort( this, comparator );
-  }
-
-  /**
    * Remove and return the last object in the bag.
    *
    * @return the last object in the bag, null if empty
@@ -143,38 +134,6 @@ public class Bag<E>
   }
 
   /**
-   * Removes from this Bag all of its elements that are contained in the
-   * specified Bag.
-   *
-   * @param bag Bag containing elements to be removed from this Bag
-   * @return {@code true} if this Bag changed as a result of the call
-   */
-  public boolean removeAll( @Nonnull final ImmutableBag<E> bag )
-  {
-    boolean modified = false;
-
-    for ( int i = 0, s = bag.size(); s > i; i++ )
-    {
-      final E e1 = bag.get( i );
-
-      for ( int j = 0; j < size; j++ )
-      {
-        final E e2 = (E) data[ j ];
-
-        if ( e1.equals( e2 ) )
-        {
-          remove( j );
-          j--;
-          modified = true;
-          break;
-        }
-      }
-    }
-
-    return modified;
-  }
-
-  /**
    * Returns the element at the specified position in Bag.
    *
    * @param index index of the element to return
@@ -224,17 +183,6 @@ public class Bag<E>
   public int getCapacity()
   {
     return data.length;
-  }
-
-  /**
-   * Checks if the internal storage supports this index.
-   *
-   * @param index index to check
-   * @return {@code true} if the index is within bounds
-   */
-  public boolean isIndexWithinBounds( final int index )
-  {
-    return index < getCapacity();
   }
 
   /**
@@ -295,16 +243,6 @@ public class Bag<E>
   public void unsafeSet( final int index, final E e )
   {
     data[ index ] = e;
-  }
-
-  /**
-   * Increase the capacity of the bag.
-   *
-   * @throws ArrayIndexOutOfBoundsException if new capacity is smaller than old
-   */
-  private void grow()
-  {
-    grow( data.length * 2 );
   }
 
   private void grow( final int newCapacity )
