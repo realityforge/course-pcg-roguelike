@@ -28,3 +28,19 @@ complete as there is too much un-said.
 
   This means the entire world and gameplay can be recreated by recording the seed and the sequence of
   commands.
+
+## PixiJS
+
+Seems like the 2D framework of choice.
+- https://github.com/kittykatattack/learningPixi
+- https://github.com/klaun76/gwt-pixi
+- https://github.com/klaun76/gwt-pixi-demo
+- https://pixijs.io/examples/#/demos-advanced/star-warp.js
+- https://www.pixijs.com/tutorials
+- https://www.amazon.co.uk/Learn-Pixi-js-Interactive-Graphics/dp/1484210956
+
+## Games to look at for ideas on ECS
+
+* [alone-rl](https://github.com/fabio-t/alone-rl.git) - a roguelike using `artemis-odb` 
+* [Ore Infinium](https://github.com/sreich/ore-infinium) - "Open Source multiplayer Terraria-inspired Sci-fi game, focused on technology, devices and researching". Uses `artemis-odb`, `protobuf` and `KryoNet` (networking library)
+* [underkeep](https://github.com/DaanVanYperen/odb-underkeep) - a Ludum Dare game using `artemis-odb` 
