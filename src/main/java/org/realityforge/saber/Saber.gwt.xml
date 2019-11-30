@@ -5,6 +5,7 @@
   <inherits name='elemental2.promise.Promise'/>
   <inherits name='elemental2.core.Core'/>
   <inherits name='elemental2.dom.Dom'/>
+  <inherits name='galdr.GaldrDev'/>
 
   <inherits name='com.artemis.backends.artemis_backends_gwt'/>
 

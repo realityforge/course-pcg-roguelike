@@ -10,13 +10,18 @@ define 'saber' do
 
   project.version = ENV['PRODUCT_VERSION'] if ENV['PRODUCT_VERSION']
 
+  project.processorpath << artifacts(:galdr_processor)
+  project.processorpath << artifacts(:grim_processor, :javax_json)
+
   compile.with :javax_annotation,
                :jsinterop_base,
                :jsinterop_annotations,
                :elemental2_promise,
                :elemental2_core,
                :elemental2_dom,
+               :grim_annotations,
                :braincheck,
+               :galdr_core,
                :gwt_user
 
   ipr.add_gwt_configuration(project,
