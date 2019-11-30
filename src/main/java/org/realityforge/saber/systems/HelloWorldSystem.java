@@ -1,20 +1,23 @@
 package org.realityforge.saber.systems;
 
-import com.artemis.ComponentMapper;
-import com.artemis.annotations.All;
-import com.artemis.systems.IteratingSystem;
 import elemental2.dom.DomGlobal;
+import galdr.ComponentManager;
+import galdr.annotations.ComponentManagerRef;
+import galdr.annotations.EntityProcessor;
+import galdr.annotations.GaldrSubSystem;
+import javax.annotation.Nonnull;
 import org.realityforge.saber.components.Hello;
 
-@All( Hello.class )
-public class HelloWorldSystem
-  extends IteratingSystem
+@GaldrSubSystem
+public abstract class HelloWorldSystem
 {
-  protected ComponentMapper<Hello> mHello;
-
-  @Override
-  protected void process( final int id )
+  @EntityProcessor( all = Hello.class )
+  final void processHello( final int id )
   {
-    DomGlobal.console.log( mHello.get( id ).message );
+    DomGlobal.console.log( hello().get( id ).message );
   }
+
+  @ComponentManagerRef
+  @Nonnull
+  abstract ComponentManager<Hello> hello();
 }

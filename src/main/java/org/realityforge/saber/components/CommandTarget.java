@@ -1,11 +1,11 @@
 package org.realityforge.saber.components;
 
-import com.artemis.Component;
+import galdr.annotations.Component;
 import javax.annotation.Nullable;
 import org.realityforge.saber.CommandType;
 
+@Component
 public final class CommandTarget
-  extends Component
 {
   @Nullable
   public CommandType command;

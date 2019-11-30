@@ -1,30 +1,41 @@
 package org.realityforge.saber.systems;
 
-import com.artemis.ComponentMapper;
-import com.artemis.annotations.All;
-import com.artemis.systems.IteratingSystem;
-import jsinterop.base.Js;
+import galdr.ComponentManager;
+import galdr.annotations.ComponentManagerRef;
+import galdr.annotations.EntityProcessor;
+import galdr.annotations.GaldrSubSystem;
+import javax.annotation.Nonnull;
 import org.realityforge.saber.CommandType;
 import org.realityforge.saber.Game;
 import org.realityforge.saber.components.CommandTarget;
+import org.realityforge.saber.components.Player;
 import org.realityforge.saber.components.Position;
 import org.realityforge.saber.world.LevelPosition;
 
-@All( CommandTarget.class )
-public class CommandSystem
-  extends IteratingSystem
+@GaldrSubSystem
+public abstract class CommandSystem
 {
-  protected ComponentMapper<CommandTarget> commandTarget;
-  protected ComponentMapper<Position> position;
+  @ComponentManagerRef
+  @Nonnull
+  abstract ComponentManager<CommandTarget> commandTarget();
 
-  @Override
-  protected void process( final int id )
+  @ComponentManagerRef
+  @Nonnull
+  abstract ComponentManager<Position> position();
+
+  @EntityProcessor( all = Player.class )
+  void attachCommandToPlayer( final int id )
   {
-    final CommandTarget t = commandTarget.get( id );
-    assert null != t;
+    commandTarget().get( id ).command = Game.getGame().getCommandType();
+  }
+
+  @EntityProcessor( all = CommandTarget.class )
+  void processCommands( final int id )
+  {
+    final CommandTarget t = commandTarget().get( id );
     if ( null != t.command )
     {
-      final Position pc = position.get( id );
+      final Position pc = position().find( id );
       if ( null != pc )
       {
         final LevelPosition position = pc.position;

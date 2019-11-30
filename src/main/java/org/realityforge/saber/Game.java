@@ -1,25 +1,12 @@
 package org.realityforge.saber;
 
-import com.artemis.Entity;
-import com.artemis.EntityEdit;
-import com.artemis.World;
-import com.artemis.WorldConfiguration;
-import com.artemis.WorldConfigurationBuilder;
-import elemental2.dom.CanvasRenderingContext2D;
 import elemental2.dom.DomGlobal;
 import elemental2.dom.HTMLCanvasElement;
-import elemental2.dom.HTMLImageElement;
 import elemental2.dom.KeyboardEvent;
 import java.util.Objects;
 import javax.annotation.Nonnull;
-import org.realityforge.saber.components.CommandTarget;
-import org.realityforge.saber.components.Position;
-import org.realityforge.saber.components.Sprite;
 import org.realityforge.saber.game.Tiles;
-import org.realityforge.saber.systems.CommandSystem;
-import org.realityforge.saber.systems.HelloWorldSystem;
 import org.realityforge.saber.world.Level;
-import org.realityforge.saber.world.LevelPosition;
 import org.realityforge.saber.world.Tile;
 import org.realityforge.saber.world.TileType;
 import org.realityforge.saber.world.TileTypeManager;
@@ -36,15 +23,12 @@ public final class Game
   private final TileTypeManager _tileTypeManager = new TileTypeManager();
   @Nonnull
   private final TextureManager _textureManager = new TextureManager( this::texturesLoaded );
-  @Nonnull
-  private final World _world;
   private Level _level;
   private boolean _texturesLoaded;
-  private double _cellWidth;
-  private double _cellHeight;
-  private int _turn;
-  private Texture _playerTexture;
-  private int _playerEntityId;
+  @Nonnull
+  private final SaberApplication _application;
+  @Nonnull
+  private CommandType _commandType = CommandType.MoveForward;
 
   public static Game getGame()
   {
@@ -56,12 +40,25 @@ public final class Game
   {
     c_game = this;
     _renderer = Objects.requireNonNull( renderer );
-    final WorldConfiguration setup = new WorldConfigurationBuilder()
-      .with( new HelloWorldSystem() )
-      .with( new CommandSystem() )
-      .build();
+    _application = SaberApplication.create();
+  }
 
-    _world = new World( setup );
+  @Nonnull
+  public SaberApplication getApplication()
+  {
+    return _application;
+  }
+
+  @Nonnull
+  public Renderer getRenderer()
+  {
+    return _renderer;
+  }
+
+  @Nonnull
+  public TextureManager getTextureManager()
+  {
+    return _textureManager;
   }
 
   public Level getLevel()
@@ -96,13 +93,7 @@ public final class Game
 
     initLevel( emptyTileType );
 
-    _playerTexture = _textureManager.registerTexture( "resources/players/warrior/spr_warrior_idle_down" );
-  }
-
-  @Nonnull
-  public World getWorld()
-  {
-    return _world;
+    _textureManager.registerTexture( "resources/players/warrior/spr_warrior_idle_down" );
   }
 
   private void initLevel( @Nonnull final TileType emptyTileType )
@@ -110,8 +101,8 @@ public final class Game
     _level = new Level( 19, 19, emptyTileType );
 
     final HTMLCanvasElement canvas = _renderer.getCanvas();
-    _cellWidth = canvas.width / ( _level.getColumnCount() * 1D );
-    _cellHeight = canvas.height / ( _level.getRowCount() * 1D );
+    final double cellWidth = canvas.width / ( _level.getColumnCount() * 1D );
+    final double cellHeight = canvas.height / ( _level.getRowCount() * 1D );
 
     int index = 0;
     final int columnCount = _level.getColumnCount();
@@ -126,9 +117,9 @@ public final class Game
         final Tile tile = tiles[ index++ ];
         tile.setTopLeftX( topLeftX );
         tile.setTopLeftY( topLeftY );
-        topLeftX += _cellWidth;
+        topLeftX += cellWidth;
       }
-      topLeftY += _cellHeight;
+      topLeftY += cellHeight;
     }
   }
 
@@ -137,13 +128,7 @@ public final class Game
     _textureManager.startTextureLoad();
     loadFromData( levelData );
 
-    _playerEntityId = _world.create();
-    final EntityEdit edit = _world.edit( _playerEntityId );
-    final LevelPosition position = edit.create( Position.class ).position;
-    position.setColumn( _level.getColumnCount() / 2 );
-    position.setRow( _level.getRowCount() / 2 );
-    edit.create( Sprite.class ).texture = _playerTexture;
-    edit.create( CommandTarget.class );
+    getApplication().sim().process( 1 );
 
     runFrame();
     DomGlobal.setInterval( v -> runFrame(), FRAME_DELAY );
@@ -181,10 +166,14 @@ public final class Game
 
   private void executeTurn( @Nonnull final CommandType commandType )
   {
-    _turn++;
-    final World world = getWorld();
-    world.getEntity( _playerEntityId ).getComponent( CommandTarget.class ).command = commandType;
-    world.process();
+    _commandType = commandType;
+    getApplication().sim().process( 1 );
+  }
+
+  @Nonnull
+  public CommandType getCommandType()
+  {
+    return _commandType;
   }
 
   private void runFrame()
@@ -197,63 +186,17 @@ public final class Game
 
   private void renderWorld()
   {
-    clearBackground();
-
-    drawWorld();
-
-    final Entity player = getWorld().getEntity( _playerEntityId );
-    final Position position = player.getComponent( Position.class );
-    final Texture texture = player.getComponent( Sprite.class ).texture;
-
-    final HTMLCanvasElement canvas = _renderer.getCanvas();
-    final int columnWidth = canvas.width / _level.getColumnCount();
-    final int rowHeight = canvas.height / _level.getRowCount();
-
-    assert null != texture;
-    final HTMLImageElement image = texture.getImage();
-    _renderer.getContext()
-      .drawImage( image, position.position.getColumn() * columnWidth, position.position.getRow() * rowHeight );
+    getApplication().renderStage().process( 1 );
   }
 
-  private void clearBackground()
+  private void registerTile( @Nonnull final String textureName, final int value )
   {
-    final HTMLCanvasElement canvas = _renderer.getCanvas();
-    final CanvasRenderingContext2D context = _renderer.getContext();
-    context.fillStyle = CanvasRenderingContext2D.FillStyleUnionType.of( "black" );
-    context.fillRect( 0, 0, canvas.width, canvas.height );
+    registerTile( textureName, value, 0 );
   }
 
-  private void drawWorld()
+  private void registerTile( @Nonnull final String textureName, final int value, final int flags )
   {
-    int index = 0;
-    final int rowCount = _level.getRowCount();
-    final int columnCount = _level.getColumnCount();
-    final Tile[] tiles = _level.getTiles();
-    for ( int i = 0; i < rowCount; i++ )
-    {
-      for ( int j = 0; j < columnCount; j++ )
-      {
-        final Tile tile = tiles[ index++ ];
-        final TileType tileType = tile.getTileType();
-        final Texture texture = tileType.getTexture();
-        if ( null != texture )
-        {
-          _renderer.getContext().drawImage( texture.getImage(), tile.getTopLeftX(), tile.getTopLeftY() );
-        }
-      }
-    }
-  }
-
-  @Nonnull
-  private TileType registerTile( @Nonnull final String textureName, final int value )
-  {
-    return registerTile( textureName, value, 0 );
-  }
-
-  @Nonnull
-  private TileType registerTile( @Nonnull final String textureName, final int value, final int flags )
-  {
-    return _tileTypeManager.registerTileType( value, _textureManager.registerTexture( textureName ), flags );
+    _tileTypeManager.registerTileType( value, _textureManager.registerTexture( textureName ), flags );
   }
 
   private void texturesLoaded()

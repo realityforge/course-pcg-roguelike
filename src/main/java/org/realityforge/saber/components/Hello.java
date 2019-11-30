@@ -1,9 +1,9 @@
 package org.realityforge.saber.components;
 
-import com.artemis.Component;
+import galdr.annotations.Component;
 
+@Component
 public class Hello
-  extends Component
 {
   public String message;
 
