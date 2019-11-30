@@ -9,6 +9,9 @@ complete as there is too much un-said.
     - Consider using [Ashley](https://github.com/libgdx/ashley) or another ECS to implement entities.
 
 * Add commands system that maps keys to commands. `KeyUp` -> `MoveForward`
+  - Actually we should have a "singleton" InputState that includes which keys transitions ocurred (ie. key down/up)
+    **AND** we should have the command mapping as part of the entity. The system is then responsible for mapping input
+    to commands/events to feed into world
 
 * Add binding layer that allows binding keys to commands (think quakes console).
 
