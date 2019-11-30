@@ -17,6 +17,8 @@ complete as there is too much un-said.
 
 * Consider having an `InputUpdateSystem` that takes a sequence of keys
 
+* Add grim tests to this application.
+
 ## Reimplementation Notes
 
 * TileType should be data driven and loaded from a file.
