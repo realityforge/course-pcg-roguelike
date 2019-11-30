@@ -41,6 +41,6 @@ Seems like the 2D framework of choice.
 
 ## Games to look at for ideas on ECS
 
-* [alone-rl](https://github.com/fabio-t/alone-rl.git) - a roguelike using `artemis-odb` 
+* [alone-rl](https://github.com/fabio-t/alone-rl.git) - a roguelike using `artemis-odb`
 * [Ore Infinium](https://github.com/sreich/ore-infinium) - "Open Source multiplayer Terraria-inspired Sci-fi game, focused on technology, devices and researching". Uses `artemis-odb`, `protobuf` and `KryoNet` (networking library)
-* [underkeep](https://github.com/DaanVanYperen/odb-underkeep) - a Ludum Dare game using `artemis-odb` 
+* [underkeep](https://github.com/DaanVanYperen/odb-underkeep) - a Ludum Dare game using `artemis-odb`
