@@ -50,7 +50,7 @@ public final class TextureManager
   }
 
   @Nonnull
-  Texture getImageByName( @Nonnull final String name )
+  public Texture getImageByName( @Nonnull final String name )
   {
     return Objects.requireNonNull( _textures.get( name ) );
   }
