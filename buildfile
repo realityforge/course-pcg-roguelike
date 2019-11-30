@@ -38,7 +38,7 @@ define 'saber' do
                             :open_in_browser => false,
                             :vm_parameters => '-Xmx2G',
                             :shell_parameters => "-strict -style PRETTY -XmethodNameDisplayMode FULL -nostartServer -incremental -codeServerPort 8889 -bindAddress 0.0.0.0 -deploy #{_(:generated, :gwt, 'deploy')} -extra #{_(:generated, :gwt, 'extra')} -war #{_(:generated, :gwt, 'war')}",
-                            :launch_page => "http://127.0.0.1:8889/saber/index.html")
+                            :launch_page => "http://127.0.0.1:8888/saber_dev/dev.html")
 
   gwt(['org.realityforge.saber.SaberDev'],
       {
