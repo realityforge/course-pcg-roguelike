@@ -29,5 +29,5 @@ artifacts:
 
   javax_json: org.glassfish:javax.json:jar:1.1
 
-  galdr_core: org.realityforge.galdr:galdr-core:jar:0.02
-  galdr_processor: org.realityforge.galdr:galdr-processor:jar:0.02
+  galdr_core: org.realityforge.galdr:galdr-core:jar:0.03
+  galdr_processor: org.realityforge.galdr:galdr-processor:jar:0.03
